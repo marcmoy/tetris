@@ -55,7 +55,7 @@
   right: 0;
   left: 0;
   width: 86%;
-  height: 50%;
+  height: 53%;
   border-radius: 5px;
 }
 
@@ -334,7 +334,7 @@ button#down {
 
 @media screen and (min-width: 370px) and (max-width: 400px){
   .grid-container {
-    top: 6%;
+    top: 8%;
   }
 }
 
