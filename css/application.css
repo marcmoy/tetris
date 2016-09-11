@@ -116,7 +116,7 @@
   border-color: 1px solid black;
   color: #b7b28f;
   position: absolute;
-  bottom: 1%;
+  bottom: 2%;
   left: 12%;
   width: auto;
   font-size: 12px;
@@ -343,4 +343,11 @@ button#down {
   margin: 0;
   background-color: blue;
   outline: 1px solid black;
+}
+
+@media screen and (min-width: 400px) and (max-width: 420px) {
+  .grid-container {
+    height: 286px;
+    width: 130px;
+  }
 }
