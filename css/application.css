@@ -356,6 +356,12 @@ tbody > tr > td {
   outline: 1px solid #a09d86;
 }
 
+tbody > tr > td:after {
+  content: "";
+  clear: both;
+  display: block;
+}
+
 .right-side {
   position: absolute;
   display: flex;
