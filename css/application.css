@@ -65,7 +65,7 @@
   left: 0;
   right: 0;
   width: 78%;
-  height: 82%;
+  height: 86%;
   background-color: #b7b28f;
   margin: auto;
   border-radius: 5px;
@@ -116,10 +116,10 @@
   border-color: 1px solid black;
   color: #b7b28f;
   position: absolute;
-  bottom: 2%;
+  bottom: 1%;
   left: 12%;
   width: auto;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 @media screen and (max-width: 415px) {
