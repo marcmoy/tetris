@@ -314,25 +314,31 @@ button#down {
 .grid-container {
   position: relative;
   margin: auto;
-  height: calc(20px * 12);
-  width: calc(10px * 12);
+  height: 240px;
+  width: 120px;
   outline: 1px solid black;
+  display: flex;
+  justify-content: center;
 }
 
-.grid-container > ul {
-  list-style: none;
-  /*outline: 1px solid black;*/
-  height: 10%;
+.grid {
+  height: 100%;
+  width: 100%;
 }
 
-.grid-container > ul > li {
-  float: left;
+.grid > tbody {
+  font-size: 1px;
+  padding: 0;
+  margin: 0;
+}
+
+.grid tbody > tr {
+  padding: 0;
+  margin: 0;
+}
+
+.grid > tbody > tr > td {
+  padding: 0;
+  margin: 0;
   background-color: blue;
-}
-
-.grid-container > ul > li > ul {
-  list-style: none;
-}
-
-.grid-container > ul > li > ul > li {
 }
