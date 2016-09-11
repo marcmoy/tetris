@@ -1,4 +1,4 @@
-@keyframes pullDown {
+/*@keyframes pullDown {
   0% { height: 0; width: calc(90px * 4); }
   100% { height: calc(148px * 4); width: calc(90px * 4); }
 }
@@ -9,4 +9,20 @@
   -ms-animation: pullDown 0.7s;
   -o-animation: pullDown 0.7s;
   animation: pullDown 0.7s;
+}*/
+
+@keyframes pulse {
+  0% {opacity: 0;}
+  50% {opacity: 1;}
+  100% {opacity: 0;}
+}
+
+.press-start {
+  font-family: 'Open Sans', sans-serif;
+  font-style: italic;
+  -webkit-animation: pulse 1.0s infinite;
+  -moz-animation: pulse 1.0s infinite;
+  -ms-animation: pulse 1.0s infinite;
+  -o-animation: pulse 1.0s infinite;
+  animation: pulse 1.0s infinite;
 }
