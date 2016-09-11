@@ -9,6 +9,7 @@
   justify-content: center;
   height: 100vh;
   width: 100vw;
+  padding-top: 10px;
 }
 
 .clearfix:after {
@@ -18,6 +19,7 @@
 }
 
 .base {
+  position: absolute;
   background-color: red;
   height: calc(148px * 4);
   width: calc(90px * 4);
@@ -28,12 +30,22 @@
 
 
 @media screen and (max-width: 415px) {
-
   .base {
     background-color: green;
     height: calc(95%);
     width: calc(100%);
-    border-radius: 1em 1em 4em 1em;
     font-size: 20px;
+    border-radius: 1em 1em 4em 1em;
   }
+}
+
+.screen {
+  background-color: #ccc;
+  margin: auto;
+  position: absolute;
+  top: 5%;
+  right: 0;
+  left: 0;
+  width: 86%;
+  height: 45%;
 }
