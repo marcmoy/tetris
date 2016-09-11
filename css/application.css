@@ -20,6 +20,8 @@
 
 .base {
   position: absolute;
+  right: 0;
+  left: 0;
   background-color: red;
   height: calc(148px * 4);
   width: calc(90px * 4);
@@ -31,6 +33,7 @@
 
 @media screen and (max-width: 415px) {
   .base {
+    margin: auto;
     background-color: green;
     height: calc(95%);
     width: calc(100%);
@@ -39,8 +42,9 @@
   }
 }
 
-.screen {
-  background-color: #ccc;
+.screen-outer {
+  text-align: center;
+  background-color: #494949;
   margin: auto;
   position: absolute;
   top: 5%;
@@ -48,4 +52,72 @@
   left: 0;
   width: 86%;
   height: 45%;
+  border-radius: 5px;
+}
+
+.screen-inner {
+  position: absolute;
+  top: -5%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 78%;
+  height: 82%;
+  background-color: #b7b28f;
+  margin: auto;
+  border-radius: 5px;
+}
+
+.power-switch-base {
+  position: absolute;
+  top: 0;
+  left: 6%;
+  width: 15%;
+  height: 3%;
+  border-radius: 0px 0px 5px 5px;
+  background-color: transparent; /* put this behind later */
+  text-align: center;
+}
+
+.power-switch {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -30%;
+  width: 50%;
+  height: 30%;
+  background-color: #494949;
+  border-radius: 5px 5px 0px 0px;
+}
+
+.power-light {
+  position: absolute;
+  top: 25%;
+  left: 3%;
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background-color: red;
+}
+
+.gameboy-logo {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  font-style: italic;
+  display: inline-block;
+  border-color: 1px solid black;
+  color: #b7b28f;
+  position: absolute;
+  bottom: 2%;
+  left: 12%;
+  width: auto;
+  font-size: 14px;
+}
+
+@media screen and (max-width: 415px) {
+  .gameboy-logo {
+    font-size: 1rem;
+  }
 }
