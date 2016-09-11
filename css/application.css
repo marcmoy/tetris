@@ -312,7 +312,7 @@ button#down {
 
 .grid-container {
   position: absolute;
-  left: 18%;
+  left: 15%;
   margin: auto;
   height: 240px;
   width: 120px;
@@ -356,14 +356,22 @@ tbody > tr > td {
   outline: 1px solid #a09d86;
 }
 
+.right-side {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  width: 30%;
+  right: 0;
+  align-items: center;
+  font-family: sans-serif;
+}
+
 .queue-container {
   height: 48px;
   width: 48px;
-  position: absolute;
-  right: 5%;
-  top: 10%;
-  display: flex;
-  justify-content: center;
+  margin-bottom: 60%;
 }
 
 .queue {
@@ -374,10 +382,7 @@ tbody > tr > td {
 
 .queue-container > label {
   font-size: 12px;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -20px;
+  font-weight: bold;
 }
 
 @media screen and (min-width: 400px) and (max-width: 420px) {
@@ -392,5 +397,20 @@ tbody > tr > td {
   .queue-container {
     height: 40px;
     width: 40px;
+  }
+}
+
+.score-container {
+  font-size: 14px;
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  line-height: 20px;
+}
+
+@media screen and (max-width: 330px) {
+  .score-container {
+    right: 1%;
+    bottom: 15%;
   }
 }
