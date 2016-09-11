@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.border {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.clearfix:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.base {
+  background-color: red;
+  height: calc(148px * 4);
+  width: calc(90px * 4);
+  border-radius: 20px 20px 60px 20px;
+  font-size: 20px;
+  margin: auto;
+}
+
+
+@media screen and (max-width: 415px) {
+
+  .base {
+    background-color: green;
+    height: calc(95%);
+    width: calc(100%);
+    border-radius: 1em 1em 4em 1em;
+    font-size: 20px;
+  }
+}
