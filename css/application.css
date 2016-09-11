@@ -19,6 +19,10 @@
   clear: both;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 .base {
   position: absolute;
   right: 0;

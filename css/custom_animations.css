@@ -1,0 +1,12 @@
+@keyframes pullDown {
+  0% { height: 0; width: calc(90px * 4); }
+  100% { height: calc(148px * 4); width: calc(90px * 4); }
+}
+
+.base {
+  -webkit-animation: pullDown 0.7s;
+  -moz-animation: pullDown 0.7s;
+  -ms-animation: pullDown 0.7s;
+  -o-animation: pullDown 0.7s;
+  animation: pullDown 0.7s;
+}

@@ -5,6 +5,7 @@
     <title>Gameboy</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700i" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/animate.css" />
+    <link rel="stylesheet" type="text/css" href="css/custom_animations.css" />
     <link rel="stylesheet" type="text/css" href="css/application.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
   </head>
@@ -17,10 +18,10 @@
             <div class="power-switch"></div>
           </div>
 
-          <div class="screen-outer animated fadeInLeft">
+          <div class="screen-outer">
             <div class="power-light"></div>
             <div class="screen-inner">
-              <div class="grid-container">
+               <div class="grid-container hidden">
                 <table class="grid">
                   <tbody>
                     <tr>
@@ -86,7 +87,7 @@
                   </tbody>
                 </table>
               </div>
-              <div class="right-side clearfix">
+               <div class="right-side clearfix hidden">
                 <div class="queue-container">
                   <table class="queue">
                     <tbody>
@@ -108,12 +109,12 @@
                 </div>
               </div>
             </div>
-            <div class="gameboy-logo animated fadeInUp">
+            <div class="gameboy-logo">
               GAME BOY
             </div>
           </div>
 
-          <div class="d-pad animated fadeInLeft">
+          <div class="d-pad">
             <div class ="d-pad-row">
               <span></span>
               <span class="d-pad-button">
@@ -141,7 +142,7 @@
             </div>
           </div>
 
-          <div class="buttons-a-b animated fadeInRight">
+          <div class="buttons-a-b">
             <button id="a-button">
               <label>A</label>
             </button>
@@ -150,18 +151,18 @@
             </button>
           </div>
 
-          <div class="buttons-SS animated fadeInUp">
-            <div class="buttons-SS-row animated fadeInLeft">
+          <div class="buttons-SS">
+            <div class="buttons-SS-row">
               <button name="select" id="select-button"></button>
               <button name="start" id="start-button"></button>
             </div>
-            <div class="buttons-SS-row animated fadeInRight">
+            <div class="buttons-SS-row">
               <label name="select" id="select-label">SELECT</label>
               <label naem="start" id="start-label">START</label>
             </div>
           </div>
 
-          <div class="speakers animated fadeInUp">
+          <div class="speakers">
             <div class="speakers-row clearfix">
               <span class="hole"></span><span class="hole"></span>
               <span class="hole"></span><span class="hole"></span>
