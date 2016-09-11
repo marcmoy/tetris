@@ -94,13 +94,19 @@
   display: flex;
   justify-content: center;
   position: absolute;
-  left: 0;
-  right: 0;
   top: -30%;
   width: 50%;
   height: 30%;
   background-color: #494949;
   border-radius: 5px 5px 0px 0px;
+}
+
+.power-switch.off {
+  right: 0;
+}
+
+.power-switch.on {
+  left: 0;
 }
 
 .power-light {
@@ -110,6 +116,13 @@
   height: 8px;
   width: 8px;
   border-radius: 50%;
+}
+
+.power-light.off {
+  background-color: gray;
+}
+
+.power-light.on {
   background-color: red;
 }
 
