@@ -1,6 +1,7 @@
 .container {
   display: flex;
   justify-content: center;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .border {
@@ -109,7 +110,6 @@
 }
 
 .gameboy-logo {
-  font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   font-style: italic;
   display: inline-block;
@@ -132,7 +132,6 @@
   position: absolute;
   left: 6%;
   bottom: 15%;
-  /*background-color: blue;*/
   border-radius: 50%;
   height: 8rem;
   width: 8rem;
@@ -312,13 +311,26 @@ button#down {
 }
 
 .grid-container {
-  position: relative;
+  position: absolute;
+  left: 18%;
   margin: auto;
   height: 240px;
   width: 120px;
   outline: 1px solid black;
-  display: flex;
-  justify-content: center;
+}
+
+@media screen and (min-width: 400px) and (max-width: 420px) {
+  .grid-container {
+    height: 280px;
+    width: 140px;
+  }
+}
+
+@media screen and (max-width: 330px) {
+  .grid-container {
+    height: 220px;
+    width: 100px;
+  }
 }
 
 .grid {
@@ -327,34 +339,52 @@ button#down {
   border-spacing: 0;
 }
 
-.grid > tbody {
+tbody {
   font-size: 1px;
   padding: 0;
   margin: 0;
 }
 
-.grid tbody > tr {
+tbody > tr {
   padding: 0;
   margin: 0;
 }
 
-.grid > tbody > tr > td {
+tbody > tr > td {
   padding: 0;
   margin: 0;
-  background-color: blue;
+  background-color: #ccc;
   outline: 1px solid black;
 }
 
+.queue-container {
+  height: 48px;
+  width: 48px;
+  position: absolute;
+  right: 5%;
+}
+
+.queue {
+  height: 100%;
+  width: 100%;
+  border-spacing: 0;
+}
+
+.queue-container > label {
+  font-size: 12px;
+}
+
 @media screen and (min-width: 400px) and (max-width: 420px) {
-  .grid-container {
-    height: 286px;
-    width: 130px;
+  .queue-container {
+    height: 56px;
+    width: 56px;
+    right: 3%;
   }
 }
 
 @media screen and (max-width: 330px) {
-  .grid-container {
-    height: 220px;
-    width: 100px;
+  .queue-container {
+    height: 40px;
+    width: 40px;
   }
 }
