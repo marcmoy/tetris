@@ -313,7 +313,7 @@ button#down {
 .grid-container {
   position: absolute;
   left: 15%;
-  margin: auto;
+  top: 3%;
   height: 240px;
   width: 120px;
 }
@@ -329,6 +329,12 @@ button#down {
   .grid-container {
     height: 220px;
     width: 100px;
+  }
+}
+
+@media screen and (min-width: 370px) and (max-width: 400px){
+  .grid-container {
+    top: 6%;
   }
 }
 
@@ -370,6 +376,7 @@ tbody > tr > td:after {
   height: 100%;
   width: 30%;
   right: 0;
+  top: 1%;
   align-items: center;
   font-family: sans-serif;
 }
@@ -387,7 +394,7 @@ tbody > tr > td:after {
 }
 
 .queue-container > label {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
 }
 
