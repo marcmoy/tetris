@@ -201,8 +201,6 @@ button#down {
 .buttons-a-b {
   width: 7rem;
   height: 5rem;
-  /*border: 1px solid black;*/
-  /*background-color: blue;*/
   position: absolute;
   right: 10%;
   bottom: 25%;
@@ -236,4 +234,32 @@ button#down {
   position: absolute;
   left: 0;
   bottom: 0;
+}
+
+.buttons-SS {
+  width: 100%;
+  position: absolute;
+  bottom: 10%;
+  text-align: center;
+}
+
+.buttons-SS > .buttons-SS-row > button {
+  font-size: 20px;
+  background-color: #585656;
+  width: 3rem;
+  border-radius: 5px;
+  height: 1rem;
+  margin: 0 20px 0 20px;
+}
+
+.buttons-SS > .buttons-SS-row > label {
+  font-family: Arial;
+  color: #544d4d;
+  width: 3em;
+  font-size: 12px;
+  margin: 0 18px 0 18px;
+}
+
+#select-label {
+  padding-left: 10px;
 }
