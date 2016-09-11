@@ -54,7 +54,7 @@
   right: 0;
   left: 0;
   width: 86%;
-  height: 45%;
+  height: 50%;
   border-radius: 5px;
 }
 
@@ -69,6 +69,9 @@
   background-color: #b7b28f;
   margin: auto;
   border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .power-switch-base {
@@ -128,7 +131,7 @@
 .d-pad {
   position: absolute;
   left: 6%;
-  bottom: 20%;
+  bottom: 15%;
   /*background-color: blue;*/
   border-radius: 50%;
   height: 8rem;
@@ -202,7 +205,7 @@ button#down {
   height: 5rem;
   position: absolute;
   right: 10%;
-  bottom: 25%;
+  bottom: 22%;
 }
 
 .buttons-a-b > button {
@@ -238,7 +241,7 @@ button#down {
 .buttons-SS {
   width: 100%;
   position: absolute;
-  bottom: 8%;
+  bottom: 5%;
   text-align: center;
 }
 
@@ -306,4 +309,30 @@ button#down {
     height: 5px;
     width: 5px;
   }
+}
+
+.grid-container {
+  position: relative;
+  margin: auto;
+  height: calc(20px * 12);
+  width: calc(10px * 12);
+  outline: 1px solid black;
+}
+
+.grid-container > ul {
+  list-style: none;
+  /*outline: 1px solid black;*/
+  height: 10%;
+}
+
+.grid-container > ul > li {
+  float: left;
+  background-color: blue;
+}
+
+.grid-container > ul > li > ul {
+  list-style: none;
+}
+
+.grid-container > ul > li > ul > li {
 }
