@@ -1,4 +1,4 @@
-#####Board Actions
+###Board Actions
 
 ```Javascript
 const renderBoard = board => {
@@ -12,7 +12,7 @@ const updateBoard = board => {
 }
 ```
 
-#####Falling Piece Actions
+###Falling Piece Actions
 
 ```Javascript
 export const requestPiece = () => ({
@@ -55,7 +55,7 @@ export const rotateCCW = piece => ({
 });
 ```
 
-#####Next Piece Actions
+###Next Piece Actions
 
 ```Javascript
 export const sendPiece = piece => ({
@@ -66,5 +66,14 @@ export const sendPiece = piece => ({
 export const addPiece = piece => ({
   type: ADD_PIECE,
   piece
+});
+```
+
+###Score Actions
+
+```Javascript
+export const updateScore = score => ({
+  type: UDPATE_SCORE,
+  score
 });
 ```
