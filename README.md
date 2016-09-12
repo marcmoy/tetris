@@ -10,7 +10,7 @@
 ![phone_demo](./docs/phone_demo.png)
 
 ##Background
-The basis of ['Tetris'](http://tetris.wikia.com/wiki/Tetris_Wiki) is to score points by arranging ['Tetromino'](https://en.wikipedia.org/wiki/Tetromino) pieces into positions that will produce ['line clears'](http://tetris.wikia.com/wiki/Line_clear). As a Tetromino piece falls down the 20x10 ['playfield'](http://tetris.wikia.com/wiki/Playfield), users can rotate or shift the position as the choose to fill and entire row. As soon as the row is filled, the line is cleared and points are awarded. Users will lose if the entire board filled with no cleared lines.
+The basis of [Tetris](http://tetris.wikia.com/wiki/Tetris_Wiki) is to score points by arranging [Tetromino](https://en.wikipedia.org/wiki/Tetromino) pieces into positions that will produce [line clears](http://tetris.wikia.com/wiki/Line_clear). As a Tetromino piece falls down the 20x10 [playfield](http://tetris.wikia.com/wiki/Playfield), users can rotate or shift the position as the choose to fill and entire row. As soon as the row is filled, the line is cleared and points are awarded. Users will lose if the entire board filled with no cleared lines.
 
 ##Feature Objectives
 - Replicated game version of Tetris with comparable game logic and gameplay user experience.
