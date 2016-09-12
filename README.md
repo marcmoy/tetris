@@ -3,7 +3,11 @@
 
 ###DEMO LIVE AT: [https://marcmoy.github.io/tetris/](https://marcmoy.github.io/tetris/)
 
-![sample](./demo.gif)
+###Desktop Browser
+![demo](./docs/demo.gif)
+
+###Mobile Browser
+![phone_demo](./docs/phone_demo.png)
 
 ##Feature Objectives
 - Replicated game version of Tetris with comparable game logic and gameplay experience.
