@@ -21,5 +21,5 @@
 This game will be implemented using the following technologies:
 
 - Vanilla Javascript (ES6) and jQuery to fulfill the overall game logic and structure.
-- Redux to manage entire game state.
+- Redux to manage entire game state. (See [sample state](./docs/sample_state.md) and [sample actions](./docs/sample_actions.md) for implementation.)
 - Webpack to bundle and compile multiple scripts.

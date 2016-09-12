@@ -34,8 +34,8 @@ piece: {
 ```
 
 ###Board State
-![board-state](./board-state.png)
+![board_state](./board_state.png)
 
 ###Piece State
-![piece-rotation](./piece-rotation.png)
-![piece-position](./piece-position.png)
+![piece_rotation](./piece_rotation.png)
+![piece_position](./piece_position.png)
