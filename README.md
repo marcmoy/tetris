@@ -1,7 +1,7 @@
 #Tetris
-###### A remastered version of the classic gameboy game, built with vanilla Javascript (ES6) and jQuery.
+####A remastered version of the classic gameboy game, built with vanilla Javascript (ES6) and jQuery.
 
-##DEMO LIVE AT: [https://marcmoy.github.io/tetris/](https://marcmoy.github.io/tetris/)
+###DEMO LIVE AT: [https://marcmoy.github.io/tetris/](https://marcmoy.github.io/tetris/)
 
 ![sample](./demo.gif)
 
@@ -15,3 +15,11 @@
 ##Bonus Features
 - '[Piece hold](http://tetris.wikia.com/wiki/Hold_piece)' ability.
 - CSS animations that will 'build' the gameboy upon entering the page. (See examples [1](https://codepen.io/heero/pen/wylhv) and [2](http://bchanx.com/animated-gameboy-in-css)).
+
+##Architecture and Technologies
+
+This game will be implemented using the following technologies:
+
+- Vanilla Javascript (ES6) and jQuery to fulfill the overall game logic and structure.
+- Redux to manage entire game state.
+- Webpack to bundle and compile multiple scripts.
