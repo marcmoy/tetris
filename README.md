@@ -47,6 +47,10 @@ In addition to the webpack entry file, there will be multiple scripts to handle 
 - `pieces.js`: Holds the settings for each type of Tetromino.
 - `score.js`: Manages the points, # of lines cleared, and level difficulty settings.
 
+##Sample Wireframe
+
+![wireframe](./docs/wireframe.png)
+
 ##Implementation Timeline
 
 ###Day 1
