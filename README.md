@@ -3,10 +3,10 @@
 
 ###DEMO LIVE AT: [https://marcmoy.github.io/tetris/](https://marcmoy.github.io/tetris/)
 
-###Desktop Browser
+###Desktop Browser Game View
 ![demo](./docs/demo.gif)
 
-###Mobile Browser
+###Mobile Browser Game View
 ![phone_demo](./docs/phone_demo.png)
 
 ##Background
