@@ -34,7 +34,7 @@ The basis of [Tetris](http://tetris.wikia.com/wiki/Tetris_Wiki) is to score poin
 This game will be implemented using the following technologies:
 
 - Vanilla Javascript (ES6) and jQuery to fulfill the overall game logic and structure.
-- Redux to manage state (refer to [sample state](./docs/sample_state.md) and [sample actions](.docs/sample_actions.md)).
+- Redux to manage state (refer to [sample state](https://github.com/marcmoy/tetris/blob/master/docs/sample_state.md) and [sample actions](https://github.com/marcmoy/tetris/blob/master/docs/sample_actions.md)).
 - Webpack to bundle and compile multiple scripts.
 
 In addition to the webpack entry file, there will be multiple scripts to handle the logic behind the various classes needed to execute the game.
