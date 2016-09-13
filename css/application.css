@@ -327,7 +327,7 @@ button#down {
   }
 }
 
-.grid-container {
+.playfield-container {
   position: absolute;
   left: 15%;
   top: 3%;
@@ -336,21 +336,21 @@ button#down {
 }
 
 @media screen and (min-width: 400px) and (max-width: 420px) {
-  .grid-container {
+  .playfield-container {
     height: 280px;
     width: 140px;
   }
 }
 
 @media screen and (max-width: 330px) {
-  .grid-container {
+  .playfield-container {
     height: 220px;
     width: 100px;
   }
 }
 
 @media screen and (min-width: 370px) and (max-width: 400px){
-  .grid-container {
+  .playfield-container {
     top: 6%;
   }
 }
