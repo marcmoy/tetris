@@ -1,8 +1,6 @@
 import React from 'react';
 
-const Playfield = ({ board }) => {
-
-  // debugger;
+const Board = ({ board }) => {
   let count = 0;
   let playfield = [];
   for (let i = 0; i < 20; i++) {
@@ -21,10 +19,10 @@ const Playfield = ({ board }) => {
       </tr>
     );
   }
-
+  debugger;
   return(
-    <div className='playfield-container'>
-      <table className='grid'>
+    <div className='board-container'>
+      <table className='board'>
         <tbody>
           { playfield }
         </tbody>
@@ -33,4 +31,4 @@ const Playfield = ({ board }) => {
   );
 };
 
-export default Playfield;
+export default Board;

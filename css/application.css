@@ -327,7 +327,7 @@ button#down {
   }
 }
 
-.playfield-container {
+.board-container {
   position: absolute;
   left: 15%;
   top: 3%;
@@ -336,26 +336,26 @@ button#down {
 }
 
 @media screen and (min-width: 400px) and (max-width: 420px) {
-  .playfield-container {
+  .board-container {
     height: 280px;
     width: 140px;
   }
 }
 
 @media screen and (max-width: 330px) {
-  .playfield-container {
+  .board-container {
     height: 220px;
     width: 100px;
   }
 }
 
 @media screen and (min-width: 370px) and (max-width: 400px){
-  .playfield-container {
+  .board-container {
     top: 6%;
   }
 }
 
-.grid {
+.board {
   height: 100%;
   width: 100%;
   border-spacing: 0;
@@ -443,4 +443,26 @@ tbody > tr > td:after {
     right: 1%;
     bottom: 15%;
   }
+}
+
+.piece-i {
+  background-color: red;
+}
+.piece-o {
+  background-color: yellow;
+}
+.piece-j {
+  background-color: green;
+}
+.piece-l {
+  background-color: blue;
+}
+.piece-s {
+  background-color: purple;
+}
+.piece-z {
+  background-color: orange;
+}
+.piece-t {
+  background-color: pink;
 }

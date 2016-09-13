@@ -1,15 +1,16 @@
 import { connect } from 'react-redux';
-import Playfield from './playfield';
+import Board from './board';
 
 const mapStateToProps = state => ({
-  board: state.board
+  board: state.board,
+  piece: state.piece
 });
 
 const mapDispatchToProps = dispatch => ({
 });
 
-const PlayfieldContainer = connect(
+const BoardContainer = connect(
   mapStateToProps
-)(Playfield);
+)(Board);
 
-export default PlayfieldContainer;
+export default BoardContainer;
