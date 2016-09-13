@@ -1,14 +1,13 @@
 import { createStore } from 'redux';
-import RootReducer from '../reducers/root_reducer';
 import { randomPiece } from '../util/piece_types';
+import RootReducer from '../reducers/root_reducer';
+import RootMiddleware from '../middleware/root_middleware';
 
 const initialBoard = () => {
   let board = {};
-  let count = 0;
   for (let i = 0; i < 20; i++) {
     for (let j = 0; j < 10; j++) {
-      board[count] = { className: 'empty', pos: [i, j] };
-      count++;
+      board[`${i},${j}`] = { className: 'empty' };
     }
   }
   return board;
@@ -22,7 +21,8 @@ const preloadedState = {
 const configureStore = () => (
   createStore(
     RootReducer,
-    preloadedState
+    preloadedState,
+    RootMiddleware
   )
 );
 

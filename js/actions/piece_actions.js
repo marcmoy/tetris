@@ -1,11 +1,17 @@
+// makes piece fall
+export const STEP_PIECE = 'STEP_PIECE';
+// movements
 export const MOVE_LEFT = 'MOVE_LEFT';
 export const MOVE_DOWN = 'MOVE_DOWN';
 export const MOVE_RIGHT = 'MOVE_RIGHT';
-
 // CW = Clockwise
 // CCW = Counter Clockewise
 export const ROTATE_CW = 'ROTATE_CW';
 export const ROTATE_CCW = 'ROTATE_CCW';
+
+export const stepPiece = () => ({
+  type: STEP_PIECE
+});
 
 export const moveLeft = piece => ({
   type: MOVE_LEFT,

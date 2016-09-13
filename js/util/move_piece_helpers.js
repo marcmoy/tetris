@@ -14,13 +14,13 @@ const DELTAS = {
 
 export const nextPos = (dir, currentPos) => {
   let delta = DELTAS[dir];
-
   return currentPos.map(pos => (
     [pos[0] + delta.x, pos[1] + delta.y]
   ));
 };
 
 export const isDropped = (dir, currentPos) => {
+  // debugger;
   let futurePos = nextPos(currentPos);
   let grid = BoardState.grid;
 

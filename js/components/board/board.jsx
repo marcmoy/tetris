@@ -8,9 +8,8 @@ const Board = ({ board }) => {
     let row = [];
 
     for (let j = 0; j < 10; j++) {
-      let key = i.toString() + j;
-      row.push(<td key={key} className={board[count].className}/>);
-      count++;
+      let key = `${i},${j}`;
+      row.push(<td key={key} className={board[key].className}/>);
     }
 
     playfield.push(

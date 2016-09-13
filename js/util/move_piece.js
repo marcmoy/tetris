@@ -7,8 +7,7 @@ const movePiece = (dir, piece) => {
   let newPiece = Object.assign(piece, { pos: newPos });
 
   // check if piece is dropped
-  if (isDropped(dir, newPiece)) newPiece.inPlay = false;
-
+  // if (isDropped(dir, newPiece)) newPiece.inPlay = false;
   return newPiece;
 };
 
