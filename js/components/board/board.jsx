@@ -19,7 +19,6 @@ const Board = ({ board }) => {
       </tr>
     );
   }
-  debugger;
   return(
     <div className='board-container'>
       <table className='board'>
