@@ -48,17 +48,14 @@ class Tetris extends React.Component {
 
   assignButtonListeners() {
 
-    $("#down").on("mousedown touchstart tap click", (e) => {
+    $("#down").on("mousedown touchstart", (e) => {
       e.preventDefault();
       e.target.className = 'clicked';
-      if (e.type === 'tap' || e.type === 'click') {
-        this.context.store.dispatch(moveDown());
-      } else {
-        this.downInterval = setInterval(
-          () => this.context.store.dispatch(moveDown()),
-          100
-        );
-      }
+      this.context.store.dispatch(moveDown());
+      this.downInterval = setInterval(
+        () => this.context.store.dispatch(moveDown()),
+        100
+      );
     });
 
     $("#down").on("mouseup touchend", (e) => {
@@ -67,17 +64,14 @@ class Tetris extends React.Component {
       clearInterval(this.downInterval);
     });
 
-    $("#left").on("mousedown touchstart tap click", (e) => {
+    $("#left").on("mousedown touchstart", (e) => {
       e.preventDefault();
       e.target.className = 'clicked';
-      if (e.type === 'tap' || e.type === 'click') {
-        this.context.store.dispatch(moveLeft());
-      } else {
-        this.leftInterval = setInterval(
-          () => this.context.store.dispatch(moveLeft()),
-          100
-        );
-      }
+      this.context.store.dispatch(moveLeft());
+      this.leftInterval = setInterval(
+        () => this.context.store.dispatch(moveLeft()),
+        100
+      );
     });
 
     $("#left").on("mouseup touchend", (e) => {
@@ -86,17 +80,14 @@ class Tetris extends React.Component {
       clearInterval(this.leftInterval);
     });
 
-    $("#right").on("mousedown touchstart tap click", (e) => {
+    $("#right").on("mousedown touchstart", (e) => {
       e.preventDefault();
       e.target.className = 'clicked';
-      if (e.type === 'tap' || e.type === 'click') {
-        this.context.store.dispatch(moveRight());
-      } else {
-        this.rightInterval = setInterval(
-          () => this.context.store.dispatch(moveRight()),
-          100
-        );
-      }
+      this.context.store.dispatch(moveRight());
+      this.rightInterval = setInterval(
+        () => this.context.store.dispatch(moveRight()),
+        100
+      );
     });
 
     $("#right").on("mouseup touchend", (e) => {
