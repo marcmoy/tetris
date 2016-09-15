@@ -10,11 +10,13 @@ class Tetris extends React.Component {
   constructor() {
     super();
     this.assignKeyListeners = this.assignKeyListeners.bind(this);
+    this.assignButtonListeners = this.assignButtonListeners.bind(this);
   }
 
   componentDidMount() {
     this.assignKeyListeners();
-    this.interval = window.setInterval(
+    this.assignButtonListeners();
+    this.interval = setInterval(
       () => this.context.store.dispatch(stepPiece()), // move piece down
       1000 // every second
     );
@@ -35,10 +37,56 @@ class Tetris extends React.Component {
           e.preventDefault();
           this.context.store.dispatch(moveDown());
           break;
+        case 38:
+          e.preventDefault();
+          break;
         default:
           break;
       }
     });
+  }
+
+  assignButtonListeners() {
+
+    $("#down").on("mousedown", (e) => {
+      e.preventDefault();
+      this.downInterval = setInterval(
+        () => this.context.store.dispatch(moveDown()),
+        100
+      );
+    });
+
+    $("#down").on("mouseup", (e) => {
+      e.preventDefault();
+      clearInterval(this.downInterval);
+    });
+
+    $("#left").on("mousedown", (e) => {
+      e.preventDefault();
+      this.leftInterval = setInterval(
+        () => this.context.store.dispatch(moveLeft()),
+        100
+      );
+    });
+
+    $("#left").on("mouseup", (e) => {
+      e.preventDefault();
+      clearInterval(this.leftInterval);
+    });
+
+    $("#right").on("mousedown", (e) => {
+      e.preventDefault();
+      this.rightInterval = setInterval(
+        () => this.context.store.dispatch(moveRight()),
+        100
+      );
+    });
+
+    $("#right").on("mouseup", (e) => {
+      e.preventDefault();
+      clearInterval(this.rightInterval);
+    });
+
   }
 
   render() {

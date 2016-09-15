@@ -5,9 +5,9 @@ import createLogger from 'redux-logger';
 const loggerMiddleware = createLogger();
 
 const RootMiddleware = applyMiddleware(
-  PieceMiddleware,
+  PieceMiddleware
   // QueueMiddleware,
-  loggerMiddleware
+  // loggerMiddleware
 );
 
 export default RootMiddleware;

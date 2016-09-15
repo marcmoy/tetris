@@ -23128,6 +23128,7 @@
 	    var _this = _possibleConstructorReturn(this, (Tetris.__proto__ || Object.getPrototypeOf(Tetris)).call(this));
 	
 	    _this.assignKeyListeners = _this.assignKeyListeners.bind(_this);
+	    _this.assignButtonListeners = _this.assignButtonListeners.bind(_this);
 	    return _this;
 	  }
 	
@@ -23137,7 +23138,8 @@
 	      var _this2 = this;
 	
 	      this.assignKeyListeners();
-	      this.interval = window.setInterval(function () {
+	      this.assignButtonListeners();
+	      this.interval = setInterval(function () {
 	        return _this2.context.store.dispatch((0, _piece_actions.stepPiece)());
 	      }, // move piece down
 	      1000 // every second
@@ -23162,9 +23164,53 @@
 	            e.preventDefault();
 	            _this3.context.store.dispatch((0, _piece_actions.moveDown)());
 	            break;
+	          case 38:
+	            e.preventDefault();
+	            break;
 	          default:
 	            break;
 	        }
+	      });
+	    }
+	  }, {
+	    key: 'assignButtonListeners',
+	    value: function assignButtonListeners() {
+	      var _this4 = this;
+	
+	      (0, _jquery2.default)("#down").on("mousedown", function (e) {
+	        e.preventDefault();
+	        _this4.downInterval = setInterval(function () {
+	          return _this4.context.store.dispatch((0, _piece_actions.moveDown)());
+	        }, 100);
+	      });
+	
+	      (0, _jquery2.default)("#down").on("mouseup", function (e) {
+	        e.preventDefault();
+	        clearInterval(_this4.downInterval);
+	      });
+	
+	      (0, _jquery2.default)("#left").on("mousedown", function (e) {
+	        e.preventDefault();
+	        _this4.leftInterval = setInterval(function () {
+	          return _this4.context.store.dispatch((0, _piece_actions.moveLeft)());
+	        }, 100);
+	      });
+	
+	      (0, _jquery2.default)("#left").on("mouseup", function (e) {
+	        e.preventDefault();
+	        clearInterval(_this4.leftInterval);
+	      });
+	
+	      (0, _jquery2.default)("#right").on("mousedown", function (e) {
+	        e.preventDefault();
+	        _this4.rightInterval = setInterval(function () {
+	          return _this4.context.store.dispatch((0, _piece_actions.moveRight)());
+	        }, 100);
+	      });
+	
+	      (0, _jquery2.default)("#right").on("mouseup", function (e) {
+	        e.preventDefault();
+	        clearInterval(_this4.rightInterval);
 	      });
 	    }
 	  }, {
@@ -50983,9 +51029,10 @@
 	// import QueueMiddleware from './queue_middleware';
 	
 	
-	var RootMiddleware = (0, _redux.applyMiddleware)(_piece_middleware2.default,
+	var RootMiddleware = (0, _redux.applyMiddleware)(_piece_middleware2.default
 	// QueueMiddleware,
-	loggerMiddleware);
+	// loggerMiddleware
+	);
 	
 	exports.default = RootMiddleware;
 
