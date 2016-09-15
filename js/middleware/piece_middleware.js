@@ -12,40 +12,50 @@ const PieceMiddleware = ({getState, dispatch}) => next => action => {
   const piece = getState().piece;
   const board = getState().board;
   const queue = getState().queue;
-  const success = (newBoard) => () => dispatch(updateBoard(newBoard));
+
+  const update = () => {
+    dispatch(receivePiece(queue));
+    dispatch(updateQueue());
+  };
 
   switch (action.type) {
     case STEP_PIECE:
       let stepPiece;
       if (piece.inPlay) {
         stepPiece = movePiece('down', piece, board);
-        let newBoard = addPiece(board, stepPiece);
-        dispatch(updateBoard(newBoard));
+        dispatch(receivePiece(stepPiece));
+        dispatch(updateBoard(stepPiece));
       } else {
-        dispatch(receivePiece(queue));
-        dispatch(updateQueue());
+        update();
       }
       break;
     case MOVE_LEFT:
-      let leftPiece = movePiece('left', action.piece, board);
-      // Object.assign({}, piece, { leftPiece });
+      if (piece.inPlay) {
+        let leftPiece = movePiece('left', piece, board);
+        dispatch(receivePiece(leftPiece));
+        dispatch(updateBoard(leftPiece));
+      } else {
+        update();
+      }
       break;
     case MOVE_DOWN:
-      let downPiece = movePiece('down', action.piece, board);
-      // Object.assign({}, piece, { downPiece });
+      if (piece.inPlay) {
+        let downPiece = movePiece('down', piece, board);
+        dispatch(receivePiece(downPiece));
+        dispatch(updateBoard(downPiece));
+      } else {
+        update();
+      }
       break;
     case MOVE_RIGHT:
-      let rightPiece = movePiece('right', action.piece, board);
-      // Object.assign({}, piece, { rightPiece });
+      if (piece.inPlay) {
+        let rightPiece = movePiece('right', piece, board);
+        dispatch(receivePiece(rightPiece));
+        dispatch(updateBoard(rightPiece));
+      } else {
+        update();
+      }
       break;
-    // case ROTATE_CW:
-    //   let cwPiece = rotatePiece('cw', action.piece);
-    //   Object.assign({}, piece, { fallingPiece: cwPiece });
-    //
-    // case ROTATE_CCW:
-    //   let ccwPiece = rotatePiece('ccw', action.piece);
-    //   Object.assign({}, piece, { fallingPiece: ccwPiece });
-
     default:
       break;
   }

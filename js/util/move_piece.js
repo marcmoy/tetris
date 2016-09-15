@@ -1,17 +1,37 @@
-import { nextPos, isDropped } from './move_piece_helpers';
+import { nextPos, checkLeft, checkRight, checkDown }
+from './move_piece_helpers';
 
 const movePiece = (dir, piece, board) => {
-
-  // assign new position to piece
   let newPos = nextPos(dir, piece.pos);
-  let newPiece = Object.assign(piece, { pos: newPos });
 
-  // check if piece is dropped
-  if (isDropped(newPiece, board)) {
-    newPiece.inPlay = false;
+  switch (dir) {
+    case 'left':
+      // checkLeft checks if left move is valid
+      if (checkLeft(piece, newPos, board)) {
+        // assign new position to piece
+        return Object.assign({}, piece, { pos: newPos });
+      }
+      break;
+    case 'right':
+      if (checkRight(piece, newPos, board)) {
+        // assign new position to piece
+        return Object.assign({}, piece, { pos: newPos });
+      }
+      break;
+    case 'down':
+      if (checkDown(piece, newPos, board)) {
+        // assign new position to piece
+        return Object.assign({}, piece, { pos: newPos });
+      } else {
+        // if down move is not possible, piece is dropped and not in play anymore
+        piece = Object.assign({}, piece, { inPlay: false });
+      }
+      break;
+    default:
+      // if all checks fail, return same piece at same position
+      return piece;
   }
-
-  return newPiece;
+  return piece;
 };
 
 export default movePiece;

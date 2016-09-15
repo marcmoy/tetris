@@ -5,7 +5,7 @@ const BoardReducer = function(board = {}, action){
 
   switch (action.type) {
     case UPDATE_BOARD:
-      let newBoard = action.board;
+      let newBoard = addPiece(board, action.piece);
       return Object.assign({}, board, { newBoard });
     default:
       return board;

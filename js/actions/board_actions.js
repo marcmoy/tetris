@@ -7,7 +7,7 @@
 
 export const UPDATE_BOARD = 'UPDATE_BOARD';
 
-export const updateBoard = board => ({
+export const updateBoard = piece => ({
   type: UPDATE_BOARD,
-  board
+  piece
 });
