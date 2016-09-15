@@ -1,9 +1,12 @@
-import { UPDATE_BOARD } from '../actions/board_actions';
-import { addPiece } from '../util/render_board';
+import { UPDATE_QUEUE } from '../actions/queue_actions';
+import { randomPiece } from '../util/piece_types';
 
 const QueueReducer = function(queue = {}, action){
 
   switch (action.type) {
+    case UPDATE_QUEUE:
+
+      return randomPiece();
     default:
       return queue;
   }

@@ -12,7 +12,7 @@ class Tetris extends React.Component {
   componentDidMount() {
     this.interval = window.setInterval(
       () => this.context.store.dispatch(stepPiece()), // move piece down
-      300 // every second
+      200 // every second
     );
   }
 

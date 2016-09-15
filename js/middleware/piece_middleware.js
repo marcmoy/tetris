@@ -11,6 +11,7 @@ import { updateQueue } from '../actions/queue_actions';
 const PieceMiddleware = ({getState, dispatch}) => next => action => {
   const piece = getState().piece;
   const board = getState().board;
+  const queue = getState().queue;
   const success = (newBoard) => () => dispatch(updateBoard(newBoard));
 
   switch (action.type) {
@@ -21,7 +22,8 @@ const PieceMiddleware = ({getState, dispatch}) => next => action => {
         let newBoard = addPiece(board, stepPiece);
         dispatch(updateBoard(newBoard));
       } else {
-        dispatch(updateQueue(randomPiece()));
+        dispatch(receivePiece(queue));
+        dispatch(updateQueue());
       }
       break;
     case MOVE_LEFT:

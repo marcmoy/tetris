@@ -23132,7 +23132,7 @@
 	      this.interval = window.setInterval(function () {
 	        return _this2.context.store.dispatch((0, _piece_actions.stepPiece)());
 	      }, // move piece down
-	      300 // every second
+	      200 // every second
 	      );
 	    }
 	  }, {
@@ -23549,7 +23549,7 @@
 	
 	var _root_reducer2 = _interopRequireDefault(_root_reducer);
 	
-	var _root_middleware = __webpack_require__(217);
+	var _root_middleware = __webpack_require__(218);
 	
 	var _root_middleware2 = _interopRequireDefault(_root_middleware);
 	
@@ -40749,9 +40749,9 @@
 	  value: true
 	});
 	
-	var _board_actions = __webpack_require__(211);
+	var _queue_actions = __webpack_require__(217);
 	
-	var _render_board = __webpack_require__(212);
+	var _piece_types = __webpack_require__(206);
 	
 	var QueueReducer = function QueueReducer() {
 	  var queue = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -40759,6 +40759,9 @@
 	
 	
 	  switch (action.type) {
+	    case _queue_actions.UPDATE_QUEUE:
+	
+	      return (0, _piece_types.randomPiece)();
 	    default:
 	      return queue;
 	  }
@@ -40768,6 +40771,24 @@
 
 /***/ },
 /* 217 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var UPDATE_QUEUE = exports.UPDATE_QUEUE = 'UPDATE_QUEUE';
+	
+	var updateQueue = exports.updateQueue = function updateQueue(nextPiece) {
+	  return {
+	    type: UPDATE_QUEUE,
+	    nextPiece: nextPiece
+	  };
+	};
+
+/***/ },
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40778,28 +40799,28 @@
 	
 	var _redux = __webpack_require__(180);
 	
-	var _piece_middleware = __webpack_require__(218);
+	var _piece_middleware = __webpack_require__(219);
 	
 	var _piece_middleware2 = _interopRequireDefault(_piece_middleware);
 	
-	var _queue_middleware = __webpack_require__(220);
-	
-	var _queue_middleware2 = _interopRequireDefault(_queue_middleware);
-	
-	var _reduxLogger = __webpack_require__(221);
+	var _reduxLogger = __webpack_require__(220);
 	
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var loggerMiddleware = (0, _reduxLogger2.default)();
+	// import QueueMiddleware from './queue_middleware';
 	
-	var RootMiddleware = (0, _redux.applyMiddleware)(_piece_middleware2.default, _queue_middleware2.default, loggerMiddleware);
+	
+	var RootMiddleware = (0, _redux.applyMiddleware)(_piece_middleware2.default,
+	// QueueMiddleware,
+	loggerMiddleware);
 	
 	exports.default = RootMiddleware;
 
 /***/ },
-/* 218 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40820,7 +40841,7 @@
 	
 	var _render_board = __webpack_require__(212);
 	
-	var _queue_actions = __webpack_require__(219);
+	var _queue_actions = __webpack_require__(217);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -40831,6 +40852,7 @@
 	    return function (action) {
 	      var piece = getState().piece;
 	      var board = getState().board;
+	      var queue = getState().queue;
 	      var success = function success(newBoard) {
 	        return function () {
 	          return dispatch((0, _board_actions.updateBoard)(newBoard));
@@ -40845,7 +40867,8 @@
 	            var newBoard = (0, _render_board.addPiece)(board, stepPiece);
 	            dispatch((0, _board_actions.updateBoard)(newBoard));
 	          } else {
-	            dispatch((0, _queue_actions.updateQueue)((0, _piece_types.randomPiece)()));
+	            dispatch((0, _piece_actions.receivePiece)(queue));
+	            dispatch((0, _queue_actions.updateQueue)());
 	          }
 	          break;
 	        case _piece_actions.MOVE_LEFT:
@@ -40879,59 +40902,7 @@
 	exports.default = PieceMiddleware;
 
 /***/ },
-/* 219 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var UPDATE_QUEUE = exports.UPDATE_QUEUE = 'UPDATE_QUEUE';
-	
-	var updateQueue = exports.updateQueue = function updateQueue(nextPiece) {
-	  return {
-	    type: UPDATE_QUEUE,
-	    nextPiece: nextPiece
-	  };
-	};
-
-/***/ },
 /* 220 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _queue_actions = __webpack_require__(219);
-	
-	var _piece_actions = __webpack_require__(198);
-	
-	var QueueMiddleware = function QueueMiddleware(_ref) {
-	  var getState = _ref.getState;
-	  var dispatch = _ref.dispatch;
-	  return function (next) {
-	    return function (action) {
-	      var queue = getState().queue;
-	      switch (action.type) {
-	        case _queue_actions.UPDATE_QUEUE:
-	          dispatch((0, _piece_actions.receivePiece)(action.nextPiece));
-	          break;
-	        default:
-	          break;
-	      }
-	      return next(action);
-	    };
-	  };
-	};
-	
-	exports.default = QueueMiddleware;
-
-/***/ },
-/* 221 */
 /***/ function(module, exports) {
 
 	"use strict";
