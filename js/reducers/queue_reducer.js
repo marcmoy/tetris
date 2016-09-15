@@ -5,7 +5,6 @@ const QueueReducer = function(queue = {}, action){
 
   switch (action.type) {
     case UPDATE_QUEUE:
-
       return randomPiece();
     default:
       return queue;
