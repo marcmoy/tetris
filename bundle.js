@@ -23132,7 +23132,7 @@
 	      this.interval = window.setInterval(function () {
 	        return _this2.context.store.dispatch((0, _piece_actions.stepPiece)());
 	      }, // move piece down
-	      1000 // every second
+	      300 // every second
 	      );
 	    }
 	  }, {
@@ -23170,6 +23170,8 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	// creates new piece
+	var NEXT_PIECE = exports.NEXT_PIECE = 'NEXT_PIECE';
 	// makes piece fall
 	var STEP_PIECE = exports.STEP_PIECE = 'STEP_PIECE';
 	// movements
@@ -23180,6 +23182,14 @@
 	// CCW = Counter Clockewise
 	var ROTATE_CW = exports.ROTATE_CW = 'ROTATE_CW';
 	var ROTATE_CCW = exports.ROTATE_CCW = 'ROTATE_CCW';
+	// receive new piece
+	var RECEIVE_PIECE = exports.RECEIVE_PIECE = 'RECEIVE_PIECE';
+	
+	var nextPiece = exports.nextPiece = function nextPiece() {
+	  return {
+	    type: NEXT_PIECE
+	  };
+	};
 	
 	var stepPiece = exports.stepPiece = function stepPiece() {
 	  return {
@@ -23219,6 +23229,14 @@
 	  return {
 	    type: ROTATE_CCW,
 	    piece: piece
+	  };
+	};
+	
+	var receivePiece = exports.receivePiece = function receivePiece(piece, success) {
+	  return {
+	    type: RECEIVE_PIECE,
+	    piece: piece,
+	    success: success
 	  };
 	};
 	
@@ -23346,14 +23364,16 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state) {
-	  return {};
+	  return {
+	    queue: state.queue
+	  };
 	};
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {};
 	};
 	
-	var QueueContainer = (0, _reactRedux.connect)()(_queue2.default);
+	var QueueContainer = (0, _reactRedux.connect)(mapStateToProps)(_queue2.default);
 	
 	exports.default = QueueContainer;
 
@@ -23374,19 +23394,22 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var Queue = function Queue(_ref) {
-	  var _ref$nextPiece = _ref.nextPiece;
-	  var nextPiece = _ref$nextPiece === undefined ? {} : _ref$nextPiece;
+	  var queue = _ref.queue;
 	
-	
-	  var queue = [];
+	  var nextPiece = [];
+	  var blocks = queue.blocks[queue.rotation];
+	  var idx = 0;
 	
 	  for (var i = 0; i < 4; i++) {
 	
 	    var row = [];
 	    for (var j = 0; j < 4; j++) {
-	      row.push(_react2.default.createElement('td', { key: j }));
+	      var className = blocks[idx] ? queue.className : 'empty';
+	      row.push(_react2.default.createElement('td', { key: j, className: className }));
+	
+	      idx++;
 	    }
-	    queue.push(_react2.default.createElement(
+	    nextPiece.push(_react2.default.createElement(
 	      'tr',
 	      { key: i },
 	      row
@@ -23402,7 +23425,7 @@
 	      _react2.default.createElement(
 	        'tbody',
 	        null,
-	        queue
+	        nextPiece
 	      )
 	    ),
 	    _react2.default.createElement(
@@ -23526,7 +23549,7 @@
 	
 	var _root_reducer2 = _interopRequireDefault(_root_reducer);
 	
-	var _root_middleware = __webpack_require__(216);
+	var _root_middleware = __webpack_require__(217);
 	
 	var _root_middleware2 = _interopRequireDefault(_root_middleware);
 	
@@ -23544,7 +23567,8 @@
 	
 	var preloadedState = {
 	  board: initialBoard(),
-	  piece: (0, _piece_types.randomPiece)()
+	  piece: (0, _piece_types.randomPiece)(),
+	  queue: (0, _piece_types.randomPiece)()
 	};
 	
 	var configureStore = function configureStore() {
@@ -23578,7 +23602,7 @@
 	};
 	
 	var initialPos = function initialPos() {
-	  return [[-3, 3], [-3, 4], [-3, 5], [-3, 6], [-2, 3], [-2, 4], [-2, 5], [-2, 6], [-1, 3], [-1, 4], [-1, 5], [-1, 6], [0, 3], [0, 4], [0, 5], [0, 6]];
+	  return [[-4, 3], [-4, 4], [-4, 5], [-4, 6], [-3, 3], [-3, 4], [-3, 5], [-3, 6], [-2, 3], [-2, 4], [-2, 5], [-2, 6], [-1, 3], [-1, 4], [-1, 5], [-1, 6]];
 	};
 	
 	var I = function I() {
@@ -40427,11 +40451,16 @@
 	
 	var _piece_reducer2 = _interopRequireDefault(_piece_reducer);
 	
+	var _queue_reducer = __webpack_require__(216);
+	
+	var _queue_reducer2 = _interopRequireDefault(_queue_reducer);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var RootReducer = (0, _redux.combineReducers)({
 	  board: _board_reducer2.default,
-	  piece: _piece_reducer2.default
+	  piece: _piece_reducer2.default,
+	  queue: _queue_reducer2.default
 	});
 	
 	exports.default = RootReducer;
@@ -40456,8 +40485,8 @@
 	
 	
 	  switch (action.type) {
-	    case _board_actions.RECEIVE_PIECE:
-	      var newBoard = (0, _render_board.addPiece)(board, action.piece);
+	    case _board_actions.UPDATE_BOARD:
+	      var newBoard = action.board;
 	      return Object.assign({}, board, { newBoard: newBoard });
 	    default:
 	      return board;
@@ -40475,12 +40504,19 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var RECEIVE_PIECE = exports.RECEIVE_PIECE = 'RECEIVE_PIECE';
+	// export const RECEIVE_PIECE = 'RECEIVE_PIECE';
+	//
+	// export const receivePiece = piece => ({
+	//   type: RECEIVE_PIECE,
+	//   piece
+	// });
 	
-	var receivePiece = exports.receivePiece = function receivePiece(piece) {
+	var UPDATE_BOARD = exports.UPDATE_BOARD = 'UPDATE_BOARD';
+	
+	var updateBoard = exports.updateBoard = function updateBoard(board) {
 	  return {
-	    type: RECEIVE_PIECE,
-	    piece: piece
+	    type: UPDATE_BOARD,
+	    board: board
 	  };
 	};
 
@@ -40514,7 +40550,12 @@
 	    }
 	  });
 	
-	  prevTargetPos = targetPos;
+	  if (piece.inPlay) {
+	    prevTargetPos = targetPos;
+	  } else {
+	    prevTargetPos = [];
+	  }
+	
 	  return newBoard;
 	};
 
@@ -40536,41 +40577,48 @@
 	
 	var _move_piece2 = _interopRequireDefault(_move_piece);
 	
+	var _piece_types = __webpack_require__(206);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var PieceReducer = function PieceReducer() {
 	  var piece = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
 	
-	  // switch (action.type) {
-	  //   case STEP_PIECE:
-	  //     let stepPiece = movePiece('down', piece);
-	  //     debugger;
-	  //     return Object.assign({}, piece, { stepPiece });
-	  //
-	  //   case MOVE_LEFT:
-	  //     let leftPiece = movePiece('left', action.piece);
-	  //     return Object.assign({}, piece, { leftPiece });
-	  //
-	  //   case MOVE_DOWN:
-	  //     let downPiece = movePiece('down', action.piece);
-	  //     return Object.assign({}, piece, { downPiece });
-	  //
-	  //   case MOVE_RIGHT:
-	  //     let rightPiece = movePiece('right', action.piece);
-	  //     return Object.assign({}, piece, { rightPiece });
+	  switch (action.type) {
+	    case _piece_actions.NEXT_PIECE:
+	      return (0, _piece_types.randomPiece)();
+	    case _piece_actions.RECEIVE_PIECE:
+	      return action.piece;
 	
-	  // case ROTATE_CW:
-	  //   let cwPiece = rotatePiece('cw', action.piece);
-	  //   return Object.assign({}, piece, { fallingPiece: cwPiece });
-	  //
-	  // case ROTATE_CCW:
-	  //   let ccwPiece = rotatePiece('ccw', action.piece);
-	  //   return Object.assign({}, piece, { fallingPiece: ccwPiece });
+	    //   case STEP_PIECE:
+	    //     let stepPiece = movePiece('down', piece);
+	    //     debugger;
+	    //     return Object.assign({}, piece, { stepPiece });
+	    //
+	    //   case MOVE_LEFT:
+	    //     let leftPiece = movePiece('left', action.piece);
+	    //     return Object.assign({}, piece, { leftPiece });
+	    //
+	    //   case MOVE_DOWN:
+	    //     let downPiece = movePiece('down', action.piece);
+	    //     return Object.assign({}, piece, { downPiece });
+	    //
+	    //   case MOVE_RIGHT:
+	    //     let rightPiece = movePiece('right', action.piece);
+	    //     return Object.assign({}, piece, { rightPiece });
 	
-	  // default:
-	  return piece;
-	  // }
+	    // case ROTATE_CW:
+	    //   let cwPiece = rotatePiece('cw', action.piece);
+	    //   return Object.assign({}, piece, { fallingPiece: cwPiece });
+	    //
+	    // case ROTATE_CCW:
+	    //   let ccwPiece = rotatePiece('ccw', action.piece);
+	    //   return Object.assign({}, piece, { fallingPiece: ccwPiece });
+	
+	    default:
+	      return piece;
+	  }
 	};
 	
 	exports.default = PieceReducer;
@@ -40587,14 +40635,17 @@
 	
 	var _move_piece_helpers = __webpack_require__(215);
 	
-	var movePiece = function movePiece(dir, piece) {
+	var movePiece = function movePiece(dir, piece, board) {
 	
 	  // assign new position to piece
 	  var newPos = (0, _move_piece_helpers.nextPos)(dir, piece.pos);
 	  var newPiece = Object.assign(piece, { pos: newPos });
 	
 	  // check if piece is dropped
-	  // if (isDropped(dir, newPiece)) newPiece.inPlay = false;
+	  if ((0, _move_piece_helpers.isDropped)(newPiece, board)) {
+	    newPiece.inPlay = false;
+	  }
+	
 	  return newPiece;
 	};
 	
@@ -40622,20 +40673,28 @@
 
 /***/ },
 /* 215 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	// adjust names later on
-	// import BoardState from 'somewhere';
+	exports.isDropped = exports.nextPos = undefined;
+	
+	var _lodash = __webpack_require__(207);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	var BoardState = {
 	  grid: {},
 	  height: 0,
 	  width: 0
-	};
+	}; // adjust names later on
+	// import BoardState from 'somewhere';
+	
 	
 	var DELTAS = {
 	  left: { x: 0, y: -1 },
@@ -40650,15 +40709,30 @@
 	  });
 	};
 	
-	var isDropped = exports.isDropped = function isDropped(dir, currentPos) {
-	  // debugger;
-	  var futurePos = nextPos(currentPos);
-	  var grid = BoardState.grid;
+	var isDropped = exports.isDropped = function isDropped(piece, board) {
+	  // checks if if starting position
 	
-	  // check if all future position are empty
-	  for (var x = 0; x < BoardState.height; x++) {
-	    for (var y = 0; y < BoardState.width; y++) {
-	      if (grid[(x, y)] !== 'empty') return true;
+	  var blocks = _lodash2.default.chunk(piece.blocks[piece.rotation], 4);
+	  var futurePos = _lodash2.default.chunk(nextPos("down", piece.pos), 4);
+	  var bottomBlocks = void 0,
+	      bottomPos = void 0;
+	
+	  for (var i = 3; i >= 0; i--) {
+	    if (_lodash2.default.sum(blocks[i]) > 0) {
+	      bottomBlocks = blocks[i];
+	      bottomPos = futurePos[i];
+	      break;
+	    }
+	  }
+	
+	  for (var _i = 0; _i < bottomBlocks.length; _i++) {
+	    if (bottomBlocks[_i]) {
+	      var key = bottomPos[_i].join(",");
+	      if (board[key]) {
+	        if (board[key].className !== 'empty') return true;
+	      } else {
+	        if (bottomPos[_i][0] > 19) return true;
+	      }
 	    }
 	  }
 	
@@ -40675,23 +40749,22 @@
 	  value: true
 	});
 	
-	var _redux = __webpack_require__(180);
+	var _board_actions = __webpack_require__(211);
 	
-	var _piece_middleware = __webpack_require__(217);
+	var _render_board = __webpack_require__(212);
 	
-	var _piece_middleware2 = _interopRequireDefault(_piece_middleware);
+	var QueueReducer = function QueueReducer() {
+	  var queue = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var action = arguments[1];
 	
-	var _reduxLogger = __webpack_require__(218);
 	
-	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
+	  switch (action.type) {
+	    default:
+	      return queue;
+	  }
+	};
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var loggerMiddleware = (0, _reduxLogger2.default)();
-	
-	var RootMiddleware = (0, _redux.applyMiddleware)(_piece_middleware2.default, loggerMiddleware);
-	
-	exports.default = RootMiddleware;
+	exports.default = QueueReducer;
 
 /***/ },
 /* 217 */
@@ -40703,13 +40776,51 @@
 	  value: true
 	});
 	
-	var _piece_actions = __webpack_require__(198);
+	var _redux = __webpack_require__(180);
 	
-	var _board_actions = __webpack_require__(211);
+	var _piece_middleware = __webpack_require__(218);
+	
+	var _piece_middleware2 = _interopRequireDefault(_piece_middleware);
+	
+	var _queue_middleware = __webpack_require__(220);
+	
+	var _queue_middleware2 = _interopRequireDefault(_queue_middleware);
+	
+	var _reduxLogger = __webpack_require__(221);
+	
+	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var loggerMiddleware = (0, _reduxLogger2.default)();
+	
+	var RootMiddleware = (0, _redux.applyMiddleware)(_piece_middleware2.default, _queue_middleware2.default, loggerMiddleware);
+	
+	exports.default = RootMiddleware;
+
+/***/ },
+/* 218 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _piece_actions = __webpack_require__(198);
 	
 	var _move_piece = __webpack_require__(214);
 	
 	var _move_piece2 = _interopRequireDefault(_move_piece);
+	
+	var _piece_types = __webpack_require__(206);
+	
+	var _board_actions = __webpack_require__(211);
+	
+	var _render_board = __webpack_require__(212);
+	
+	var _queue_actions = __webpack_require__(219);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -40719,22 +40830,34 @@
 	  return function (next) {
 	    return function (action) {
 	      var piece = getState().piece;
+	      var board = getState().board;
+	      var success = function success(newBoard) {
+	        return function () {
+	          return dispatch((0, _board_actions.updateBoard)(newBoard));
+	        };
+	      };
 	
 	      switch (action.type) {
 	        case _piece_actions.STEP_PIECE:
-	          var stepPiece = (0, _move_piece2.default)('down', piece);
-	          dispatch((0, _board_actions.receivePiece)(piece));
+	          var stepPiece = void 0;
+	          if (piece.inPlay) {
+	            stepPiece = (0, _move_piece2.default)('down', piece, board);
+	            var newBoard = (0, _render_board.addPiece)(board, stepPiece);
+	            dispatch((0, _board_actions.updateBoard)(newBoard));
+	          } else {
+	            dispatch((0, _queue_actions.updateQueue)((0, _piece_types.randomPiece)()));
+	          }
 	          break;
 	        case _piece_actions.MOVE_LEFT:
-	          var leftPiece = (0, _move_piece2.default)('left', action.piece);
+	          var leftPiece = (0, _move_piece2.default)('left', action.piece, board);
 	          // Object.assign({}, piece, { leftPiece });
 	          break;
 	        case _piece_actions.MOVE_DOWN:
-	          var downPiece = (0, _move_piece2.default)('down', action.piece);
+	          var downPiece = (0, _move_piece2.default)('down', action.piece, board);
 	          // Object.assign({}, piece, { downPiece });
 	          break;
 	        case _piece_actions.MOVE_RIGHT:
-	          var rightPiece = (0, _move_piece2.default)('right', action.piece);
+	          var rightPiece = (0, _move_piece2.default)('right', action.piece, board);
 	          // Object.assign({}, piece, { rightPiece });
 	          break;
 	        // case ROTATE_CW:
@@ -40756,7 +40879,59 @@
 	exports.default = PieceMiddleware;
 
 /***/ },
-/* 218 */
+/* 219 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var UPDATE_QUEUE = exports.UPDATE_QUEUE = 'UPDATE_QUEUE';
+	
+	var updateQueue = exports.updateQueue = function updateQueue(nextPiece) {
+	  return {
+	    type: UPDATE_QUEUE,
+	    nextPiece: nextPiece
+	  };
+	};
+
+/***/ },
+/* 220 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _queue_actions = __webpack_require__(219);
+	
+	var _piece_actions = __webpack_require__(198);
+	
+	var QueueMiddleware = function QueueMiddleware(_ref) {
+	  var getState = _ref.getState;
+	  var dispatch = _ref.dispatch;
+	  return function (next) {
+	    return function (action) {
+	      var queue = getState().queue;
+	      switch (action.type) {
+	        case _queue_actions.UPDATE_QUEUE:
+	          dispatch((0, _piece_actions.receivePiece)(action.nextPiece));
+	          break;
+	        default:
+	          break;
+	      }
+	      return next(action);
+	    };
+	  };
+	};
+	
+	exports.default = QueueMiddleware;
+
+/***/ },
+/* 221 */
 /***/ function(module, exports) {
 
 	"use strict";

@@ -3,6 +3,7 @@ var prevTargetPos = [];
 export const addPiece = (board, piece) => {
   let newBoard = board;
 
+
   prevTargetPos.forEach(pos => {
     let key = pos.join(",");
     newBoard[key].className = 'empty';
@@ -19,6 +20,11 @@ export const addPiece = (board, piece) => {
     }
   });
 
-  prevTargetPos = targetPos;
+  if (piece.inPlay) {
+    prevTargetPos = targetPos;
+  } else {
+    prevTargetPos = [];
+  }
+
   return newBoard;
 };

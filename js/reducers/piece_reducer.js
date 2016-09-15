@@ -1,10 +1,17 @@
-import { STEP_PIECE, MOVE_LEFT, MOVE_DOWN, MOVE_RIGHT, ROTATE_CW, ROTATE_CCW
+import { NEXT_PIECE, STEP_PIECE, RECEIVE_PIECE,
+  MOVE_LEFT, MOVE_DOWN, MOVE_RIGHT, ROTATE_CW, ROTATE_CCW
  } from '../actions/piece_actions';
 import { renderPiece } from '../actions/board_actions';
 import movePiece from '../util/move_piece';
+import { randomPiece } from '../util/piece_types';
 
 const PieceReducer = (piece = {}, action) => {
-  // switch (action.type) {
+  switch (action.type) {
+    case NEXT_PIECE:
+      return randomPiece();
+    case RECEIVE_PIECE:
+      return action.piece;
+
   //   case STEP_PIECE:
   //     let stepPiece = movePiece('down', piece);
   //     debugger;
@@ -30,9 +37,9 @@ const PieceReducer = (piece = {}, action) => {
     //   let ccwPiece = rotatePiece('ccw', action.piece);
     //   return Object.assign({}, piece, { fallingPiece: ccwPiece });
 
-    // default:
+    default:
       return piece;
-  // }
+  }
 };
 
 export default PieceReducer;

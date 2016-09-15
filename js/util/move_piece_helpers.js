@@ -1,5 +1,7 @@
 // adjust names later on
 // import BoardState from 'somewhere';
+import _ from 'lodash';
+
 const BoardState = {
   grid: {},
   height: 0,
@@ -19,15 +21,30 @@ export const nextPos = (dir, currentPos) => {
   ));
 };
 
-export const isDropped = (dir, currentPos) => {
-  // debugger;
-  let futurePos = nextPos(currentPos);
-  let grid = BoardState.grid;
 
-  // check if all future position are empty
-  for (let x = 0; x < BoardState.height; x++) {
-    for (let y = 0; y < BoardState.width; y++) {
-      if (grid[x,y] !== 'empty') return true;
+export const isDropped = (piece, board) => {
+  // checks if if starting position
+
+  let blocks = _.chunk(piece.blocks[piece.rotation], 4);
+  let futurePos = _.chunk(nextPos("down", piece.pos), 4);
+  let bottomBlocks, bottomPos;
+
+  for (let i = 3; i >= 0; i--) {
+    if (_.sum(blocks[i]) > 0) {
+      bottomBlocks = blocks[i];
+      bottomPos = futurePos[i];
+      break;
+    }
+  }
+
+  for (let i = 0; i < bottomBlocks.length; i++) {
+    if (bottomBlocks[i]) {
+      let key = bottomPos[i].join(",");
+      if (board[key]) {
+        if (board[key].className !== 'empty') return true;
+      } else {
+        if (bottomPos[i][0] > 19) return true;
+      }
     }
   }
 

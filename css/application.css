@@ -410,6 +410,10 @@ tbody > tr > td:after {
   border-spacing: 0;
 }
 
+/*.queue > tbody > tr > td {
+  outline: none
+}*/
+
 .queue-container > label {
   font-size: 13px;
   font-weight: bold;

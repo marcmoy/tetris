@@ -1,3 +1,5 @@
+// creates new piece
+export const NEXT_PIECE = 'NEXT_PIECE';
 // makes piece fall
 export const STEP_PIECE = 'STEP_PIECE';
 // movements
@@ -8,6 +10,12 @@ export const MOVE_RIGHT = 'MOVE_RIGHT';
 // CCW = Counter Clockewise
 export const ROTATE_CW = 'ROTATE_CW';
 export const ROTATE_CCW = 'ROTATE_CCW';
+// receive new piece
+export const RECEIVE_PIECE = 'RECEIVE_PIECE';
+
+export const nextPiece = () => ({
+  type: NEXT_PIECE
+});
 
 export const stepPiece = () => ({
   type: STEP_PIECE
@@ -36,6 +44,12 @@ export const rotateCW = piece => ({
 export const rotateCCW = piece => ({
   type: ROTATE_CCW,
   piece
+});
+
+export const receivePiece = (piece, success) => ({
+  type: RECEIVE_PIECE,
+  piece,
+  success
 });
 
 // Example of a piece-I object at it's initial state:

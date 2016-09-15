@@ -1,13 +1,16 @@
 import { nextPos, isDropped } from './move_piece_helpers';
 
-const movePiece = (dir, piece) => {
+const movePiece = (dir, piece, board) => {
 
   // assign new position to piece
   let newPos = nextPos(dir, piece.pos);
   let newPiece = Object.assign(piece, { pos: newPos });
 
   // check if piece is dropped
-  // if (isDropped(dir, newPiece)) newPiece.inPlay = false;
+  if (isDropped(newPiece, board)) {
+    newPiece.inPlay = false;
+  }
+
   return newPiece;
 };
 

@@ -1,16 +1,20 @@
 import React from 'react';
 
-const Queue = ({ nextPiece = {} }) => {
-
-  let queue = [];
+const Queue = ({ queue }) => {
+  let nextPiece = [];
+  let blocks = queue.blocks[queue.rotation];
+  let idx = 0;
 
   for (let i = 0; i < 4; i++) {
 
     let row = [];
     for (let j = 0; j < 4; j++) {
-      row.push(<td key={j} />);
+      let className = blocks[idx] ? queue.className : 'empty';
+      row.push(<td key={j} className={className}/>);
+
+      idx++;
     }
-    queue.push(
+    nextPiece.push(
       <tr key={i}>
         {row}
       </tr>
@@ -21,7 +25,7 @@ const Queue = ({ nextPiece = {} }) => {
     <div className='queue-container'>
       <table className='queue'>
         <tbody>
-          { queue }
+          { nextPiece }
         </tbody>
       </table>
       <label>NEXT</label>
