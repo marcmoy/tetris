@@ -23132,7 +23132,7 @@
 	      this.interval = window.setInterval(function () {
 	        return _this2.context.store.dispatch((0, _piece_actions.stepPiece)());
 	      }, // move piece down
-	      200 // every second
+	      100 // every second
 	      );
 	    }
 	  }, {
@@ -40692,9 +40692,7 @@
 	  grid: {},
 	  height: 0,
 	  width: 0
-	}; // adjust names later on
-	// import BoardState from 'somewhere';
-	
+	};
 	
 	var DELTAS = {
 	  left: { x: 0, y: -1 },
@@ -40710,29 +40708,29 @@
 	};
 	
 	var isDropped = exports.isDropped = function isDropped(piece, board) {
-	  // checks if if starting position
-	
+	  // look up future positions and blocks
 	  var blocks = _lodash2.default.chunk(piece.blocks[piece.rotation], 4);
 	  var futurePos = _lodash2.default.chunk(nextPos("down", piece.pos), 4);
-	  var bottomBlocks = void 0,
-	      bottomPos = void 0;
+	  var checkPos = [[], [], [], []];
 	
-	  for (var i = 3; i >= 0; i--) {
-	    if (_lodash2.default.sum(blocks[i]) > 0) {
-	      bottomBlocks = blocks[i];
-	      bottomPos = futurePos[i];
-	      break;
+	  // read blocks and check for the last positions to check against
+	  for (var i = 0; i < blocks.length; i++) {
+	    var block = blocks[i];
+	    for (var j = 0; j < block.length; j++) {
+	      if (block[j]) {
+	        checkPos[j] = futurePos[i][j];
+	      }
 	    }
 	  }
 	
-	  for (var _i = 0; _i < bottomBlocks.length; _i++) {
-	    if (bottomBlocks[_i]) {
-	      var key = bottomPos[_i].join(",");
-	      if (board[key]) {
-	        if (board[key].className !== 'empty') return true;
-	      } else {
-	        if (bottomPos[_i][0] > 19) return true;
-	      }
+	  // check each 'bottom' position if it's empty or not
+	  for (var _i = 0; _i < checkPos.length; _i++) {
+	    var key = checkPos[_i].join(",");
+	    if (board[key]) {
+	      if (board[key].className !== 'empty') return true;
+	    } else {
+	      // checks if piece is at bottom of grid
+	      if (checkPos[_i][0] > 19) return true;
 	    }
 	  }
 	
