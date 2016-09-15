@@ -9,7 +9,7 @@ export const addPiece = (board, piece) => {
   });
 
   let targetPos = [];
-  
+
   piece.blocks[piece.rotation].forEach((block, idx) => {
     if (block) {
       let key = piece.pos[idx].join(",");

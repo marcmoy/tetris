@@ -48,7 +48,7 @@ class Tetris extends React.Component {
 
   assignButtonListeners() {
 
-    $("#down").on("vmousedown", (e) => {
+    $("#down").on("mousedown touchstart", (e) => {
       e.preventDefault();
       this.downInterval = setInterval(
         () => this.context.store.dispatch(moveDown()),
@@ -56,12 +56,12 @@ class Tetris extends React.Component {
       );
     });
 
-    $("#down").on("vmouseup", (e) => {
+    $("#down").on("mouseup touchend", (e) => {
       e.preventDefault();
       clearInterval(this.downInterval);
     });
 
-    $("#left").on("vmousedown", (e) => {
+    $("#left").on("mousedown touchstart", (e) => {
       e.preventDefault();
       this.leftInterval = setInterval(
         () => this.context.store.dispatch(moveLeft()),
@@ -69,12 +69,12 @@ class Tetris extends React.Component {
       );
     });
 
-    $("#left").on("vmouseup", (e) => {
+    $("#left").on("mouseup touchend", (e) => {
       e.preventDefault();
       clearInterval(this.leftInterval);
     });
 
-    $("#right").on("vmousedown", (e) => {
+    $("#right").on("mousedown touchstart", (e) => {
       e.preventDefault();
       this.rightInterval = setInterval(
         () => this.context.store.dispatch(moveRight()),
@@ -82,7 +82,7 @@ class Tetris extends React.Component {
       );
     });
 
-    $("#right").on("vmouseup", (e) => {
+    $("#right").on("mouseup touchend", (e) => {
       e.preventDefault();
       clearInterval(this.rightInterval);
     });

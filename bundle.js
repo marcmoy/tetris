@@ -23177,38 +23177,38 @@
 	    value: function assignButtonListeners() {
 	      var _this4 = this;
 	
-	      (0, _jquery2.default)("#down").on("mousedown", function (e) {
+	      (0, _jquery2.default)("#down").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        _this4.downInterval = setInterval(function () {
 	          return _this4.context.store.dispatch((0, _piece_actions.moveDown)());
 	        }, 100);
 	      });
 	
-	      (0, _jquery2.default)("#down").on("mouseup", function (e) {
+	      (0, _jquery2.default)("#down").on("mouseup touchend", function (e) {
 	        e.preventDefault();
 	        clearInterval(_this4.downInterval);
 	      });
 	
-	      (0, _jquery2.default)("#left").on("mousedown", function (e) {
+	      (0, _jquery2.default)("#left").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        _this4.leftInterval = setInterval(function () {
 	          return _this4.context.store.dispatch((0, _piece_actions.moveLeft)());
 	        }, 100);
 	      });
 	
-	      (0, _jquery2.default)("#left").on("mouseup", function (e) {
+	      (0, _jquery2.default)("#left").on("mouseup touchend", function (e) {
 	        e.preventDefault();
 	        clearInterval(_this4.leftInterval);
 	      });
 	
-	      (0, _jquery2.default)("#right").on("mousedown", function (e) {
+	      (0, _jquery2.default)("#right").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        _this4.rightInterval = setInterval(function () {
 	          return _this4.context.store.dispatch((0, _piece_actions.moveRight)());
 	        }, 100);
 	      });
 	
-	      (0, _jquery2.default)("#right").on("mouseup", function (e) {
+	      (0, _jquery2.default)("#right").on("mouseup touchend", function (e) {
 	        e.preventDefault();
 	        clearInterval(_this4.rightInterval);
 	      });
