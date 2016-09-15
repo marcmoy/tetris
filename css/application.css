@@ -191,6 +191,10 @@
   background-color: #585656;
 }
 
+.d-pad-row > span > button.clicked {
+  background-color: #3c3838;
+}
+
 button#center {
   border: 1px solid #585656;
 }

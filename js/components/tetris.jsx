@@ -50,6 +50,7 @@ class Tetris extends React.Component {
 
     $("#down").on("mousedown touchstart", (e) => {
       e.preventDefault();
+      e.target.className = 'clicked';
       this.downInterval = setInterval(
         () => this.context.store.dispatch(moveDown()),
         100
@@ -58,11 +59,13 @@ class Tetris extends React.Component {
 
     $("#down").on("mouseup touchend", (e) => {
       e.preventDefault();
+      e.target.className = '';
       clearInterval(this.downInterval);
     });
 
     $("#left").on("mousedown touchstart", (e) => {
       e.preventDefault();
+      e.target.className = 'clicked';
       this.leftInterval = setInterval(
         () => this.context.store.dispatch(moveLeft()),
         100
@@ -71,11 +74,13 @@ class Tetris extends React.Component {
 
     $("#left").on("mouseup touchend", (e) => {
       e.preventDefault();
+      e.target.className = '';
       clearInterval(this.leftInterval);
     });
 
     $("#right").on("mousedown touchstart", (e) => {
       e.preventDefault();
+      e.target.className = 'clicked';
       this.rightInterval = setInterval(
         () => this.context.store.dispatch(moveRight()),
         100
@@ -84,6 +89,7 @@ class Tetris extends React.Component {
 
     $("#right").on("mouseup touchend", (e) => {
       e.preventDefault();
+      e.target.className = '';
       clearInterval(this.rightInterval);
     });
 
