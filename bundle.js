@@ -62,12 +62,31 @@
 	
 	var _store2 = _interopRequireDefault(_store);
 	
+	var _jquery = __webpack_require__(205);
+	
+	var _jquery2 = _interopRequireDefault(_jquery);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	document.addEventListener('DOMContentLoaded', function () {
 	  var store = (0, _store2.default)();
 	  var screen = document.getElementById('screen');
-	  _reactDom2.default.render(_react2.default.createElement(_root2.default, { store: store }), screen);
+	
+	  var renderGame = function renderGame(e) {
+	    e.preventDefault();
+	    (0, _jquery2.default)("#start-screen").addClass("hidden");
+	    (0, _jquery2.default)("#power-switch").removeClass("off").addClass("on");
+	    (0, _jquery2.default)("#power-light").removeClass("off").addClass("on");
+	    _reactDom2.default.render(_react2.default.createElement(_root2.default, { store: store }), screen);
+	  };
+	
+	  (0, _jquery2.default)("#start-button").on("mousedown touchstart", function (e) {
+	    renderGame(e);
+	  });
+	
+	  (0, _jquery2.default)(window).on("keydown", function (e) {
+	    if (e.keyCode === 13) renderGame(e);
+	  });
 	});
 
 /***/ },
@@ -23186,6 +23205,9 @@
 	    key: 'assignButtonListeners',
 	    value: function assignButtonListeners() {
 	      var _this4 = this;
+	
+	      // prevent start button from render new game again
+	      (0, _jquery2.default)("#start-button").off("mousedown touchstart");
 	
 	      (0, _jquery2.default)("#down").on("mousedown touchstart", function (e) {
 	        e.preventDefault();

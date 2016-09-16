@@ -55,6 +55,9 @@ class Tetris extends React.Component {
   }
 
   assignButtonListeners() {
+    // prevent start button from render new game again
+    $("#start-button").off("mousedown touchstart");
+
     $("#down").on("mousedown touchstart", (e) => {
       e.preventDefault();
       e.target.className = 'clicked';
