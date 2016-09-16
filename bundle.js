@@ -23185,6 +23185,7 @@
 	            break;
 	          case 38:
 	            e.preventDefault();
+	            _this3.context.store.dispatch((0, _piece_actions.hardDrop)());
 	            break;
 	          case 32:
 	            // spacebar
@@ -23252,6 +23253,17 @@
 	        e.preventDefault();
 	        e.target.className = '';
 	        clearInterval(_this4.rightInterval);
+	      });
+	
+	      (0, _jquery2.default)("#up").on("mousedown touchstart", function (e) {
+	        e.preventDefault();
+	        e.target.className = 'clicked';
+	        _this4.context.store.dispatch((0, _piece_actions.hardDrop)());
+	      });
+	
+	      (0, _jquery2.default)("#up").on("mouseup touchend", function (e) {
+	        e.preventDefault();
+	        e.target.className = '';
 	      });
 	
 	      (0, _jquery2.default)("#a-button").on("mousedown touchstart", function (e) {
@@ -23324,6 +23336,8 @@
 	var ROTATE_CW = exports.ROTATE_CW = 'ROTATE_CW';
 	var ROTATE_CCW = exports.ROTATE_CCW = 'ROTATE_CCW';
 	
+	var HARD_DROP = exports.HARD_DROP = 'HARD_DROP';
+	
 	var receivePiece = exports.receivePiece = function receivePiece(piece) {
 	  return {
 	    type: RECEIVE_PIECE,
@@ -23364,6 +23378,12 @@
 	var rotateCCW = exports.rotateCCW = function rotateCCW() {
 	  return {
 	    type: ROTATE_CCW
+	  };
+	};
+	
+	var hardDrop = exports.hardDrop = function hardDrop() {
+	  return {
+	    type: HARD_DROP
 	  };
 	};
 	
@@ -50873,11 +50893,11 @@
 	
 	var _piece_middleware2 = _interopRequireDefault(_piece_middleware);
 	
-	var _board_middleware = __webpack_require__(222);
+	var _board_middleware = __webpack_require__(223);
 	
 	var _board_middleware2 = _interopRequireDefault(_board_middleware);
 	
-	var _reduxLogger = __webpack_require__(224);
+	var _reduxLogger = __webpack_require__(225);
 	
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 	
@@ -50913,6 +50933,10 @@
 	var _rotate_piece = __webpack_require__(221);
 	
 	var _rotate_piece2 = _interopRequireDefault(_rotate_piece);
+	
+	var _hard_drop_piece = __webpack_require__(222);
+	
+	var _hard_drop_piece2 = _interopRequireDefault(_hard_drop_piece);
 	
 	var _board_actions = __webpack_require__(212);
 	
@@ -50987,6 +51011,15 @@
 	            var ccwPiece = (0, _rotate_piece2.default)('ccw', piece, board);
 	            dispatch((0, _piece_actions.receivePiece)(ccwPiece));
 	            dispatch((0, _board_actions.updateBoard)(ccwPiece));
+	          } else {
+	            update();
+	          }
+	          break;
+	        case _piece_actions.HARD_DROP:
+	          if (piece.inPlay) {
+	            var hardPiece = (0, _hard_drop_piece2.default)(piece, board);
+	            dispatch((0, _piece_actions.receivePiece)(hardPiece));
+	            dispatch((0, _board_actions.updateBoard)(hardPiece));
 	          } else {
 	            update();
 	          }
@@ -51285,9 +51318,39 @@
 	  value: true
 	});
 	
+	var _move_piece = __webpack_require__(219);
+	
+	var _move_piece2 = _interopRequireDefault(_move_piece);
+	
+	var _render_board = __webpack_require__(213);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var hardDropPiece = function hardDropPiece(piece, board) {
+	  if (!piece.inPlay) {
+	    return piece;
+	  }
+	
+	  var droppedPiece = (0, _move_piece2.default)('down', piece, board);
+	  var newBoard = (0, _render_board.addPiece)(board, droppedPiece);
+	  return hardDropPiece(droppedPiece, newBoard);
+	};
+	
+	exports.default = hardDropPiece;
+
+/***/ },
+/* 223 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
 	var _board_actions = __webpack_require__(212);
 	
-	var _clear_lines = __webpack_require__(223);
+	var _clear_lines = __webpack_require__(224);
 	
 	var _clear_lines2 = _interopRequireDefault(_clear_lines);
 	
@@ -51315,7 +51378,7 @@
 	exports.default = BoardMiddleware;
 
 /***/ },
-/* 223 */
+/* 224 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -51327,7 +51390,6 @@
 	
 	var clearLines = function clearLines(board) {
 	  if (noLines(board)) return board;
-	
 	  var newBoard = removeLine(board, clearIndex);
 	  return clearLines(newBoard);
 	};
@@ -51366,7 +51428,7 @@
 	exports.default = clearLines;
 
 /***/ },
-/* 224 */
+/* 225 */
 /***/ function(module, exports) {
 
 	"use strict";

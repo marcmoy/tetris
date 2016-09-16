@@ -2,7 +2,6 @@ let clearIndex = null;
 
 const clearLines = board => {
   if (noLines(board)) return board;
-
   let newBoard = removeLine(board, clearIndex);
   return clearLines(newBoard);
 };

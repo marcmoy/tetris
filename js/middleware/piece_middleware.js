@@ -1,8 +1,10 @@
-import { STEP_PIECE, MOVE_LEFT, MOVE_DOWN, MOVE_RIGHT, ROTATE_CW, ROTATE_CCW
+import { STEP_PIECE, MOVE_LEFT, MOVE_DOWN, MOVE_RIGHT,
+  ROTATE_CW, ROTATE_CCW, HARD_DROP
  } from '../actions/piece_actions';
 import { receivePiece } from '../actions/piece_actions';
 import movePiece from '../util/move_piece';
 import rotatePiece from '../util/rotate_piece';
+import hardDropPiece from '../util/hard_drop_piece';
 import { updateBoard, boardClear } from '../actions/board_actions';
 import { updateQueue } from '../actions/queue_actions';
 
@@ -69,6 +71,15 @@ const PieceMiddleware = ({getState, dispatch}) => next => action => {
         let ccwPiece = rotatePiece('ccw', piece, board);
         dispatch(receivePiece(ccwPiece));
         dispatch(updateBoard(ccwPiece));
+      } else {
+        update();
+      }
+      break;
+    case HARD_DROP:
+      if (piece.inPlay) {
+        let hardPiece = hardDropPiece(piece, board);
+        dispatch(receivePiece(hardPiece));
+        dispatch(updateBoard(hardPiece));
       } else {
         update();
       }

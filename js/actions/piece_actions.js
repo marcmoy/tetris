@@ -11,6 +11,8 @@ export const MOVE_RIGHT = 'MOVE_RIGHT';
 export const ROTATE_CW = 'ROTATE_CW';
 export const ROTATE_CCW = 'ROTATE_CCW';
 
+export const HARD_DROP = 'HARD_DROP';
+
 export const receivePiece = piece => ({
   type: RECEIVE_PIECE,
   piece
@@ -38,6 +40,10 @@ export const rotateCW = () => ({
 
 export const rotateCCW = () => ({
   type: ROTATE_CCW
+});
+
+export const hardDrop = () => ({
+  type: HARD_DROP
 });
 
 // Example of a piece-I object at it's initial state:
