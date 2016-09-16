@@ -1,5 +1,5 @@
 import React from 'react';
-import { stepPiece, moveLeft, moveRight, moveDown }
+import { stepPiece, moveLeft, moveRight, moveDown, rotateCW, rotateCCW  }
   from '../actions/piece_actions';
 import BoardContainer from './board/board_container';
 import QueueContainer from './queue/queue_container';
@@ -39,6 +39,14 @@ class Tetris extends React.Component {
           break;
         case 38:
           e.preventDefault();
+          break;
+        case 32: // spacebar
+          e.preventDefault();
+          this.context.store.dispatch(rotateCW());
+          break;
+        case 16: // shift
+          e.preventDefault();
+          this.context.store.dispatch(rotateCCW());
           break;
         default:
           break;
@@ -96,6 +104,27 @@ class Tetris extends React.Component {
       clearInterval(this.rightInterval);
     });
 
+    $("#a-button").on("mousedown touchstart", (e) => {
+      e.preventDefault();
+      e.target.className = 'clicked';
+      this.context.store.dispatch(rotateCW());
+    });
+
+    $("#a-button").on("mouseup touchend", (e) => {
+      e.preventDefault();
+      e.target.className = '';
+    });
+
+    $("#b-button").on("mousedown touchstart", (e) => {
+      e.preventDefault();
+      e.target.className = 'clicked';
+      this.context.store.dispatch(rotateCCW());
+    });
+
+    $("#b-button").on("mouseup touchend", (e) => {
+      e.preventDefault();
+      e.target.className = '';
+    });
   }
 
   render() {

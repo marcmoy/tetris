@@ -3,6 +3,7 @@ import { STEP_PIECE, MOVE_LEFT, MOVE_DOWN, MOVE_RIGHT, ROTATE_CW, ROTATE_CCW
 import { receivePiece } from '../actions/piece_actions';
 import { nextPiece } from '../actions/piece_actions';
 import movePiece from '../util/move_piece';
+import rotatePiece from '../util/rotate_piece';
 import { randomPiece } from '../util/piece_types';
 import { updateBoard } from '../actions/board_actions';
 import { addPiece } from '../util/render_board';
@@ -52,6 +53,24 @@ const PieceMiddleware = ({getState, dispatch}) => next => action => {
         let rightPiece = movePiece('right', piece, board);
         dispatch(receivePiece(rightPiece));
         dispatch(updateBoard(rightPiece));
+      } else {
+        update();
+      }
+      break;
+    case ROTATE_CW:
+      if (piece.inPlay) {
+        let cwPiece = rotatePiece('cw', piece, board);
+        dispatch(receivePiece(cwPiece));
+        dispatch(updateBoard(cwPiece));
+      } else {
+        update();
+      }
+      break;
+    case ROTATE_CCW:
+      if (piece.inPlay) {
+        let ccwPiece = rotatePiece('ccw', piece, board);
+        dispatch(receivePiece(ccwPiece));
+        dispatch(updateBoard(ccwPiece));
       } else {
         update();
       }
