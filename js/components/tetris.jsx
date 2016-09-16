@@ -55,8 +55,6 @@ class Tetris extends React.Component {
   }
 
   assignButtonListeners() {
-    $("#base").disableSelection();
-
     $("#down").on("mousedown touchstart", (e) => {
       e.preventDefault();
       e.target.className = 'clicked';

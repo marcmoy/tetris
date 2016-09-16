@@ -23187,8 +23187,6 @@
 	    value: function assignButtonListeners() {
 	      var _this4 = this;
 	
-	      (0, _jquery2.default)("#base").disableSelection();
-	
 	      (0, _jquery2.default)("#down").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
