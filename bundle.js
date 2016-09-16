@@ -33776,7 +33776,7 @@
 	
 	var _root_reducer2 = _interopRequireDefault(_root_reducer);
 	
-	var _root_middleware = __webpack_require__(217);
+	var _root_middleware = __webpack_require__(220);
 	
 	var _root_middleware2 = _interopRequireDefault(_root_middleware);
 	
@@ -50674,11 +50674,11 @@
 	
 	var _board_reducer2 = _interopRequireDefault(_board_reducer);
 	
-	var _piece_reducer = __webpack_require__(214);
+	var _piece_reducer = __webpack_require__(217);
 	
 	var _piece_reducer2 = _interopRequireDefault(_piece_reducer);
 	
-	var _queue_reducer = __webpack_require__(215);
+	var _queue_reducer = __webpack_require__(218);
 	
 	var _queue_reducer2 = _interopRequireDefault(_queue_reducer);
 	
@@ -50766,13 +50766,21 @@
 
 /***/ },
 /* 213 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.addPiece = undefined;
+	
+	var _hard_drop_piece = __webpack_require__(214);
+	
+	var _hard_drop_piece2 = _interopRequireDefault(_hard_drop_piece);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	var prevTargetPos = [];
 	
 	var addPiece = exports.addPiece = function addPiece(board, piece) {
@@ -50803,6 +50811,12 @@
 	
 	  return newBoard;
 	};
+	
+	var renderPreview = function renderPreview(board, piece) {
+	  var droppedPiece = (0, _hard_drop_piece2.default)(piece, board);
+	  var previewClassName = droppedPiece.className + ' preview';
+	  droppedPiece.className = previewClassName;
+	};
 
 /***/ },
 /* 214 */
@@ -50814,21 +50828,25 @@
 	  value: true
 	});
 	
-	var _piece_actions = __webpack_require__(198);
+	var _move_piece = __webpack_require__(215);
 	
-	var PieceReducer = function PieceReducer() {
-	  var piece = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	  var action = arguments[1];
+	var _move_piece2 = _interopRequireDefault(_move_piece);
 	
-	  switch (action.type) {
-	    case _piece_actions.RECEIVE_PIECE:
-	      return action.piece;
-	    default:
-	      return piece;
+	var _render_board = __webpack_require__(213);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var hardDropPiece = function hardDropPiece(piece, board) {
+	  if (!piece.inPlay) {
+	    return piece;
 	  }
+	
+	  var droppedPiece = (0, _move_piece2.default)('down', piece, board);
+	  var newBoard = (0, _render_board.addPiece)(board, droppedPiece);
+	  return hardDropPiece(droppedPiece, newBoard);
 	};
 	
-	exports.default = PieceReducer;
+	exports.default = hardDropPiece;
 
 /***/ },
 /* 215 */
@@ -50840,211 +50858,7 @@
 	  value: true
 	});
 	
-	var _queue_actions = __webpack_require__(216);
-	
-	var _piece_types = __webpack_require__(207);
-	
-	var QueueReducer = function QueueReducer() {
-	  var queue = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	  var action = arguments[1];
-	
-	
-	  switch (action.type) {
-	    case _queue_actions.UPDATE_QUEUE:
-	      return (0, _piece_types.randomPiece)();
-	    default:
-	      return queue;
-	  }
-	};
-	
-	exports.default = QueueReducer;
-
-/***/ },
-/* 216 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var UPDATE_QUEUE = exports.UPDATE_QUEUE = 'UPDATE_QUEUE';
-	
-	var updateQueue = exports.updateQueue = function updateQueue(nextPiece) {
-	  return {
-	    type: UPDATE_QUEUE,
-	    nextPiece: nextPiece
-	  };
-	};
-
-/***/ },
-/* 217 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _redux = __webpack_require__(180);
-	
-	var _piece_middleware = __webpack_require__(218);
-	
-	var _piece_middleware2 = _interopRequireDefault(_piece_middleware);
-	
-	var _board_middleware = __webpack_require__(223);
-	
-	var _board_middleware2 = _interopRequireDefault(_board_middleware);
-	
-	var _reduxLogger = __webpack_require__(225);
-	
-	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var loggerMiddleware = (0, _reduxLogger2.default)();
-	// import QueueMiddleware from './queue_middleware';
-	
-	
-	var RootMiddleware = (0, _redux.applyMiddleware)(_piece_middleware2.default, _board_middleware2.default
-	// QueueMiddleware,
-	// loggerMiddleware
-	);
-	
-	exports.default = RootMiddleware;
-
-/***/ },
-/* 218 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _piece_actions = __webpack_require__(198);
-	
-	var _move_piece = __webpack_require__(219);
-	
-	var _move_piece2 = _interopRequireDefault(_move_piece);
-	
-	var _rotate_piece = __webpack_require__(221);
-	
-	var _rotate_piece2 = _interopRequireDefault(_rotate_piece);
-	
-	var _hard_drop_piece = __webpack_require__(222);
-	
-	var _hard_drop_piece2 = _interopRequireDefault(_hard_drop_piece);
-	
-	var _board_actions = __webpack_require__(212);
-	
-	var _queue_actions = __webpack_require__(216);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var PieceMiddleware = function PieceMiddleware(_ref) {
-	  var getState = _ref.getState;
-	  var dispatch = _ref.dispatch;
-	  return function (next) {
-	    return function (action) {
-	      var piece = getState().piece;
-	      var board = getState().board;
-	      var queue = getState().queue;
-	
-	      var update = function update() {
-	        dispatch((0, _board_actions.boardClear)());
-	        dispatch((0, _piece_actions.receivePiece)(queue));
-	        dispatch((0, _queue_actions.updateQueue)());
-	      };
-	
-	      switch (action.type) {
-	        case _piece_actions.STEP_PIECE:
-	          var stepPiece = void 0;
-	          if (piece.inPlay) {
-	            stepPiece = (0, _move_piece2.default)('down', piece, board);
-	            dispatch((0, _piece_actions.receivePiece)(stepPiece));
-	            dispatch((0, _board_actions.updateBoard)(stepPiece));
-	          } else {
-	            update();
-	          }
-	          break;
-	        case _piece_actions.MOVE_LEFT:
-	          if (piece.inPlay) {
-	            var leftPiece = (0, _move_piece2.default)('left', piece, board);
-	            dispatch((0, _piece_actions.receivePiece)(leftPiece));
-	            dispatch((0, _board_actions.updateBoard)(leftPiece));
-	          } else {
-	            update();
-	          }
-	          break;
-	        case _piece_actions.MOVE_DOWN:
-	          if (piece.inPlay) {
-	            var downPiece = (0, _move_piece2.default)('down', piece, board);
-	            dispatch((0, _piece_actions.receivePiece)(downPiece));
-	            dispatch((0, _board_actions.updateBoard)(downPiece));
-	          } else {
-	            update();
-	          }
-	          break;
-	        case _piece_actions.MOVE_RIGHT:
-	          if (piece.inPlay) {
-	            var rightPiece = (0, _move_piece2.default)('right', piece, board);
-	            dispatch((0, _piece_actions.receivePiece)(rightPiece));
-	            dispatch((0, _board_actions.updateBoard)(rightPiece));
-	          } else {
-	            update();
-	          }
-	          break;
-	        case _piece_actions.ROTATE_CW:
-	          if (piece.inPlay) {
-	            var cwPiece = (0, _rotate_piece2.default)('cw', piece, board);
-	            dispatch((0, _piece_actions.receivePiece)(cwPiece));
-	            dispatch((0, _board_actions.updateBoard)(cwPiece));
-	          } else {
-	            update();
-	          }
-	          break;
-	        case _piece_actions.ROTATE_CCW:
-	          if (piece.inPlay) {
-	            var ccwPiece = (0, _rotate_piece2.default)('ccw', piece, board);
-	            dispatch((0, _piece_actions.receivePiece)(ccwPiece));
-	            dispatch((0, _board_actions.updateBoard)(ccwPiece));
-	          } else {
-	            update();
-	          }
-	          break;
-	        case _piece_actions.HARD_DROP:
-	          if (piece.inPlay) {
-	            var hardPiece = (0, _hard_drop_piece2.default)(piece, board);
-	            dispatch((0, _piece_actions.receivePiece)(hardPiece));
-	            dispatch((0, _board_actions.updateBoard)(hardPiece));
-	          } else {
-	            update();
-	          }
-	          break;
-	        default:
-	          break;
-	      }
-	      return next(action);
-	    };
-	  };
-	};
-	
-	exports.default = PieceMiddleware;
-
-/***/ },
-/* 219 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _move_piece_helpers = __webpack_require__(220);
+	var _move_piece_helpers = __webpack_require__(216);
 	
 	var movePiece = function movePiece(dir, piece, board) {
 	  var newPos = (0, _move_piece_helpers.nextPos)(dir, piece.pos);
@@ -51102,7 +50916,7 @@
 	// };
 
 /***/ },
-/* 220 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51222,6 +51036,116 @@
 	};
 
 /***/ },
+/* 217 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _piece_actions = __webpack_require__(198);
+	
+	var PieceReducer = function PieceReducer() {
+	  var piece = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case _piece_actions.RECEIVE_PIECE:
+	      return action.piece;
+	    default:
+	      return piece;
+	  }
+	};
+	
+	exports.default = PieceReducer;
+
+/***/ },
+/* 218 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _queue_actions = __webpack_require__(219);
+	
+	var _piece_types = __webpack_require__(207);
+	
+	var QueueReducer = function QueueReducer() {
+	  var queue = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var action = arguments[1];
+	
+	
+	  switch (action.type) {
+	    case _queue_actions.UPDATE_QUEUE:
+	      return (0, _piece_types.randomPiece)();
+	    default:
+	      return queue;
+	  }
+	};
+	
+	exports.default = QueueReducer;
+
+/***/ },
+/* 219 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var UPDATE_QUEUE = exports.UPDATE_QUEUE = 'UPDATE_QUEUE';
+	
+	var updateQueue = exports.updateQueue = function updateQueue(nextPiece) {
+	  return {
+	    type: UPDATE_QUEUE,
+	    nextPiece: nextPiece
+	  };
+	};
+
+/***/ },
+/* 220 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _redux = __webpack_require__(180);
+	
+	var _piece_middleware = __webpack_require__(221);
+	
+	var _piece_middleware2 = _interopRequireDefault(_piece_middleware);
+	
+	var _board_middleware = __webpack_require__(223);
+	
+	var _board_middleware2 = _interopRequireDefault(_board_middleware);
+	
+	var _reduxLogger = __webpack_require__(225);
+	
+	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var loggerMiddleware = (0, _reduxLogger2.default)();
+	// import QueueMiddleware from './queue_middleware';
+	
+	
+	var RootMiddleware = (0, _redux.applyMiddleware)(_piece_middleware2.default, _board_middleware2.default
+	// QueueMiddleware,
+	// loggerMiddleware
+	);
+	
+	exports.default = RootMiddleware;
+
+/***/ },
 /* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -51231,7 +51155,128 @@
 	  value: true
 	});
 	
-	var _move_piece_helpers = __webpack_require__(220);
+	var _piece_actions = __webpack_require__(198);
+	
+	var _move_piece = __webpack_require__(215);
+	
+	var _move_piece2 = _interopRequireDefault(_move_piece);
+	
+	var _rotate_piece = __webpack_require__(222);
+	
+	var _rotate_piece2 = _interopRequireDefault(_rotate_piece);
+	
+	var _hard_drop_piece = __webpack_require__(214);
+	
+	var _hard_drop_piece2 = _interopRequireDefault(_hard_drop_piece);
+	
+	var _board_actions = __webpack_require__(212);
+	
+	var _queue_actions = __webpack_require__(219);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var PieceMiddleware = function PieceMiddleware(_ref) {
+	  var getState = _ref.getState;
+	  var dispatch = _ref.dispatch;
+	  return function (next) {
+	    return function (action) {
+	      var piece = getState().piece;
+	      var board = getState().board;
+	      var queue = getState().queue;
+	
+	      var update = function update() {
+	        dispatch((0, _board_actions.boardClear)());
+	        dispatch((0, _piece_actions.receivePiece)(queue));
+	        dispatch((0, _queue_actions.updateQueue)());
+	      };
+	
+	      switch (action.type) {
+	        case _piece_actions.STEP_PIECE:
+	          var stepPiece = void 0;
+	          if (piece.inPlay) {
+	            stepPiece = (0, _move_piece2.default)('down', piece, board);
+	            dispatch((0, _piece_actions.receivePiece)(stepPiece));
+	            dispatch((0, _board_actions.updateBoard)(stepPiece));
+	          } else {
+	            update();
+	          }
+	          break;
+	        case _piece_actions.MOVE_LEFT:
+	          if (piece.inPlay) {
+	            var leftPiece = (0, _move_piece2.default)('left', piece, board);
+	            dispatch((0, _piece_actions.receivePiece)(leftPiece));
+	            dispatch((0, _board_actions.updateBoard)(leftPiece));
+	          } else {
+	            update();
+	          }
+	          break;
+	        case _piece_actions.MOVE_DOWN:
+	          if (piece.inPlay) {
+	            var downPiece = (0, _move_piece2.default)('down', piece, board);
+	            dispatch((0, _piece_actions.receivePiece)(downPiece));
+	            dispatch((0, _board_actions.updateBoard)(downPiece));
+	          } else {
+	            update();
+	          }
+	          break;
+	        case _piece_actions.MOVE_RIGHT:
+	          if (piece.inPlay) {
+	            var rightPiece = (0, _move_piece2.default)('right', piece, board);
+	            dispatch((0, _piece_actions.receivePiece)(rightPiece));
+	            dispatch((0, _board_actions.updateBoard)(rightPiece));
+	          } else {
+	            update();
+	          }
+	          break;
+	        case _piece_actions.ROTATE_CW:
+	          if (piece.inPlay) {
+	            var cwPiece = (0, _rotate_piece2.default)('cw', piece, board);
+	            dispatch((0, _piece_actions.receivePiece)(cwPiece));
+	            dispatch((0, _board_actions.updateBoard)(cwPiece));
+	          } else {
+	            update();
+	          }
+	          break;
+	        case _piece_actions.ROTATE_CCW:
+	          if (piece.inPlay) {
+	            var ccwPiece = (0, _rotate_piece2.default)('ccw', piece, board);
+	            dispatch((0, _piece_actions.receivePiece)(ccwPiece));
+	            dispatch((0, _board_actions.updateBoard)(ccwPiece));
+	          } else {
+	            update();
+	          }
+	          break;
+	        case _piece_actions.HARD_DROP:
+	          if (piece.inPlay) {
+	            var hardPiece = (0, _hard_drop_piece2.default)(piece, board);
+	            dispatch((0, _piece_actions.receivePiece)(hardPiece));
+	            dispatch((0, _board_actions.updateBoard)(hardPiece));
+	            dispatch((0, _board_actions.boardClear)());
+	          } else {
+	            update();
+	          }
+	          break;
+	        default:
+	          break;
+	      }
+	      return next(action);
+	    };
+	  };
+	};
+	
+	exports.default = PieceMiddleware;
+
+/***/ },
+/* 222 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _move_piece_helpers = __webpack_require__(216);
 	
 	var rotatePiece = function rotatePiece(dir, oldPiece, board) {
 	  var newPiece = Object.assign({}, oldPiece);
@@ -51307,36 +51352,6 @@
 	};
 	
 	exports.default = rotatePiece;
-
-/***/ },
-/* 222 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _move_piece = __webpack_require__(219);
-	
-	var _move_piece2 = _interopRequireDefault(_move_piece);
-	
-	var _render_board = __webpack_require__(213);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var hardDropPiece = function hardDropPiece(piece, board) {
-	  if (!piece.inPlay) {
-	    return piece;
-	  }
-	
-	  var droppedPiece = (0, _move_piece2.default)('down', piece, board);
-	  var newBoard = (0, _render_board.addPiece)(board, droppedPiece);
-	  return hardDropPiece(droppedPiece, newBoard);
-	};
-	
-	exports.default = hardDropPiece;
 
 /***/ },
 /* 223 */

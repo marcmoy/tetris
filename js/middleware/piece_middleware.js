@@ -80,6 +80,7 @@ const PieceMiddleware = ({getState, dispatch}) => next => action => {
         let hardPiece = hardDropPiece(piece, board);
         dispatch(receivePiece(hardPiece));
         dispatch(updateBoard(hardPiece));
+        dispatch(boardClear());
       } else {
         update();
       }

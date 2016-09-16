@@ -1,3 +1,5 @@
+import hardDropPiece from './hard_drop_piece';
+
 var prevTargetPos = [];
 
 export const addPiece = (board, piece) => {
@@ -27,4 +29,10 @@ export const addPiece = (board, piece) => {
   }
 
   return newBoard;
+};
+
+const renderPreview = (board, piece) => {
+  let droppedPiece = hardDropPiece(piece, board);
+  let previewClassName = droppedPiece.className + ' preview';
+  droppedPiece.className = previewClassName;
 };
