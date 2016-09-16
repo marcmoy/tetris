@@ -23187,10 +23187,7 @@
 	    value: function assignButtonListeners() {
 	      var _this4 = this;
 	
-	      (0, _jquery2.default)("#base").on("touchstart", function (e) {
-	        // prevent iPhone users from zooming in
-	        e.preventDefault();
-	      });
+	      (0, _jquery2.default)("#base").disableSelection();
 	
 	      (0, _jquery2.default)("#down").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
