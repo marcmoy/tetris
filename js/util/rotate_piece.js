@@ -45,6 +45,7 @@ const wallKicked = (oldPiece, newPiece, board) => {
 
   // temporary wallkick for i-pieces
   if (newPiece.className === 'piece-i') {
+    console.log('no kick');
     return oldPiece;
   }
 
