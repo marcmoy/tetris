@@ -475,23 +475,23 @@ tbody > tr > td:after {
 }
 
 .piece-i {
-  background-color: red;
+  background-color: cyan;
 }
 .piece-o {
   background-color: yellow;
 }
 .piece-j {
-  background-color: green;
+  background-color: #5a65ad;
 }
 .piece-l {
-  background-color: blue;
-}
-.piece-s {
-  background-color: purple;
-}
-.piece-z {
   background-color: orange;
 }
+.piece-s {
+  background-color: green;
+}
+.piece-z {
+  background-color: red;
+}
 .piece-t {
-  background-color: pink;
+  background-color: #ad4d9c;
 }

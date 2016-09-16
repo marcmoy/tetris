@@ -44,7 +44,7 @@ const newPositions = (oldPiece, newPiece) => {
 const wallKicked = (oldPiece, newPiece, board) => {
 
   // temporary wallkick for i-pieces
-  if (newPiece.className === 'i-piece') {
+  if (newPiece.className === 'piece-i') {
     return oldPiece;
   }
 
