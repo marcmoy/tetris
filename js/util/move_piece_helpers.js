@@ -40,7 +40,7 @@ export const checkDown = (piece, newPos, board) => {
   return spotsEmpty(downSpots, board);
 };
 
-const spotsEmpty = (pos, board) => {
+export const spotsEmpty = (pos, board) => {
   for (let i = 0; i < pos.length; i++) {
     let key = pos[i].join(",");
     if (board[key]) {

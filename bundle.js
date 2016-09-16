@@ -50673,6 +50673,8 @@
 	    case _board_actions.UPDATE_BOARD:
 	      var newBoard = (0, _render_board.addPiece)(board, action.piece);
 	      return Object.assign({}, board, { newBoard: newBoard });
+	    case _board_actions.RECEIVE_BOARD:
+	      return action.board;
 	    default:
 	      return board;
 	  }
@@ -50697,11 +50699,26 @@
 	// });
 	
 	var UPDATE_BOARD = exports.UPDATE_BOARD = 'UPDATE_BOARD';
+	var BOARD_CLEAR = exports.BOARD_CLEAR = 'BOARD_CLEAR';
+	var RECEIVE_BOARD = exports.RECEIVE_BOARD = 'RECEIVE_BOARD';
 	
 	var updateBoard = exports.updateBoard = function updateBoard(piece) {
 	  return {
 	    type: UPDATE_BOARD,
 	    piece: piece
+	  };
+	};
+	
+	var boardClear = exports.boardClear = function boardClear() {
+	  return {
+	    type: BOARD_CLEAR
+	  };
+	};
+	
+	var receiveBoard = exports.receiveBoard = function receiveBoard(board) {
+	  return {
+	    type: RECEIVE_BOARD,
+	    board: board
 	  };
 	};
 
@@ -50834,7 +50851,11 @@
 	
 	var _piece_middleware2 = _interopRequireDefault(_piece_middleware);
 	
-	var _reduxLogger = __webpack_require__(222);
+	var _board_middleware = __webpack_require__(222);
+	
+	var _board_middleware2 = _interopRequireDefault(_board_middleware);
+	
+	var _reduxLogger = __webpack_require__(224);
 	
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 	
@@ -50844,7 +50865,7 @@
 	// import QueueMiddleware from './queue_middleware';
 	
 	
-	var RootMiddleware = (0, _redux.applyMiddleware)(_piece_middleware2.default
+	var RootMiddleware = (0, _redux.applyMiddleware)(_piece_middleware2.default, _board_middleware2.default
 	// QueueMiddleware,
 	// loggerMiddleware
 	);
@@ -50871,11 +50892,7 @@
 	
 	var _rotate_piece2 = _interopRequireDefault(_rotate_piece);
 	
-	var _piece_types = __webpack_require__(207);
-	
 	var _board_actions = __webpack_require__(212);
-	
-	var _render_board = __webpack_require__(213);
 	
 	var _queue_actions = __webpack_require__(216);
 	
@@ -50891,6 +50908,7 @@
 	      var queue = getState().queue;
 	
 	      var update = function update() {
+	        dispatch((0, _board_actions.boardClear)());
 	        dispatch((0, _piece_actions.receivePiece)(queue));
 	        dispatch((0, _queue_actions.updateQueue)());
 	      };
@@ -51037,7 +51055,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.checkDown = exports.checkRight = exports.checkLeft = exports.nextPos = undefined;
+	exports.spotsEmpty = exports.checkDown = exports.checkRight = exports.checkLeft = exports.nextPos = undefined;
 	
 	var _lodash = __webpack_require__(208);
 	
@@ -51085,7 +51103,7 @@
 	  return spotsEmpty(downSpots, board);
 	};
 	
-	var spotsEmpty = function spotsEmpty(pos, board) {
+	var spotsEmpty = exports.spotsEmpty = function spotsEmpty(pos, board) {
 	  for (var i = 0; i < pos.length; i++) {
 	    var key = pos[i].join(",");
 	    if (board[key]) {
@@ -51150,21 +51168,22 @@
 
 /***/ },
 /* 221 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var rotatePiece = function rotatePiece(dir, piece, board) {
-	  var newPiece = piece;
 	
+	var _move_piece_helpers = __webpack_require__(220);
+	
+	var rotatePiece = function rotatePiece(dir, oldPiece, board) {
+	  var newPiece = Object.assign({}, oldPiece);
 	  switch (dir) {
 	    case 'cw':
 	      newPiece.rotation++;
 	      if (newPiece.rotation > 3) newPiece.rotation = 0;
-	
 	      break;
 	    case 'ccw':
 	      newPiece.rotation--;
@@ -51174,12 +51193,157 @@
 	      return;
 	  }
 	
-	  return newPiece;
+	  if (blocksValid(oldPiece, newPiece, board)) {
+	    return newPiece;
+	  } else {
+	    return wallKicked(oldPiece, newPiece, board);
+	  }
 	};
+	
+	var blocksValid = function blocksValid(oldPiece, newPiece, board) {
+	  var checkPos = newPositions(oldPiece, newPiece);
+	  return (0, _move_piece_helpers.spotsEmpty)(checkPos, board);
+	};
+	
+	// finds the new positions by comparing to old positions
+	var newPositions = function newPositions(oldPiece, newPiece) {
+	  var oldBlocks = oldPiece.blocks[oldPiece.rotation];
+	  var newBlocks = newPiece.blocks[newPiece.rotation];
+	  var newPos = [];
+	  for (var i = 0; i < 16; i++) {
+	    if (oldBlocks[i] !== newBlocks[i] && newBlocks[i] === 1) {
+	      newPos.push(newPiece.pos[i]);
+	    }
+	  }
+	  return newPos;
+	};
+	
+	var wallKicked = function wallKicked(oldPiece, newPiece, board) {
+	
+	  // temporary wallkick for i-pieces
+	  if (newPiece.className === 'i-piece') {
+	    return oldPiece;
+	  }
+	
+	  // TODO: fix wall kick logic
+	
+	  // check if left wall kick is possible
+	  var leftPos = (0, _move_piece_helpers.nextPos)('left', newPiece.pos);
+	  if ((0, _move_piece_helpers.checkLeft)(newPiece, leftPos, board)) {
+	    console.log('kicked left');
+	    return Object.assign({}, newPiece, { pos: leftPos });
+	  }
+	
+	  // check if right wall kick is possible
+	  var rightPos = (0, _move_piece_helpers.nextPos)('right', newPiece.pos);
+	  if ((0, _move_piece_helpers.checkRight)(newPiece, rightPos, board)) {
+	    console.log('kicked right');
+	    return Object.assign({}, newPiece, { pos: rightPos });
+	  }
+	
+	  // if no kick is possible, return original piece
+	  console.log('no kick');
+	  return oldPiece;
+	};
+	
+	var validKick = function validKick() {
+	  return true;
+	};
+	
 	exports.default = rotatePiece;
 
 /***/ },
 /* 222 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _board_actions = __webpack_require__(212);
+	
+	var _clear_lines = __webpack_require__(223);
+	
+	var _clear_lines2 = _interopRequireDefault(_clear_lines);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var BoardMiddleware = function BoardMiddleware(_ref) {
+	  var getState = _ref.getState;
+	  var dispatch = _ref.dispatch;
+	  return function (next) {
+	    return function (action) {
+	      var board = getState().board;
+	      switch (action.type) {
+	        case _board_actions.BOARD_CLEAR:
+	          var newBoard = (0, _clear_lines2.default)(board);
+	          dispatch((0, _board_actions.receiveBoard)(newBoard));
+	          break;
+	        default:
+	          break;
+	      }
+	      return next(action);
+	    };
+	  };
+	};
+	
+	exports.default = BoardMiddleware;
+
+/***/ },
+/* 223 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var clearIndex = null;
+	
+	var clearLines = function clearLines(board) {
+	  if (noLines(board)) return board;
+	
+	  var newBoard = removeLine(board, clearIndex);
+	  return clearLines(newBoard);
+	};
+	
+	var noLines = function noLines(board) {
+	  for (var row = 0; row < 20; row++) {
+	    var count = 0;
+	    for (var col = 0; col < 10; col++) {
+	      var key = row + ',' + col;
+	      if (board[key].className !== 'empty') count++;
+	    }
+	    if (count === 10) {
+	      clearIndex = row;
+	      return false;
+	    }
+	  }
+	  return true;
+	};
+	
+	var removeLine = function removeLine(oldBoard, clearRow) {
+	  var newBoard = Object.assign({}, oldBoard);
+	
+	  for (var row = clearRow; row > 0; row--) {
+	    for (var col = 0; col < 10; col++) {
+	      var key = row + ',' + col;
+	      var keyAbove = row - 1 + ',' + col;
+	      // handles edge case at top row
+	      var newClassName = oldBoard[keyAbove].className || 'empty';
+	      newBoard[key].className = newClassName;
+	    }
+	  }
+	
+	  return newBoard;
+	};
+	
+	exports.default = clearLines;
+
+/***/ },
+/* 224 */
 /***/ function(module, exports) {
 
 	"use strict";

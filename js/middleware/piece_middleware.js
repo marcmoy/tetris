@@ -1,12 +1,9 @@
 import { STEP_PIECE, MOVE_LEFT, MOVE_DOWN, MOVE_RIGHT, ROTATE_CW, ROTATE_CCW
  } from '../actions/piece_actions';
 import { receivePiece } from '../actions/piece_actions';
-import { nextPiece } from '../actions/piece_actions';
 import movePiece from '../util/move_piece';
 import rotatePiece from '../util/rotate_piece';
-import { randomPiece } from '../util/piece_types';
-import { updateBoard } from '../actions/board_actions';
-import { addPiece } from '../util/render_board';
+import { updateBoard, boardClear } from '../actions/board_actions';
 import { updateQueue } from '../actions/queue_actions';
 
 const PieceMiddleware = ({getState, dispatch}) => next => action => {
@@ -15,6 +12,7 @@ const PieceMiddleware = ({getState, dispatch}) => next => action => {
   const queue = getState().queue;
 
   const update = () => {
+    dispatch(boardClear());
     dispatch(receivePiece(queue));
     dispatch(updateQueue());
   };
