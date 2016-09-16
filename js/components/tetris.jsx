@@ -55,6 +55,10 @@ class Tetris extends React.Component {
   }
 
   assignButtonListeners() {
+    $("#base").on("touchstart", (e) => {
+      // prevent iPhone users from zooming in
+      e.preventDefault();
+    });
 
     $("#down").on("mousedown touchstart", (e) => {
       e.preventDefault();
