@@ -50714,7 +50714,8 @@
 	  switch (action.type) {
 	    case _board_actions.UPDATE_BOARD:
 	      var newBoard = (0, _render_board.addPiece)(board, action.piece);
-	      return Object.assign({}, board, { newBoard: newBoard });
+	      var previewBoard = (0, _render_board.renderPreview)(newBoard, action.piece);
+	      return Object.assign({}, previewBoard);
 	    case _board_actions.RECEIVE_BOARD:
 	      return action.board;
 	    default:
@@ -50773,49 +50774,92 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.addPiece = undefined;
+	exports.renderPreview = exports.addPiece = undefined;
 	
 	var _hard_drop_piece = __webpack_require__(214);
 	
 	var _hard_drop_piece2 = _interopRequireDefault(_hard_drop_piece);
 	
+	var _move_piece_helpers = __webpack_require__(216);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var prevTargetPos = [];
+	var previewTargetPos = [];
 	
 	var addPiece = exports.addPiece = function addPiece(board, piece) {
-	  var newBoard = board;
-	
-	  prevTargetPos.forEach(function (pos) {
-	    var key = pos.join(",");
-	    newBoard[key].className = 'empty';
-	  });
-	
+	  var newBoard = Object.assign({}, board);
 	  var targetPos = [];
 	
-	  piece.blocks[piece.rotation].forEach(function (block, idx) {
-	    if (block) {
-	      var key = piece.pos[idx].join(",");
-	      if (newBoard[key]) {
-	        targetPos.push(piece.pos[idx]);
-	        newBoard[key].className = piece.className;
-	      }
-	    }
-	  });
+	  if (!piece.className.includes('preview')) {
 	
-	  if (piece.inPlay) {
-	    prevTargetPos = targetPos;
+	    prevTargetPos.forEach(function (pos) {
+	      var key = pos.join(",");
+	      newBoard[key].className = 'empty';
+	    });
+	
+	    piece.blocks[piece.rotation].forEach(function (block, idx) {
+	      if (block) {
+	        var key = piece.pos[idx].join(",");
+	        if (newBoard[key]) {
+	          targetPos.push(piece.pos[idx]);
+	          newBoard[key].className = piece.className;
+	        }
+	      }
+	    });
+	
+	    if (piece.inPlay) {
+	      prevTargetPos = targetPos;
+	    } else {
+	      prevTargetPos = [];
+	    }
 	  } else {
-	    prevTargetPos = [];
+	    // preview piece at bottom position will be not inPlay
+	    if (!piece.inPlay) {
+	      (function () {
+	
+	        var relevantPos = [];
+	
+	        piece.blocks[piece.rotation].forEach(function (block, idx) {
+	          if (block) {
+	            var key = piece.pos[idx].join(",");
+	            if (newBoard[key]) {
+	              relevantPos.push(piece.pos[idx]);
+	            }
+	          }
+	        });
+	
+	        if (!(0, _move_piece_helpers.isEqual)(relevantPos, previewTargetPos)) {
+	          previewTargetPos.forEach(function (pos) {
+	            var key = pos.join(",");
+	            if (newBoard[key].className.includes('preview')) {
+	              newBoard[key].className = 'empty';
+	            }
+	          });
+	        }
+	
+	        relevantPos.forEach(function (pos) {
+	          var key = pos.join(",");
+	          var name = newBoard[key].className;
+	          if (name === 'empty') {
+	            newBoard[key].className = piece.className;
+	          }
+	        });
+	
+	        previewTargetPos = relevantPos;
+	      })();
+	    }
 	  }
 	
 	  return newBoard;
 	};
 	
-	var renderPreview = function renderPreview(board, piece) {
-	  var droppedPiece = (0, _hard_drop_piece2.default)(piece, board);
-	  var previewClassName = droppedPiece.className + ' preview';
-	  droppedPiece.className = previewClassName;
+	var renderPreview = exports.renderPreview = function renderPreview(board, piece) {
+	  var preview = piece.className + ' preview';
+	  var piecePreview = Object.assign({}, piece, { className: preview });
+	  var previewBoard = Object.assign({}, board);
+	  var droppedPiece = (0, _hard_drop_piece2.default)(piecePreview, previewBoard);
+	  return board;
 	};
 
 /***/ },
@@ -50840,9 +50884,9 @@
 	  if (!piece.inPlay) {
 	    return piece;
 	  }
-	
-	  var droppedPiece = (0, _move_piece2.default)('down', piece, board);
-	  var newBoard = (0, _render_board.addPiece)(board, droppedPiece);
+	  var boardClone = Object.assign({}, board);
+	  var droppedPiece = (0, _move_piece2.default)('down', piece, boardClone);
+	  var newBoard = (0, _render_board.addPiece)(boardClone, droppedPiece);
 	  return hardDropPiece(droppedPiece, newBoard);
 	};
 	
@@ -50882,12 +50926,11 @@
 	        // assign new position to piece
 	        return Object.assign({}, piece, { pos: newPos });
 	      } else {
-	        // if down move is not possible, piece is dropped and not in play anymore
+	        // if down move is not possible, piece is dropped and not in play
 	        piece = Object.assign({}, piece, { inPlay: false });
 	      }
 	      break;
 	    default:
-	      // if all checks fail, return same piece at same position
 	      return piece;
 	  }
 	  return piece;
@@ -50924,7 +50967,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.spotsEmpty = exports.checkDown = exports.checkRight = exports.checkLeft = exports.nextPos = undefined;
+	exports.isEqual = exports.spotsEmpty = exports.checkDown = exports.checkRight = exports.checkLeft = exports.nextPos = undefined;
 	
 	var _lodash = __webpack_require__(208);
 	
@@ -50976,7 +51019,8 @@
 	  for (var i = 0; i < pos.length; i++) {
 	    var key = pos[i].join(",");
 	    if (board[key]) {
-	      if (board[key].className !== 'empty') return false;
+	      var name = board[key].className;
+	      if (name !== 'empty' && !name.includes('preview')) return false;
 	    } else {
 	      // checks if piece is at bottom of grid
 	      if (pos[i][0] > 19) return false;
@@ -51033,6 +51077,24 @@
 	  }
 	
 	  return checkPos;
+	};
+	
+	var isEqual = exports.isEqual = function isEqual(array1, array2) {
+	  if (!Array.isArray(array1) && !Array.isArray(array2)) {
+	    return array1 === array2;
+	  }
+	
+	  if (array1.length !== array2.length) {
+	    return false;
+	  }
+	
+	  for (var i = 0, len = array1.length; i < len; i++) {
+	    if (!isEqual(array1[i], array2[i])) {
+	      return false;
+	    }
+	  }
+	
+	  return true;
 	};
 
 /***/ },
@@ -51414,7 +51476,8 @@
 	    var count = 0;
 	    for (var col = 0; col < 10; col++) {
 	      var key = row + ',' + col;
-	      if (board[key].className !== 'empty') count++;
+	      var name = board[key].className;
+	      if (name !== 'empty' && !name.includes('preview')) count++;
 	    }
 	    if (count === 10) {
 	      clearIndex = row;

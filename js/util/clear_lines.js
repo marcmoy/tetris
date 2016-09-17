@@ -11,7 +11,8 @@ const noLines = board => {
     let count = 0;
     for (let col = 0; col < 10 ; col++) {
       let key = `${row},${col}`;
-      if (board[key].className !== 'empty') count++;
+      let name = board[key].className;
+      if (name !== 'empty' && !name.includes('preview')) count++;
     }
     if (count === 10) {
       clearIndex = row;

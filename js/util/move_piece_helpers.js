@@ -44,7 +44,8 @@ export const spotsEmpty = (pos, board) => {
   for (let i = 0; i < pos.length; i++) {
     let key = pos[i].join(",");
     if (board[key]) {
-      if (board[key].className !== 'empty') return false;
+      let name = board[key].className;
+      if (name !== 'empty' && !name.includes('preview')) return false;
     } else {
       // checks if piece is at bottom of grid
       if (pos[i][0] > 19) return false;
@@ -101,4 +102,22 @@ const downPos = (blocks, pos) => {
   }
 
   return checkPos;
+};
+
+export const isEqual = (array1, array2) => {
+    if (!Array.isArray(array1) && !Array.isArray(array2)) {
+        return array1 === array2;
+    }
+
+    if (array1.length !== array2.length) {
+        return false;
+    }
+
+    for (let i = 0, len = array1.length; i < len; i++) {
+        if (!isEqual(array1[i], array2[i])) {
+            return false;
+        }
+    }
+
+    return true;
 };

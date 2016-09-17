@@ -23,12 +23,11 @@ const movePiece = (dir, piece, board) => {
         // assign new position to piece
         return Object.assign({}, piece, { pos: newPos });
       } else {
-        // if down move is not possible, piece is dropped and not in play anymore
+        // if down move is not possible, piece is dropped and not in play
         piece = Object.assign({}, piece, { inPlay: false });
       }
       break;
     default:
-      // if all checks fail, return same piece at same position
       return piece;
   }
   return piece;

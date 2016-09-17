@@ -505,3 +505,7 @@ tbody > tr > td:after {
 .piece-t {
   background-color: #ad4d9c;
 }
+
+.preview {
+  opacity: 0.2;
+}
