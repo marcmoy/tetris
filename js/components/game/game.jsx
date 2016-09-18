@@ -62,13 +62,19 @@ class Game extends React.Component {
   }
 
   componentDidUpdate(nextProps) {
-    if (this.currentLevel < nextProps.level) {
-      this.currentLevel = nextProps.level;
+    let gameover = nextProps.gamestate.gameover;
+
+    if (gameover) {
       clearInterval(this.interval);
-      this.interval = setInterval(
-        () => this.props.stepPiece(), // move piece down
-        LEVEL_SPEED[this.currentLevel] // every second
-      );
+    } else {
+      if (this.currentLevel < nextProps.level) {
+        clearInterval(this.interval);
+        this.currentLevel = nextProps.level;
+        this.interval = setInterval(
+          () => this.props.stepPiece(), // move piece down
+          LEVEL_SPEED[this.currentLevel] // every second
+        );
+      }
     }
   }
 
@@ -80,9 +86,10 @@ class Game extends React.Component {
   startGameInterval() {
     this.assignKeyListeners();
     this.assignButtonListeners();
+    clearInterval(this.interval);
     this.interval = setInterval(
       () => this.props.stepPiece(), // move piece down
-      LEVEL_SPEED[this.currentLevel] // every second
+      LEVEL_SPEED[this.props.level] // every second
     );
   }
 
@@ -304,7 +311,6 @@ class Game extends React.Component {
 
   renderGameover() {
     clearInterval(this.interval);
-    this.currentLevel = 0;
     $('#gameover-screen').removeClass('hidden');
     $(window).off("keydown");
     this.turnOffButtons();
@@ -331,7 +337,7 @@ class Game extends React.Component {
   }
 
   restartGame() {
-    this.currentLevel = 0;
+    clearInterval(this.interval);
     this.props.resetPiece();
     this.props.resetBoard();
     this.props.updateQueue();

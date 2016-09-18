@@ -23277,14 +23277,20 @@
 	    value: function componentDidUpdate(nextProps) {
 	      var _this3 = this;
 	
-	      if (this.currentLevel < nextProps.level) {
-	        this.currentLevel = nextProps.level;
+	      var gameover = nextProps.gamestate.gameover;
+	
+	      if (gameover) {
 	        clearInterval(this.interval);
-	        this.interval = setInterval(function () {
-	          return _this3.props.stepPiece();
-	        }, // move piece down
-	        LEVEL_SPEED[this.currentLevel] // every second
-	        );
+	      } else {
+	        if (this.currentLevel < nextProps.level) {
+	          clearInterval(this.interval);
+	          this.currentLevel = nextProps.level;
+	          this.interval = setInterval(function () {
+	            return _this3.props.stepPiece();
+	          }, // move piece down
+	          LEVEL_SPEED[this.currentLevel] // every second
+	          );
+	        }
 	      }
 	    }
 	  }, {
@@ -23304,7 +23310,7 @@
 	      this.interval = setInterval(function () {
 	        return _this4.props.stepPiece();
 	      }, // move piece down
-	      LEVEL_SPEED[this.currentLevel] // every second
+	      LEVEL_SPEED[this.props.level] // every second
 	      );
 	    }
 	  }, {
@@ -23572,7 +23578,7 @@
 	  }, {
 	    key: 'restartGame',
 	    value: function restartGame() {
-	      this.currentLevel = 0;
+	      clearInterval(this.interval);
 	      this.props.resetPiece();
 	      this.props.resetBoard();
 	      this.props.updateQueue();
