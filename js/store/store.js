@@ -3,7 +3,7 @@ import { randomPiece } from '../util/piece_types';
 import RootReducer from '../reducers/root_reducer';
 import RootMiddleware from '../middleware/root_middleware';
 
-const initialBoard = () => {
+export const initialBoard = () => {
   let board = {};
   for (let i = 0; i < 20; i++) {
     for (let j = 0; j < 10; j++) {

@@ -1,6 +1,7 @@
 export const UPDATE_BOARD = 'UPDATE_BOARD';
 export const BOARD_CLEAR = 'BOARD_CLEAR';
 export const RECEIVE_BOARD = 'RECEIVE_BOARD';
+export const RESET_BOARD = 'RESET_BOARD';
 
 export const updateBoard = piece => ({
   type: UPDATE_BOARD,
@@ -14,4 +15,8 @@ export const boardClear = () => ({
 export const receiveBoard = board => ({
   type: RECEIVE_BOARD,
   board
+});
+
+export const resetBoard = () => ({
+  type: RESET_BOARD
 });

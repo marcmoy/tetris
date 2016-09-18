@@ -7,6 +7,7 @@ import rotatePiece from '../util/rotate_piece';
 import hardDropPiece from '../util/hard_drop_piece';
 import { updateBoard, boardClear } from '../actions/board_actions';
 import { updateQueue } from '../actions/queue_actions';
+import { checkGameover } from '../actions/game_state_actions';
 
 const PieceMiddleware = ({getState, dispatch}) => next => action => {
   const piece = getState().piece;
@@ -16,6 +17,7 @@ const PieceMiddleware = ({getState, dispatch}) => next => action => {
   const update = () => {
     dispatch(boardClear());
     dispatch(receivePiece(queue));
+    dispatch(checkGameover(board));
     dispatch(updateQueue());
   };
 

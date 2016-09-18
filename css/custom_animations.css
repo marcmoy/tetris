@@ -17,7 +17,7 @@
   100% {opacity: 0;}
 }
 
-#start-screen, #pause-screen {
+#start-screen, #pause-screen, #gameover-screen {
   position: absolute;
   left: 0;
   right: 0;
@@ -40,5 +40,9 @@
 }
 
 #pause-screen.dim {
+  background-color: rgba(109,107,91,0.5);
+}
+
+#gameover-screen.dim {
   background-color: rgba(109,107,91,0.5);
 }

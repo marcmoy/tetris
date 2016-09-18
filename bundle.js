@@ -58,7 +58,7 @@
 	
 	var _root2 = _interopRequireDefault(_root);
 	
-	var _store = __webpack_require__(209);
+	var _store = __webpack_require__(211);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
@@ -23097,6 +23097,10 @@
 	
 	var _piece_actions = __webpack_require__(208);
 	
+	var _board_actions = __webpack_require__(209);
+	
+	var _queue_actions = __webpack_require__(210);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state) {
@@ -23135,6 +23139,19 @@
 	    },
 	    hardDrop: function hardDrop() {
 	      return dispatch((0, _piece_actions.hardDrop)());
+	    },
+	    // reset actions
+	    resetPiece: function resetPiece() {
+	      return dispatch((0, _piece_actions.resetPiece)());
+	    },
+	    resetBoard: function resetBoard() {
+	      return dispatch((0, _board_actions.resetBoard)());
+	    },
+	    updateQueue: function updateQueue() {
+	      return dispatch((0, _queue_actions.updateQueue)());
+	    },
+	    resetGameState: function resetGameState() {
+	      return dispatch((0, _game_state_actions.resetGameState)());
 	    }
 	  };
 	};
@@ -23208,6 +23225,8 @@
 	    _this.pause = _this.pause.bind(_this);
 	    _this.turnOffButtons = _this.turnOffButtons.bind(_this);
 	    _this.addClickEffect = _this.addClickEffect.bind(_this);
+	    _this.restartGame = _this.restartGame.bind(_this);
+	    _this.renderGameover = _this.renderGameover.bind(_this);
 	    return _this;
 	  }
 	
@@ -23230,6 +23249,7 @@
 	        e.target.className = 'clicked';
 	        renderGame(e);
 	      });
+	
 	      (0, _jquery2.default)("#start-button").on("mouseup touchend", function (e) {
 	        e.preventDefault();
 	        e.target.className = '';
@@ -23493,6 +23513,45 @@
 	      });
 	    }
 	  }, {
+	    key: 'renderGameover',
+	    value: function renderGameover() {
+	      var _this8 = this;
+	
+	      clearInterval(this.interval);
+	      (0, _jquery2.default)('#gameover-screen').removeClass('hidden');
+	      (0, _jquery2.default)(window).off("keydown");
+	      this.turnOffButtons();
+	      this.addClickEffect();
+	
+	      (0, _jquery2.default)("#start-button").on("mousedown touchstart", function (e) {
+	        e.preventDefault();
+	        e.target.className = 'clicked';
+	        (0, _jquery2.default)('#gameover-screen').addClass('hidden');
+	        _this8.restartGame();
+	      });
+	
+	      (0, _jquery2.default)("#start-button").on("mouseup touchend", function (e) {
+	        e.preventDefault();
+	        e.target.className = '';
+	      });
+	
+	      (0, _jquery2.default)(window).on("keydown", function (e) {
+	        if (e.keyCode === 13) {
+	          (0, _jquery2.default)('#gameover-screen').addClass('hidden');
+	          _this8.restartGame();
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'restartGame',
+	    value: function restartGame() {
+	      this.props.resetPiece();
+	      this.props.resetBoard();
+	      this.props.updateQueue();
+	      this.props.resetGameState();
+	      this.startGameInterval();
+	    }
+	  }, {
 	    key: 'renderScreen',
 	    value: function renderScreen() {
 	      var gamestate = this.props.gamestate;
@@ -23508,6 +23567,10 @@
 	        )
 	      );
 	
+	      if (gamestate.gameover) {
+	        this.renderGameover();
+	      }
+	
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -23518,6 +23581,20 @@
 	            'span',
 	            { className: 'blink' },
 	            'PAUSED'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'hidden dim', id: 'gameover-screen' },
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'blink' },
+	            'GAMEOVER',
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement('br', null),
+	            'Press START of ENTER',
+	            _react2.default.createElement('br', null),
+	            'to play again.'
 	          )
 	        ),
 	        _react2.default.createElement(_board_container2.default, null),
@@ -33956,11 +34033,12 @@
 	var CHECK_GAMEOVER = exports.CHECK_GAMEOVER = 'CHECK_GAMEOVER';
 	var GAME_ON = exports.GAME_ON = 'GAME_ON';
 	var TOGGLE_PAUSE = exports.TOGGLE_PAUSE = 'TOGGLE_PAUSE';
+	var RESET_GAME_STATE = exports.RESET_GAME_STATE = 'RESET_GAME_STATE';
 	
-	var checkGameover = exports.checkGameover = function checkGameover(gameover) {
+	var checkGameover = exports.checkGameover = function checkGameover(board) {
 	  return {
 	    type: CHECK_GAMEOVER,
-	    gameover: gameover
+	    board: board
 	  };
 	};
 	
@@ -33976,6 +34054,12 @@
 	    pause: pause
 	  };
 	};
+	
+	var resetGameState = exports.resetGameState = function resetGameState() {
+	  return {
+	    type: RESET_GAME_STATE
+	  };
+	};
 
 /***/ },
 /* 208 */
@@ -33986,11 +34070,9 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	// receive new piece
+	var RESET_PIECE = exports.RESET_PIECE = 'RESET_PIECE';
 	var RECEIVE_PIECE = exports.RECEIVE_PIECE = 'RECEIVE_PIECE';
-	// makes piece fall
 	var STEP_PIECE = exports.STEP_PIECE = 'STEP_PIECE';
-	// movements
 	var MOVE_LEFT = exports.MOVE_LEFT = 'MOVE_LEFT';
 	var MOVE_DOWN = exports.MOVE_DOWN = 'MOVE_DOWN';
 	var MOVE_RIGHT = exports.MOVE_RIGHT = 'MOVE_RIGHT';
@@ -33998,7 +34080,6 @@
 	// CCW = Counter Clockewise
 	var ROTATE_CW = exports.ROTATE_CW = 'ROTATE_CW';
 	var ROTATE_CCW = exports.ROTATE_CCW = 'ROTATE_CCW';
-	
 	var HARD_DROP = exports.HARD_DROP = 'HARD_DROP';
 	
 	var receivePiece = exports.receivePiece = function receivePiece(piece) {
@@ -34050,6 +34131,12 @@
 	  };
 	};
 	
+	var resetPiece = exports.resetPiece = function resetPiece() {
+	  return {
+	    type: RESET_PIECE
+	  };
+	};
+	
 	// Example of a piece-I object at it's initial state:
 	// --------------------------------------------------
 	// const I = {
@@ -34071,6 +34158,64 @@
 
 /***/ },
 /* 209 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var UPDATE_BOARD = exports.UPDATE_BOARD = 'UPDATE_BOARD';
+	var BOARD_CLEAR = exports.BOARD_CLEAR = 'BOARD_CLEAR';
+	var RECEIVE_BOARD = exports.RECEIVE_BOARD = 'RECEIVE_BOARD';
+	var RESET_BOARD = exports.RESET_BOARD = 'RESET_BOARD';
+	
+	var updateBoard = exports.updateBoard = function updateBoard(piece) {
+	  return {
+	    type: UPDATE_BOARD,
+	    piece: piece
+	  };
+	};
+	
+	var boardClear = exports.boardClear = function boardClear() {
+	  return {
+	    type: BOARD_CLEAR
+	  };
+	};
+	
+	var receiveBoard = exports.receiveBoard = function receiveBoard(board) {
+	  return {
+	    type: RECEIVE_BOARD,
+	    board: board
+	  };
+	};
+	
+	var resetBoard = exports.resetBoard = function resetBoard() {
+	  return {
+	    type: RESET_BOARD
+	  };
+	};
+
+/***/ },
+/* 210 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var UPDATE_QUEUE = exports.UPDATE_QUEUE = 'UPDATE_QUEUE';
+	
+	var updateQueue = exports.updateQueue = function updateQueue(nextPiece) {
+	  return {
+	    type: UPDATE_QUEUE,
+	    nextPiece: nextPiece
+	  };
+	};
+
+/***/ },
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34078,12 +34223,13 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.initialBoard = undefined;
 	
 	var _redux = __webpack_require__(180);
 	
-	var _piece_types = __webpack_require__(210);
+	var _piece_types = __webpack_require__(212);
 	
-	var _root_reducer = __webpack_require__(213);
+	var _root_reducer = __webpack_require__(215);
 	
 	var _root_reducer2 = _interopRequireDefault(_root_reducer);
 	
@@ -34093,7 +34239,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var initialBoard = function initialBoard() {
+	var initialBoard = exports.initialBoard = function initialBoard() {
 	  var board = {};
 	  for (var i = 0; i < 20; i++) {
 	    for (var j = 0; j < 10; j++) {
@@ -34121,7 +34267,7 @@
 	exports.default = configureStore;
 
 /***/ },
-/* 210 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34131,7 +34277,7 @@
 	});
 	exports.randomPiece = exports.randomRotation = undefined;
 	
-	var _lodash = __webpack_require__(211);
+	var _lodash = __webpack_require__(213);
 	
 	var randomIdx = [0, 1, 2, 3];
 	
@@ -34219,7 +34365,7 @@
 	};
 
 /***/ },
-/* 211 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -50956,10 +51102,10 @@
 	  }
 	}.call(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(212)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(214)(module)))
 
 /***/ },
-/* 212 */
+/* 214 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -50975,7 +51121,7 @@
 
 
 /***/ },
-/* 213 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50986,15 +51132,15 @@
 	
 	var _redux = __webpack_require__(180);
 	
-	var _board_reducer = __webpack_require__(214);
+	var _board_reducer = __webpack_require__(216);
 	
 	var _board_reducer2 = _interopRequireDefault(_board_reducer);
 	
-	var _piece_reducer = __webpack_require__(220);
+	var _piece_reducer = __webpack_require__(221);
 	
 	var _piece_reducer2 = _interopRequireDefault(_piece_reducer);
 	
-	var _queue_reducer = __webpack_require__(221);
+	var _queue_reducer = __webpack_require__(222);
 	
 	var _queue_reducer2 = _interopRequireDefault(_queue_reducer);
 	
@@ -51014,7 +51160,7 @@
 	exports.default = RootReducer;
 
 /***/ },
-/* 214 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51023,9 +51169,11 @@
 	  value: true
 	});
 	
-	var _board_actions = __webpack_require__(215);
+	var _board_actions = __webpack_require__(209);
 	
-	var _render_board = __webpack_require__(216);
+	var _render_board = __webpack_require__(217);
+	
+	var _store = __webpack_require__(211);
 	
 	var BoardReducer = function BoardReducer() {
 	  var board = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -51039,6 +51187,8 @@
 	      return Object.assign({}, previewBoard);
 	    case _board_actions.RECEIVE_BOARD:
 	      return action.board;
+	    case _board_actions.RESET_BOARD:
+	      return (0, _store.initialBoard)();
 	    default:
 	      return board;
 	  }
@@ -51047,40 +51197,7 @@
 	exports.default = BoardReducer;
 
 /***/ },
-/* 215 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var UPDATE_BOARD = exports.UPDATE_BOARD = 'UPDATE_BOARD';
-	var BOARD_CLEAR = exports.BOARD_CLEAR = 'BOARD_CLEAR';
-	var RECEIVE_BOARD = exports.RECEIVE_BOARD = 'RECEIVE_BOARD';
-	
-	var updateBoard = exports.updateBoard = function updateBoard(piece) {
-	  return {
-	    type: UPDATE_BOARD,
-	    piece: piece
-	  };
-	};
-	
-	var boardClear = exports.boardClear = function boardClear() {
-	  return {
-	    type: BOARD_CLEAR
-	  };
-	};
-	
-	var receiveBoard = exports.receiveBoard = function receiveBoard(board) {
-	  return {
-	    type: RECEIVE_BOARD,
-	    board: board
-	  };
-	};
-
-/***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51090,11 +51207,11 @@
 	});
 	exports.renderPreview = exports.addPiece = undefined;
 	
-	var _hard_drop_piece = __webpack_require__(217);
+	var _hard_drop_piece = __webpack_require__(218);
 	
 	var _hard_drop_piece2 = _interopRequireDefault(_hard_drop_piece);
 	
-	var _move_piece_helpers = __webpack_require__(219);
+	var _move_piece_helpers = __webpack_require__(220);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -51177,7 +51294,7 @@
 	};
 
 /***/ },
-/* 217 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51186,11 +51303,11 @@
 	  value: true
 	});
 	
-	var _move_piece = __webpack_require__(218);
+	var _move_piece = __webpack_require__(219);
 	
 	var _move_piece2 = _interopRequireDefault(_move_piece);
 	
-	var _render_board = __webpack_require__(216);
+	var _render_board = __webpack_require__(217);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -51207,7 +51324,7 @@
 	exports.default = hardDropPiece;
 
 /***/ },
-/* 218 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51216,7 +51333,7 @@
 	  value: true
 	});
 	
-	var _move_piece_helpers = __webpack_require__(219);
+	var _move_piece_helpers = __webpack_require__(220);
 	
 	var movePiece = function movePiece(dir, piece, board) {
 	  var newPos = (0, _move_piece_helpers.nextPos)(dir, piece.pos);
@@ -51273,7 +51390,7 @@
 	// };
 
 /***/ },
-/* 219 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51283,7 +51400,7 @@
 	});
 	exports.isEqual = exports.spotsEmpty = exports.checkDown = exports.checkRight = exports.checkLeft = exports.nextPos = undefined;
 	
-	var _lodash = __webpack_require__(211);
+	var _lodash = __webpack_require__(213);
 	
 	var _lodash2 = _interopRequireDefault(_lodash);
 	
@@ -51412,7 +51529,7 @@
 	};
 
 /***/ },
-/* 220 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51423,6 +51540,8 @@
 	
 	var _piece_actions = __webpack_require__(208);
 	
+	var _piece_types = __webpack_require__(212);
+	
 	var PieceReducer = function PieceReducer() {
 	  var piece = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
@@ -51430,6 +51549,8 @@
 	  switch (action.type) {
 	    case _piece_actions.RECEIVE_PIECE:
 	      return action.piece;
+	    case _piece_actions.RESET_PIECE:
+	      return (0, _piece_types.randomPiece)();
 	    default:
 	      return piece;
 	  }
@@ -51438,7 +51559,7 @@
 	exports.default = PieceReducer;
 
 /***/ },
-/* 221 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51447,9 +51568,9 @@
 	  value: true
 	});
 	
-	var _queue_actions = __webpack_require__(222);
+	var _queue_actions = __webpack_require__(210);
 	
-	var _piece_types = __webpack_require__(210);
+	var _piece_types = __webpack_require__(212);
 	
 	var QueueReducer = function QueueReducer() {
 	  var queue = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -51467,24 +51588,6 @@
 	exports.default = QueueReducer;
 
 /***/ },
-/* 222 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var UPDATE_QUEUE = exports.UPDATE_QUEUE = 'UPDATE_QUEUE';
-	
-	var updateQueue = exports.updateQueue = function updateQueue(nextPiece) {
-	  return {
-	    type: UPDATE_QUEUE,
-	    nextPiece: nextPiece
-	  };
-	};
-
-/***/ },
 /* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -51496,6 +51599,17 @@
 	
 	var _game_state_actions = __webpack_require__(207);
 	
+	var checkSpots = [[0, 3], [0, 4], [0, 5], [0, 6], [0, 7]];
+	
+	var checkGame = function checkGame(board) {
+	  var count = 0;
+	  checkSpots.forEach(function (spot) {
+	    var key = spot.join(",");
+	    if (board[key].className !== 'empty') count++;
+	  });
+	  return count > 0;
+	};
+	
 	var GameStateReducer = function GameStateReducer() {
 	  var gamestate = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  var action = arguments[1];
@@ -51503,11 +51617,14 @@
 	
 	  switch (action.type) {
 	    case _game_state_actions.CHECK_GAMEOVER:
-	      return Object.assign({}, gamestate, { gameover: action.gameover });
+	      var gameover = checkGame(action.board);
+	      return Object.assign({}, gamestate, { gameover: gameover });
 	    case _game_state_actions.GAME_ON:
 	      return Object.assign({}, gamestate, { on: true });
 	    case _game_state_actions.TOGGLE_PAUSE:
 	      return Object.assign({}, gamestate, { pause: action.pause });
+	    case _game_state_actions.RESET_GAME_STATE:
+	      return { on: true, gameover: false, pause: false };
 	    default:
 	      return gamestate;
 	  }
@@ -51542,11 +51659,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var loggerMiddleware = (0, _reduxLogger2.default)();
-	// import QueueMiddleware from './queue_middleware';
-	
 	
 	var RootMiddleware = (0, _redux.applyMiddleware)(_piece_middleware2.default, _board_middleware2.default
-	// QueueMiddleware,
 	// loggerMiddleware
 	);
 	
@@ -51564,7 +51678,7 @@
 	
 	var _piece_actions = __webpack_require__(208);
 	
-	var _move_piece = __webpack_require__(218);
+	var _move_piece = __webpack_require__(219);
 	
 	var _move_piece2 = _interopRequireDefault(_move_piece);
 	
@@ -51572,13 +51686,15 @@
 	
 	var _rotate_piece2 = _interopRequireDefault(_rotate_piece);
 	
-	var _hard_drop_piece = __webpack_require__(217);
+	var _hard_drop_piece = __webpack_require__(218);
 	
 	var _hard_drop_piece2 = _interopRequireDefault(_hard_drop_piece);
 	
-	var _board_actions = __webpack_require__(215);
+	var _board_actions = __webpack_require__(209);
 	
-	var _queue_actions = __webpack_require__(222);
+	var _queue_actions = __webpack_require__(210);
+	
+	var _game_state_actions = __webpack_require__(207);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -51594,6 +51710,7 @@
 	      var update = function update() {
 	        dispatch((0, _board_actions.boardClear)());
 	        dispatch((0, _piece_actions.receivePiece)(queue));
+	        dispatch((0, _game_state_actions.checkGameover)(board));
 	        dispatch((0, _queue_actions.updateQueue)());
 	      };
 	
@@ -51683,7 +51800,7 @@
 	  value: true
 	});
 	
-	var _move_piece_helpers = __webpack_require__(219);
+	var _move_piece_helpers = __webpack_require__(220);
 	
 	var rotatePiece = function rotatePiece(dir, oldPiece, board) {
 	  var newPiece = Object.assign({}, oldPiece);
@@ -51770,7 +51887,7 @@
 	  value: true
 	});
 	
-	var _board_actions = __webpack_require__(215);
+	var _board_actions = __webpack_require__(209);
 	
 	var _clear_lines = __webpack_require__(228);
 	

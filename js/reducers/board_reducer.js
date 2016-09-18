@@ -1,5 +1,7 @@
-import { UPDATE_BOARD, RECEIVE_BOARD } from '../actions/board_actions';
+import { UPDATE_BOARD, RECEIVE_BOARD, RESET_BOARD }
+  from '../actions/board_actions';
 import { addPiece, renderPreview } from '../util/render_board';
+import { initialBoard } from '../store/store';
 
 const BoardReducer = function( board = {}, action){
 
@@ -10,6 +12,8 @@ const BoardReducer = function( board = {}, action){
       return Object.assign({}, previewBoard);
     case RECEIVE_BOARD:
       return action.board;
+    case RESET_BOARD:
+      return initialBoard();
     default:
       return board;
   }

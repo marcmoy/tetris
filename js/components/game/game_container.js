@@ -1,9 +1,12 @@
 import { connect } from 'react-redux';
 import Game from './game';
-import { gameOn, togglePause } from '../../actions/game_state_actions';
+import { gameOn, togglePause, resetGameState }
+  from '../../actions/game_state_actions';
 import { stepPiece, moveLeft, moveRight, moveDown,
-  rotateCW, rotateCCW, hardDrop  }
+  rotateCW, rotateCCW, hardDrop, resetPiece  }
   from '../../actions/piece_actions';
+import { resetBoard } from '../../actions/board_actions';
+import { updateQueue } from '../../actions/queue_actions';
 
 const mapStateToProps = state => ({
   gamestate: state.gamestate
@@ -20,7 +23,12 @@ const mapDispatchToProps = dispatch => ({
   moveRight: () => dispatch(moveRight()),
   rotateCW: () => dispatch(rotateCW()),
   rotateCCW: () => dispatch(rotateCCW()),
-  hardDrop: () => dispatch(hardDrop())
+  hardDrop: () => dispatch(hardDrop()),
+  // reset actions
+  resetPiece: () => dispatch(resetPiece()),
+  resetBoard: () => dispatch(resetBoard()),
+  updateQueue: () => dispatch(updateQueue()),
+  resetGameState: () => dispatch(resetGameState())
 });
 
 const GameContainer = connect(

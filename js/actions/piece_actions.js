@@ -1,8 +1,6 @@
-// receive new piece
+export const RESET_PIECE = 'RESET_PIECE';
 export const RECEIVE_PIECE = 'RECEIVE_PIECE';
-// makes piece fall
 export const STEP_PIECE = 'STEP_PIECE';
-// movements
 export const MOVE_LEFT = 'MOVE_LEFT';
 export const MOVE_DOWN = 'MOVE_DOWN';
 export const MOVE_RIGHT = 'MOVE_RIGHT';
@@ -10,7 +8,6 @@ export const MOVE_RIGHT = 'MOVE_RIGHT';
 // CCW = Counter Clockewise
 export const ROTATE_CW = 'ROTATE_CW';
 export const ROTATE_CCW = 'ROTATE_CCW';
-
 export const HARD_DROP = 'HARD_DROP';
 
 export const receivePiece = piece => ({
@@ -44,6 +41,10 @@ export const rotateCCW = () => ({
 
 export const hardDrop = () => ({
   type: HARD_DROP
+});
+
+export const resetPiece = () => ({
+  type: RESET_PIECE
 });
 
 // Example of a piece-I object at it's initial state:

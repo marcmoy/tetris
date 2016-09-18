@@ -24,6 +24,8 @@ class Game extends React.Component {
     this.pause = this.pause.bind(this);
     this.turnOffButtons = this.turnOffButtons.bind(this);
     this.addClickEffect = this.addClickEffect.bind(this);
+    this.restartGame = this.restartGame.bind(this);
+    this.renderGameover = this.renderGameover.bind(this);
   }
 
   componentDidMount() {
@@ -284,6 +286,41 @@ class Game extends React.Component {
     });
   }
 
+  renderGameover() {
+    clearInterval(this.interval);
+    $('#gameover-screen').removeClass('hidden');
+    $(window).off("keydown");
+    this.turnOffButtons();
+    this.addClickEffect();
+
+    $("#start-button").on("mousedown touchstart", (e) => {
+      e.preventDefault();
+      e.target.className = 'clicked';
+      $('#gameover-screen').addClass('hidden');
+      this.restartGame();
+    });
+
+    $("#start-button").on("mouseup touchend", (e) => {
+      e.preventDefault();
+      e.target.className = '';
+    });
+
+    $(window).on("keydown", (e) => {
+      if (e.keyCode === 13) {
+        $('#gameover-screen').addClass('hidden');
+        this.restartGame();
+      }
+    });
+  }
+
+  restartGame() {
+    this.props.resetPiece();
+    this.props.resetBoard();
+    this.props.updateQueue();
+    this.props.resetGameState();
+    this.startGameInterval();
+  }
+
   renderScreen() {
     let gamestate = this.props.gamestate;
     if (!gamestate.on) return (
@@ -295,18 +332,29 @@ class Game extends React.Component {
       </div>
     );
 
+    if (gamestate.gameover) {
+      this.renderGameover();
+    }
+
     return (
-      <div>
-        <div className='hidden dim' id='pause-screen'>
-          <span className='blink'>PAUSED</span>
+        <div>
+          <div className='hidden dim' id='pause-screen'>
+            <span className='blink'>PAUSED</span>
+          </div>
+          <div className='hidden dim' id='gameover-screen'>
+            <span className='blink'>
+              GAMEOVER<br/><br/>
+              Press START of ENTER<br/>
+              to play again.
+            </span>
+          </div>
+          <BoardContainer />
+          <div className='right-side clearfix'>
+            <QueueContainer />
+            <ScoreContainer />
+          </div>
         </div>
-        <BoardContainer />
-        <div className='right-side clearfix'>
-          <QueueContainer />
-          <ScoreContainer />
-        </div>
-      </div>
-    );
+      );
   }
 
   render() {
