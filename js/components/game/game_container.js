@@ -10,7 +10,8 @@ import { updateQueue } from '../../actions/queue_actions';
 import { resetScore } from '../../actions/score_actions';
 
 const mapStateToProps = state => ({
-  gamestate: state.gamestate
+  gamestate: state.gamestate,
+  level: state.score.level
 });
 
 const mapDispatchToProps = dispatch => ({

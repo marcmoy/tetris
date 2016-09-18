@@ -3,6 +3,8 @@ export const INCREASE_POINTS = 'INCREASE_POINTS';
 export const RECEIVE_POINTS = 'RECEIVE_POINTS';
 export const INCREASE_LINES = 'INCREASE_LINES';
 export const RECEIVE_LINES = 'RECEIVE_LINES';
+export const INCREASE_LEVEL = 'INCREASE_LEVEL';
+export const RECEIVE_LEVEL = 'RECEIVE_LEVEL';
 
 export const resetScore = () => ({
   type: RESET_SCORE
@@ -26,4 +28,14 @@ export const increaseLines = lines => ({
 export const receiveLines = lines => ({
   type: RECEIVE_LINES,
   lines
+});
+
+export const increaseLevel = level => ({
+  type: INCREASE_LEVEL,
+  level
+});
+
+export const receiveLevel = level => ({
+  type: RECEIVE_LEVEL,
+  level
 });

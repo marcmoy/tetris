@@ -23107,7 +23107,8 @@
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    gamestate: state.gamestate
+	    gamestate: state.gamestate,
+	    level: state.score.level
 	  };
 	};
 	
@@ -23211,6 +23212,10 @@
 	
 	var BUTTONS = ['select-button', 'start-button', 'a-button', 'b-button', 'up', 'down', 'left', 'right'];
 	
+	var LEVEL_SPEED = {
+	  0: 800, 1: 500, 2: 200, 3: 150, 4: 100, 5: 50, 6: 50, 7: 40, 8: 40
+	};
+	
 	var Game = function (_React$Component) {
 	  _inherits(Game, _React$Component);
 	
@@ -23219,6 +23224,7 @@
 	
 	    var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this));
 	
+	    _this.currentLevel = 0;
 	    _this.assignKeyListeners = _this.assignKeyListeners.bind(_this);
 	    _this.assignButtonListeners = _this.assignButtonListeners.bind(_this);
 	    _this.removeKeyListeners = _this.removeKeyListeners.bind(_this);
@@ -23267,6 +23273,21 @@
 	      this.addClickEffect();
 	    }
 	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate(nextProps) {
+	      var _this3 = this;
+	
+	      if (this.currentLevel < nextProps.level) {
+	        this.currentLevel = nextProps.level;
+	        clearInterval(this.interval);
+	        this.interval = setInterval(function () {
+	          return _this3.props.stepPiece();
+	        }, // move piece down
+	        LEVEL_SPEED[this.currentLevel] // every second
+	        );
+	      }
+	    }
+	  }, {
 	    key: 'startGame',
 	    value: function startGame() {
 	      this.props.gameOn();
@@ -23275,14 +23296,14 @@
 	  }, {
 	    key: 'startGameInterval',
 	    value: function startGameInterval() {
-	      var _this3 = this;
+	      var _this4 = this;
 	
 	      this.assignKeyListeners();
 	      this.assignButtonListeners();
 	      this.interval = setInterval(function () {
-	        return _this3.props.stepPiece();
+	        return _this4.props.stepPiece();
 	      }, // move piece down
-	      1000 // every second
+	      LEVEL_SPEED[this.currentLevel] // every second
 	      );
 	    }
 	  }, {
@@ -23308,13 +23329,13 @@
 	  }, {
 	    key: 'removeKeyListeners',
 	    value: function removeKeyListeners() {
-	      var _this4 = this;
+	      var _this5 = this;
 	
 	      (0, _jquery2.default)(window).off("keydown");
 	      (0, _jquery2.default)(window).on("keydown", function (e) {
 	        if (e.keyCode === 13) {
 	          e.preventDefault();
-	          _this4.pause();
+	          _this5.pause();
 	        }
 	      });
 	    }
@@ -23346,7 +23367,7 @@
 	  }, {
 	    key: 'removeButtonListeners',
 	    value: function removeButtonListeners() {
-	      var _this5 = this;
+	      var _this6 = this;
 	
 	      this.turnOffButtons();
 	      this.addClickEffect();
@@ -23354,7 +23375,7 @@
 	      (0, _jquery2.default)("#start-button").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this5.pause();
+	        _this6.pause();
 	      });
 	
 	      (0, _jquery2.default)("#start-button").on("mouseup touchend", function (e) {
@@ -23365,7 +23386,7 @@
 	  }, {
 	    key: 'assignKeyListeners',
 	    value: function assignKeyListeners() {
-	      var _this6 = this;
+	      var _this7 = this;
 	
 	      // turn off old listeners
 	      (0, _jquery2.default)(window).off("keydown");
@@ -23375,34 +23396,34 @@
 	        switch (e.keyCode) {
 	          case 37:
 	            e.preventDefault();
-	            _this6.props.moveLeft();
+	            _this7.props.moveLeft();
 	            break;
 	          case 39:
 	            e.preventDefault();
-	            _this6.props.moveRight();
+	            _this7.props.moveRight();
 	            break;
 	          case 40:
 	            e.preventDefault();
-	            _this6.props.moveDown();
+	            _this7.props.moveDown();
 	            break;
 	          case 38:
 	            e.preventDefault();
-	            _this6.props.hardDrop();
+	            _this7.props.hardDrop();
 	            break;
 	          case 32:
 	            // spacebar
 	            e.preventDefault();
-	            _this6.props.rotateCW();
+	            _this7.props.rotateCW();
 	            break;
 	          case 16:
 	            // shift
 	            e.preventDefault();
-	            _this6.props.rotateCCW();
+	            _this7.props.rotateCCW();
 	            break;
 	          case 13:
 	            // enter
 	            e.preventDefault();
-	            _this6.pause();
+	            _this7.pause();
 	            break;
 	          default:
 	            break;
@@ -23412,7 +23433,7 @@
 	  }, {
 	    key: 'assignButtonListeners',
 	    value: function assignButtonListeners() {
-	      var _this7 = this;
+	      var _this8 = this;
 	
 	      // turn off old listeners
 	      this.turnOffButtons();
@@ -23421,52 +23442,52 @@
 	      (0, _jquery2.default)("#down").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this7.props.moveDown();
-	        _this7.downInterval = setInterval(function () {
-	          return _this7.props.moveDown();
+	        _this8.props.moveDown();
+	        _this8.downInterval = setInterval(function () {
+	          return _this8.props.moveDown();
 	        }, 100);
 	      });
 	
 	      (0, _jquery2.default)("#down").on("mouseup touchend", function (e) {
 	        e.preventDefault();
 	        e.target.className = '';
-	        clearInterval(_this7.downInterval);
+	        clearInterval(_this8.downInterval);
 	      });
 	
 	      (0, _jquery2.default)("#left").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this7.props.moveLeft();
-	        _this7.leftInterval = setInterval(function () {
-	          return _this7.props.moveLeft();
+	        _this8.props.moveLeft();
+	        _this8.leftInterval = setInterval(function () {
+	          return _this8.props.moveLeft();
 	        }, 100);
 	      });
 	
 	      (0, _jquery2.default)("#left").on("mouseup touchend", function (e) {
 	        e.preventDefault();
 	        e.target.className = '';
-	        clearInterval(_this7.leftInterval);
+	        clearInterval(_this8.leftInterval);
 	      });
 	
 	      (0, _jquery2.default)("#right").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this7.props.moveRight();
-	        _this7.rightInterval = setInterval(function () {
-	          return _this7.props.moveRight();
+	        _this8.props.moveRight();
+	        _this8.rightInterval = setInterval(function () {
+	          return _this8.props.moveRight();
 	        }, 100);
 	      });
 	
 	      (0, _jquery2.default)("#right").on("mouseup touchend", function (e) {
 	        e.preventDefault();
 	        e.target.className = '';
-	        clearInterval(_this7.rightInterval);
+	        clearInterval(_this8.rightInterval);
 	      });
 	
 	      (0, _jquery2.default)("#up").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this7.props.hardDrop();
+	        _this8.props.hardDrop();
 	      });
 	
 	      (0, _jquery2.default)("#up").on("mouseup touchend", function (e) {
@@ -23477,7 +23498,7 @@
 	      (0, _jquery2.default)("#a-button").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this7.props.rotateCW();
+	        _this8.props.rotateCW();
 	      });
 	
 	      (0, _jquery2.default)("#a-button").on("mouseup touchend", function (e) {
@@ -23488,7 +23509,7 @@
 	      (0, _jquery2.default)("#b-button").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this7.props.rotateCCW();
+	        _this8.props.rotateCCW();
 	      });
 	
 	      (0, _jquery2.default)("#b-button").on("mouseup touchend", function (e) {
@@ -23499,7 +23520,7 @@
 	      (0, _jquery2.default)("#start-button").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this7.pause();
+	        _this8.pause();
 	      });
 	
 	      (0, _jquery2.default)("#start-button").on("mouseup touchend", function (e) {
@@ -23520,7 +23541,7 @@
 	  }, {
 	    key: 'renderGameover',
 	    value: function renderGameover() {
-	      var _this8 = this;
+	      var _this9 = this;
 	
 	      clearInterval(this.interval);
 	      (0, _jquery2.default)('#gameover-screen').removeClass('hidden');
@@ -23532,7 +23553,7 @@
 	        e.preventDefault();
 	        e.target.className = 'clicked';
 	        (0, _jquery2.default)('#gameover-screen').addClass('hidden');
-	        _this8.restartGame();
+	        _this9.restartGame();
 	      });
 	
 	      (0, _jquery2.default)("#start-button").on("mouseup touchend", function (e) {
@@ -23543,13 +23564,14 @@
 	      (0, _jquery2.default)(window).on("keydown", function (e) {
 	        if (e.keyCode === 13) {
 	          (0, _jquery2.default)('#gameover-screen').addClass('hidden');
-	          _this8.restartGame();
+	          _this9.restartGame();
 	        }
 	      });
 	    }
 	  }, {
 	    key: 'restartGame',
 	    value: function restartGame() {
+	      this.currentLevel = 0;
 	      this.props.resetPiece();
 	      this.props.resetBoard();
 	      this.props.updateQueue();
@@ -34235,6 +34257,8 @@
 	var RECEIVE_POINTS = exports.RECEIVE_POINTS = 'RECEIVE_POINTS';
 	var INCREASE_LINES = exports.INCREASE_LINES = 'INCREASE_LINES';
 	var RECEIVE_LINES = exports.RECEIVE_LINES = 'RECEIVE_LINES';
+	var INCREASE_LEVEL = exports.INCREASE_LEVEL = 'INCREASE_LEVEL';
+	var RECEIVE_LEVEL = exports.RECEIVE_LEVEL = 'RECEIVE_LEVEL';
 	
 	var resetScore = exports.resetScore = function resetScore() {
 	  return {
@@ -34267,6 +34291,20 @@
 	  return {
 	    type: RECEIVE_LINES,
 	    lines: lines
+	  };
+	};
+	
+	var increaseLevel = exports.increaseLevel = function increaseLevel(level) {
+	  return {
+	    type: INCREASE_LEVEL,
+	    level: level
+	  };
+	};
+	
+	var receiveLevel = exports.receiveLevel = function receiveLevel(level) {
+	  return {
+	    type: RECEIVE_LEVEL,
+	    level: level
 	  };
 	};
 
@@ -51719,6 +51757,8 @@
 	      return Object.assign({}, score, { points: action.points });
 	    case _score_actions.RECEIVE_LINES:
 	      return Object.assign({}, score, { lines: action.lines });
+	    case _score_actions.RECEIVE_LEVEL:
+	      return Object.assign({}, score, { level: action.level });
 	    default:
 	      return score;
 	  }
@@ -52099,6 +52139,18 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	var LEVEL = {
+	  0: 4,
+	  1: 8,
+	  2: 12,
+	  3: 16,
+	  4: 20,
+	  5: 24,
+	  6: 28,
+	  7: 32,
+	  8: 36
+	};
+	
 	var ScoreMiddleware = function ScoreMiddleware(_ref) {
 	  var getState = _ref.getState;
 	  var dispatch = _ref.dispatch;
@@ -52106,6 +52158,7 @@
 	    return function (action) {
 	      var points = getState().score.points;
 	      var lines = getState().score.lines;
+	      var level = getState().score.level;
 	
 	      switch (action.type) {
 	        case _score_actions.INCREASE_POINTS:
@@ -52114,7 +52167,13 @@
 	          break;
 	        case _score_actions.INCREASE_LINES:
 	          var newLines = lines + action.lines;
+	          if (LEVEL[level] <= newLines) {
+	            dispatch((0, _score_actions.increaseLevel)(level + 1));
+	          }
 	          dispatch((0, _score_actions.receiveLines)(newLines));
+	          break;
+	        case _score_actions.INCREASE_LEVEL:
+	          dispatch((0, _score_actions.receiveLevel)(action.level));
 	          break;
 	        default:
 	          break;

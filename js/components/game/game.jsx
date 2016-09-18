@@ -10,9 +10,14 @@ const BUTTONS = [
   'up', 'down', 'left', 'right'
 ];
 
+const LEVEL_SPEED = {
+  0: 800, 1: 500, 2: 200, 3: 150, 4: 100, 5: 50, 6: 50, 7: 40, 8: 40
+};
+
 class Game extends React.Component {
   constructor() {
     super();
+    this.currentLevel = 0;
     this.assignKeyListeners = this.assignKeyListeners.bind(this);
     this.assignButtonListeners = this.assignButtonListeners.bind(this);
     this.removeKeyListeners = this.removeKeyListeners.bind(this);
@@ -56,6 +61,17 @@ class Game extends React.Component {
     this.addClickEffect();
   }
 
+  componentDidUpdate(nextProps) {
+    if (this.currentLevel < nextProps.level) {
+      this.currentLevel = nextProps.level;
+      clearInterval(this.interval);
+      this.interval = setInterval(
+        () => this.props.stepPiece(), // move piece down
+        LEVEL_SPEED[this.currentLevel] // every second
+      );
+    }
+  }
+
   startGame() {
     this.props.gameOn();
     this.startGameInterval();
@@ -66,7 +82,7 @@ class Game extends React.Component {
     this.assignButtonListeners();
     this.interval = setInterval(
       () => this.props.stepPiece(), // move piece down
-      1000 // every second
+      LEVEL_SPEED[this.currentLevel] // every second
     );
   }
 
@@ -314,6 +330,7 @@ class Game extends React.Component {
   }
 
   restartGame() {
+    this.currentLevel = 0;
     this.props.resetPiece();
     this.props.resetBoard();
     this.props.updateQueue();
