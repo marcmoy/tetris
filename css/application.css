@@ -277,6 +277,10 @@ button#down {
   color: #544d4d;
 }
 
+.buttons-a-b > button.clicked {
+  background-color: #3c3838;
+}
+
 #a-button {
   position: absolute;
   top: 0;
@@ -303,6 +307,10 @@ button#down {
   border-radius: 5px;
   height: 1rem;
   margin: 0 20px 0 20px;
+}
+
+.buttons-SS > .buttons-SS-row > button.clicked {
+  background-color: #3c3838;
 }
 
 .buttons-SS > .buttons-SS-row > label {
@@ -507,5 +515,5 @@ tbody > tr > td:after {
 }
 
 .preview {
-  opacity: 0.2;
+  opacity: 0.3;
 }

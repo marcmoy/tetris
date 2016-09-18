@@ -5,6 +5,11 @@ import QueueContainer from '../queue/queue_container';
 import ScoreContainer from '../score/score_container';
 import $ from 'jquery';
 
+const BUTTONS = [
+  'select-button', 'start-button', 'a-button', 'b-button',
+  'up', 'down', 'left', 'right'
+];
+
 class Game extends React.Component {
   constructor() {
     super();
@@ -17,6 +22,8 @@ class Game extends React.Component {
     this.startGameInterval = this.startGameInterval.bind(this);
     this.pauseGameInterval = this.pauseGameInterval.bind(this);
     this.pause = this.pause.bind(this);
+    this.turnOffButtons = this.turnOffButtons.bind(this);
+    this.addClickEffect = this.addClickEffect.bind(this);
   }
 
   componentDidMount() {
@@ -30,12 +37,21 @@ class Game extends React.Component {
     };
 
     $("#start-button").on("mousedown touchstart", (e) => {
+      e.preventDefault();
+      e.target.className = 'clicked';
       renderGame(e);
+    });
+
+    $("#start-button").on("mouseup touchend", (e) => {
+      e.preventDefault();
+      e.target.className = '';
     });
 
     $(window).on("keydown", (e) => {
       if (e.keyCode === 13) renderGame(e);
     });
+
+    this.addClickEffect();
   }
 
   startGame() {
@@ -80,18 +96,42 @@ class Game extends React.Component {
     });
   }
 
+  turnOffButtons() {
+    BUTTONS.forEach(button => {
+      $(`#${button}`).off("mousedown touchstart");
+      $(`#${button}`).off("mouseup touchend");
+    });
+  }
+
+  addClickEffect() {
+    BUTTONS.forEach(button => {
+      if (button !== 'start-button') {
+        $(`#${button}`).on("mousedown touchstart", (e) => {
+          e.preventDefault();
+          e.target.className = 'clicked';
+        });
+
+        $(`#${button}`).on("mouseup touchend", (e) => {
+          e.preventDefault();
+          e.target.className = '';
+        });
+      }
+    });
+  }
+
   removeButtonListeners() {
-    $("#start-button").off("mousedown touchstart");
-    $("#a-button").off("mousedown touchstart");
-    $("#b-button").off("mousedown touchstart");
-    $("#left").off("mousedown touchstart");
-    $("#down").off("mousedown touchstart");
-    $("#right").off("mousedown touchstart");
-    $("#up").off("mousedown touchstart");
+    this.turnOffButtons();
+    this.addClickEffect();
 
     $("#start-button").on("mousedown touchstart", (e) => {
       e.preventDefault();
+      e.target.className = 'clicked';
       this.pause();
+    });
+
+    $("#start-button").on("mouseup touchend", (e) => {
+      e.preventDefault();
+      e.target.className = '';
     });
   }
 
@@ -138,7 +178,7 @@ class Game extends React.Component {
 
   assignButtonListeners() {
     // turn off old listeners
-    $("#start-button").off("mousedown touchstart");
+    this.turnOffButtons();
 
     // turn on new listeners
     $("#down").on("mousedown touchstart", (e) => {
@@ -224,7 +264,23 @@ class Game extends React.Component {
 
     $("#start-button").on("mousedown touchstart", (e) => {
       e.preventDefault();
+      e.target.className = 'clicked';
       this.pause();
+    });
+
+    $("#start-button").on("mouseup touchend", (e) => {
+      e.preventDefault();
+      e.target.className = '';
+    });
+
+    $("#select-button").on("mousedown touchstart", (e) => {
+      e.preventDefault();
+      e.target.className = 'clicked';
+    });
+
+    $("#select-button").on("mouseup touchend", (e) => {
+      e.preventDefault();
+      e.target.className = '';
     });
   }
 

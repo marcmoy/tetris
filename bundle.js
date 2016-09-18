@@ -23187,6 +23187,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	var BUTTONS = ['select-button', 'start-button', 'a-button', 'b-button', 'up', 'down', 'left', 'right'];
+	
 	var Game = function (_React$Component) {
 	  _inherits(Game, _React$Component);
 	
@@ -23204,6 +23206,8 @@
 	    _this.startGameInterval = _this.startGameInterval.bind(_this);
 	    _this.pauseGameInterval = _this.pauseGameInterval.bind(_this);
 	    _this.pause = _this.pause.bind(_this);
+	    _this.turnOffButtons = _this.turnOffButtons.bind(_this);
+	    _this.addClickEffect = _this.addClickEffect.bind(_this);
 	    return _this;
 	  }
 	
@@ -23222,12 +23226,20 @@
 	      };
 	
 	      (0, _jquery2.default)("#start-button").on("mousedown touchstart", function (e) {
+	        e.preventDefault();
+	        e.target.className = 'clicked';
 	        renderGame(e);
+	      });
+	      (0, _jquery2.default)("#start-button").on("mouseup touchend", function (e) {
+	        e.preventDefault();
+	        e.target.className = '';
 	      });
 	
 	      (0, _jquery2.default)(window).on("keydown", function (e) {
 	        if (e.keyCode === 13) renderGame(e);
 	      });
+	
+	      this.addClickEffect();
 	    }
 	  }, {
 	    key: 'startGame',
@@ -23282,21 +23294,47 @@
 	      });
 	    }
 	  }, {
+	    key: 'turnOffButtons',
+	    value: function turnOffButtons() {
+	      BUTTONS.forEach(function (button) {
+	        (0, _jquery2.default)('#' + button).off("mousedown touchstart");
+	        (0, _jquery2.default)('#' + button).off("mouseup touchend");
+	      });
+	    }
+	  }, {
+	    key: 'addClickEffect',
+	    value: function addClickEffect() {
+	      BUTTONS.forEach(function (button) {
+	        if (button !== 'start-button') {
+	          (0, _jquery2.default)('#' + button).on("mousedown touchstart", function (e) {
+	            e.preventDefault();
+	            e.target.className = 'clicked';
+	          });
+	
+	          (0, _jquery2.default)('#' + button).on("mouseup touchend", function (e) {
+	            e.preventDefault();
+	            e.target.className = '';
+	          });
+	        }
+	      });
+	    }
+	  }, {
 	    key: 'removeButtonListeners',
 	    value: function removeButtonListeners() {
 	      var _this5 = this;
 	
-	      (0, _jquery2.default)("#start-button").off("mousedown touchstart");
-	      (0, _jquery2.default)("#a-button").off("mousedown touchstart");
-	      (0, _jquery2.default)("#b-button").off("mousedown touchstart");
-	      (0, _jquery2.default)("#left").off("mousedown touchstart");
-	      (0, _jquery2.default)("#down").off("mousedown touchstart");
-	      (0, _jquery2.default)("#right").off("mousedown touchstart");
-	      (0, _jquery2.default)("#up").off("mousedown touchstart");
+	      this.turnOffButtons();
+	      this.addClickEffect();
 	
 	      (0, _jquery2.default)("#start-button").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
+	        e.target.className = 'clicked';
 	        _this5.pause();
+	      });
+	
+	      (0, _jquery2.default)("#start-button").on("mouseup touchend", function (e) {
+	        e.preventDefault();
+	        e.target.className = '';
 	      });
 	    }
 	  }, {
@@ -23352,7 +23390,7 @@
 	      var _this7 = this;
 	
 	      // turn off old listeners
-	      (0, _jquery2.default)("#start-button").off("mousedown touchstart");
+	      this.turnOffButtons();
 	
 	      // turn on new listeners
 	      (0, _jquery2.default)("#down").on("mousedown touchstart", function (e) {
@@ -23435,7 +23473,23 @@
 	
 	      (0, _jquery2.default)("#start-button").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
+	        e.target.className = 'clicked';
 	        _this7.pause();
+	      });
+	
+	      (0, _jquery2.default)("#start-button").on("mouseup touchend", function (e) {
+	        e.preventDefault();
+	        e.target.className = '';
+	      });
+	
+	      (0, _jquery2.default)("#select-button").on("mousedown touchstart", function (e) {
+	        e.preventDefault();
+	        e.target.className = 'clicked';
+	      });
+	
+	      (0, _jquery2.default)("#select-button").on("mouseup touchend", function (e) {
+	        e.preventDefault();
+	        e.target.className = '';
 	      });
 	    }
 	  }, {
