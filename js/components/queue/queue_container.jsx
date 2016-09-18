@@ -5,9 +5,6 @@ const mapStateToProps = state => ({
   queue: state.queue
 });
 
-const mapDispatchToProps = dispatch => ({
-});
-
 const QueueContainer = connect(
   mapStateToProps
 )(Queue);

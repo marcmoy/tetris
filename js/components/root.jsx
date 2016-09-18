@@ -1,10 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import Tetris from './tetris';
+import GameContainer from './game/game_container';
 
 const Root = ({ store }) => (
   <Provider store={store}>
-    <Tetris />
+    <GameContainer />
   </Provider>
 );
 

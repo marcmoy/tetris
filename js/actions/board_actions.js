@@ -1,10 +1,3 @@
-// export const RECEIVE_PIECE = 'RECEIVE_PIECE';
-//
-// export const receivePiece = piece => ({
-//   type: RECEIVE_PIECE,
-//   piece
-// });
-
 export const UPDATE_BOARD = 'UPDATE_BOARD';
 export const BOARD_CLEAR = 'BOARD_CLEAR';
 export const RECEIVE_BOARD = 'RECEIVE_BOARD';

@@ -58,35 +58,16 @@
 	
 	var _root2 = _interopRequireDefault(_root);
 	
-	var _store = __webpack_require__(206);
+	var _store = __webpack_require__(209);
 	
 	var _store2 = _interopRequireDefault(_store);
-	
-	var _jquery = __webpack_require__(205);
-	
-	var _jquery2 = _interopRequireDefault(_jquery);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	document.addEventListener('DOMContentLoaded', function () {
 	  var store = (0, _store2.default)();
 	  var screen = document.getElementById('screen');
-	
-	  var renderGame = function renderGame(e) {
-	    e.preventDefault();
-	    (0, _jquery2.default)("#start-screen").addClass("hidden");
-	    (0, _jquery2.default)("#power-switch").removeClass("off").addClass("on");
-	    (0, _jquery2.default)("#power-light").removeClass("off").addClass("on");
-	    _reactDom2.default.render(_react2.default.createElement(_root2.default, { store: store }), screen);
-	  };
-	
-	  (0, _jquery2.default)("#start-button").on("mousedown touchstart", function (e) {
-	    renderGame(e);
-	  });
-	
-	  (0, _jquery2.default)(window).on("keydown", function (e) {
-	    if (e.keyCode === 13) renderGame(e);
-	  });
+	  _reactDom2.default.render(_react2.default.createElement(_root2.default, { store: store }), screen);
 	});
 
 /***/ },
@@ -21476,9 +21457,9 @@
 	
 	var _reactRedux = __webpack_require__(173);
 	
-	var _tetris = __webpack_require__(197);
+	var _game_container = __webpack_require__(197);
 	
-	var _tetris2 = _interopRequireDefault(_tetris);
+	var _game_container2 = _interopRequireDefault(_game_container);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -21487,7 +21468,7 @@
 	  return _react2.default.createElement(
 	    _reactRedux.Provider,
 	    { store: store },
-	    _react2.default.createElement(_tetris2.default, null)
+	    _react2.default.createElement(_game_container2.default, null)
 	  );
 	};
 	
@@ -23106,27 +23087,95 @@
 	  value: true
 	});
 	
+	var _reactRedux = __webpack_require__(173);
+	
+	var _game = __webpack_require__(198);
+	
+	var _game2 = _interopRequireDefault(_game);
+	
+	var _game_state_actions = __webpack_require__(207);
+	
+	var _piece_actions = __webpack_require__(208);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    gamestate: state.gamestate
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    // gamestate actions
+	    gameOn: function gameOn() {
+	      return dispatch((0, _game_state_actions.gameOn)());
+	    },
+	    togglePause: function togglePause(pause) {
+	      return dispatch((0, _game_state_actions.togglePause)(pause));
+	    },
+	    // piece actions
+	    stepPiece: function stepPiece() {
+	      return dispatch((0, _piece_actions.stepPiece)());
+	    },
+	    moveDown: function moveDown() {
+	      return dispatch((0, _piece_actions.moveDown)());
+	    },
+	    moveLeft: function moveLeft() {
+	      return dispatch((0, _piece_actions.moveLeft)());
+	    },
+	    moveRight: function moveRight() {
+	      return dispatch((0, _piece_actions.moveRight)());
+	    },
+	    rotateCW: function rotateCW() {
+	      return dispatch((0, _piece_actions.rotateCW)());
+	    },
+	    rotateCCW: function rotateCCW() {
+	      return dispatch((0, _piece_actions.rotateCCW)());
+	    },
+	    hardDrop: function hardDrop() {
+	      return dispatch((0, _piece_actions.hardDrop)());
+	    }
+	  };
+	};
+	
+	var GameContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_game2.default);
+	
+	exports.default = GameContainer;
+
+/***/ },
+/* 198 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _piece_actions = __webpack_require__(198);
-	
 	var _board_container = __webpack_require__(199);
 	
 	var _board_container2 = _interopRequireDefault(_board_container);
 	
-	var _queue_container = __webpack_require__(201);
+	var _start_screen = __webpack_require__(201);
+	
+	var _start_screen2 = _interopRequireDefault(_start_screen);
+	
+	var _queue_container = __webpack_require__(202);
 	
 	var _queue_container2 = _interopRequireDefault(_queue_container);
 	
-	var _score_container = __webpack_require__(203);
+	var _score_container = __webpack_require__(204);
 	
 	var _score_container2 = _interopRequireDefault(_score_container);
 	
-	var _jquery = __webpack_require__(205);
+	var _jquery = __webpack_require__(206);
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
@@ -23138,64 +23187,158 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Tetris = function (_React$Component) {
-	  _inherits(Tetris, _React$Component);
+	var Game = function (_React$Component) {
+	  _inherits(Game, _React$Component);
 	
-	  function Tetris() {
-	    _classCallCheck(this, Tetris);
+	  function Game() {
+	    _classCallCheck(this, Game);
 	
-	    var _this = _possibleConstructorReturn(this, (Tetris.__proto__ || Object.getPrototypeOf(Tetris)).call(this));
+	    var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this));
 	
 	    _this.assignKeyListeners = _this.assignKeyListeners.bind(_this);
 	    _this.assignButtonListeners = _this.assignButtonListeners.bind(_this);
+	    _this.removeKeyListeners = _this.removeKeyListeners.bind(_this);
+	    _this.removeButtonListeners = _this.removeButtonListeners.bind(_this);
+	    _this.startGame = _this.startGame.bind(_this);
+	    _this.renderScreen = _this.renderScreen.bind(_this);
+	    _this.startGameInterval = _this.startGameInterval.bind(_this);
+	    _this.pauseGameInterval = _this.pauseGameInterval.bind(_this);
+	    _this.pause = _this.pause.bind(_this);
 	    return _this;
 	  }
 	
-	  _createClass(Tetris, [{
+	  _createClass(Game, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      var _this2 = this;
 	
+	      var renderGame = function renderGame(e) {
+	        e.preventDefault();
+	        (0, _jquery2.default)("#power-switch").removeClass("off").addClass("on");
+	        (0, _jquery2.default)("#power-light").removeClass("off").addClass("on");
+	        (0, _jquery2.default)("#start-button").off("mousedown touchstart");
+	        (0, _jquery2.default)(window).off("keydown");
+	        _this2.startGame();
+	      };
+	
+	      (0, _jquery2.default)("#start-button").on("mousedown touchstart", function (e) {
+	        renderGame(e);
+	      });
+	
+	      (0, _jquery2.default)(window).on("keydown", function (e) {
+	        if (e.keyCode === 13) renderGame(e);
+	      });
+	    }
+	  }, {
+	    key: 'startGame',
+	    value: function startGame() {
+	      this.props.gameOn();
+	      this.startGameInterval();
+	    }
+	  }, {
+	    key: 'startGameInterval',
+	    value: function startGameInterval() {
+	      var _this3 = this;
+	
 	      this.assignKeyListeners();
 	      this.assignButtonListeners();
 	      this.interval = setInterval(function () {
-	        return _this2.context.store.dispatch((0, _piece_actions.stepPiece)());
+	        return _this3.props.stepPiece();
 	      }, // move piece down
 	      1000 // every second
 	      );
 	    }
 	  }, {
+	    key: 'pause',
+	    value: function pause() {
+	      if (this.props.gamestate.pause) {
+	        this.startGameInterval();
+	        this.props.togglePause(false);
+	        (0, _jquery2.default)("#pause-screen").addClass("hidden");
+	      } else {
+	        this.pauseGameInterval();
+	        this.props.togglePause(true);
+	        (0, _jquery2.default)("#pause-screen").removeClass("hidden");
+	      }
+	    }
+	  }, {
+	    key: 'pauseGameInterval',
+	    value: function pauseGameInterval() {
+	      this.removeKeyListeners();
+	      this.removeButtonListeners();
+	      clearInterval(this.interval);
+	    }
+	  }, {
+	    key: 'removeKeyListeners',
+	    value: function removeKeyListeners() {
+	      var _this4 = this;
+	
+	      (0, _jquery2.default)(window).off("keydown");
+	      (0, _jquery2.default)(window).on("keydown", function (e) {
+	        if (e.keyCode === 13) {
+	          e.preventDefault();
+	          _this4.pause();
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'removeButtonListeners',
+	    value: function removeButtonListeners() {
+	      var _this5 = this;
+	
+	      (0, _jquery2.default)("#start-button").off("mousedown touchstart");
+	      (0, _jquery2.default)("#a-button").off("mousedown touchstart");
+	      (0, _jquery2.default)("#b-button").off("mousedown touchstart");
+	      (0, _jquery2.default)("#left").off("mousedown touchstart");
+	      (0, _jquery2.default)("#down").off("mousedown touchstart");
+	      (0, _jquery2.default)("#right").off("mousedown touchstart");
+	
+	      (0, _jquery2.default)("#start-button").on("mousedown touchstart", function (e) {
+	        e.preventDefault();
+	        _this5.pause();
+	      });
+	    }
+	  }, {
 	    key: 'assignKeyListeners',
 	    value: function assignKeyListeners() {
-	      var _this3 = this;
+	      var _this6 = this;
 	
+	      // turn off old listeners
+	      (0, _jquery2.default)(window).off("keydown");
+	
+	      // turn on new listeners
 	      (0, _jquery2.default)(window).on("keydown", function (e) {
 	        switch (e.keyCode) {
 	          case 37:
 	            e.preventDefault();
-	            _this3.context.store.dispatch((0, _piece_actions.moveLeft)());
+	            _this6.props.moveLeft();
 	            break;
 	          case 39:
 	            e.preventDefault();
-	            _this3.context.store.dispatch((0, _piece_actions.moveRight)());
+	            _this6.props.moveRight();
 	            break;
 	          case 40:
 	            e.preventDefault();
-	            _this3.context.store.dispatch((0, _piece_actions.moveDown)());
+	            _this6.props.moveDown();
 	            break;
 	          case 38:
 	            e.preventDefault();
-	            _this3.context.store.dispatch((0, _piece_actions.hardDrop)());
+	            _this6.props.hardDrop();
 	            break;
 	          case 32:
 	            // spacebar
 	            e.preventDefault();
-	            _this3.context.store.dispatch((0, _piece_actions.rotateCW)());
+	            _this6.props.rotateCW();
 	            break;
 	          case 16:
 	            // shift
 	            e.preventDefault();
-	            _this3.context.store.dispatch((0, _piece_actions.rotateCCW)());
+	            _this6.props.rotateCCW();
+	            break;
+	          case 13:
+	            // enter
+	            e.preventDefault();
+	            _this6.pause();
 	            break;
 	          default:
 	            break;
@@ -23205,60 +23348,61 @@
 	  }, {
 	    key: 'assignButtonListeners',
 	    value: function assignButtonListeners() {
-	      var _this4 = this;
+	      var _this7 = this;
 	
-	      // prevent start button from render new game again
+	      // turn off old listeners
 	      (0, _jquery2.default)("#start-button").off("mousedown touchstart");
 	
+	      // turn on new listeners
 	      (0, _jquery2.default)("#down").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this4.context.store.dispatch((0, _piece_actions.moveDown)());
-	        _this4.downInterval = setInterval(function () {
-	          return _this4.context.store.dispatch((0, _piece_actions.moveDown)());
+	        _this7.props.moveDown();
+	        _this7.downInterval = setInterval(function () {
+	          return _this7.props.moveDown();
 	        }, 100);
 	      });
 	
 	      (0, _jquery2.default)("#down").on("mouseup touchend", function (e) {
 	        e.preventDefault();
 	        e.target.className = '';
-	        clearInterval(_this4.downInterval);
+	        clearInterval(_this7.downInterval);
 	      });
 	
 	      (0, _jquery2.default)("#left").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this4.context.store.dispatch((0, _piece_actions.moveLeft)());
-	        _this4.leftInterval = setInterval(function () {
-	          return _this4.context.store.dispatch((0, _piece_actions.moveLeft)());
+	        _this7.props.moveLeft();
+	        _this7.leftInterval = setInterval(function () {
+	          return _this7.props.moveLeft();
 	        }, 100);
 	      });
 	
 	      (0, _jquery2.default)("#left").on("mouseup touchend", function (e) {
 	        e.preventDefault();
 	        e.target.className = '';
-	        clearInterval(_this4.leftInterval);
+	        clearInterval(_this7.leftInterval);
 	      });
 	
 	      (0, _jquery2.default)("#right").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this4.context.store.dispatch((0, _piece_actions.moveRight)());
-	        _this4.rightInterval = setInterval(function () {
-	          return _this4.context.store.dispatch((0, _piece_actions.moveRight)());
+	        _this7.props.moveRight();
+	        _this7.rightInterval = setInterval(function () {
+	          return _this7.props.moveRight();
 	        }, 100);
 	      });
 	
 	      (0, _jquery2.default)("#right").on("mouseup touchend", function (e) {
 	        e.preventDefault();
 	        e.target.className = '';
-	        clearInterval(_this4.rightInterval);
+	        clearInterval(_this7.rightInterval);
 	      });
 	
 	      (0, _jquery2.default)("#up").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this4.context.store.dispatch((0, _piece_actions.hardDrop)());
+	        _this7.props.hardDrop();
 	      });
 	
 	      (0, _jquery2.default)("#up").on("mouseup touchend", function (e) {
@@ -23269,7 +23413,7 @@
 	      (0, _jquery2.default)("#a-button").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this4.context.store.dispatch((0, _piece_actions.rotateCW)());
+	        _this7.props.rotateCW();
 	      });
 	
 	      (0, _jquery2.default)("#a-button").on("mouseup touchend", function (e) {
@@ -23280,20 +23424,47 @@
 	      (0, _jquery2.default)("#b-button").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this4.context.store.dispatch((0, _piece_actions.rotateCCW)());
+	        _this7.props.rotateCCW();
 	      });
 	
 	      (0, _jquery2.default)("#b-button").on("mouseup touchend", function (e) {
 	        e.preventDefault();
 	        e.target.className = '';
 	      });
+	
+	      (0, _jquery2.default)("#start-button").on("mousedown touchstart", function (e) {
+	        e.preventDefault();
+	        _this7.pause();
+	      });
 	    }
 	  }, {
-	    key: 'render',
-	    value: function render() {
+	    key: 'renderScreen',
+	    value: function renderScreen() {
+	      var gamestate = this.props.gamestate;
+	      if (!gamestate.on) return _react2.default.createElement(
+	        'div',
+	        { id: 'start-screen' },
+	        _react2.default.createElement(
+	          'span',
+	          { className: 'blink' },
+	          'Press START or ENTER',
+	          _react2.default.createElement('br', null),
+	          'to begin!'
+	        )
+	      );
+	
 	      return _react2.default.createElement(
 	        'div',
 	        null,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'hidden dim', id: 'pause-screen' },
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'blink' },
+	            'PAUSE'
+	          )
+	        ),
 	        _react2.default.createElement(_board_container2.default, null),
 	        _react2.default.createElement(
 	          'div',
@@ -23303,108 +23474,21 @@
 	        )
 	      );
 	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        this.renderScreen()
+	      );
+	    }
 	  }]);
 	
-	  return Tetris;
+	  return Game;
 	}(_react2.default.Component);
 	
-	Tetris.contextTypes = {
-	  store: _react2.default.PropTypes.object.isRequired
-	};
-	
-	exports.default = Tetris;
-
-/***/ },
-/* 198 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	// receive new piece
-	var RECEIVE_PIECE = exports.RECEIVE_PIECE = 'RECEIVE_PIECE';
-	// makes piece fall
-	var STEP_PIECE = exports.STEP_PIECE = 'STEP_PIECE';
-	// movements
-	var MOVE_LEFT = exports.MOVE_LEFT = 'MOVE_LEFT';
-	var MOVE_DOWN = exports.MOVE_DOWN = 'MOVE_DOWN';
-	var MOVE_RIGHT = exports.MOVE_RIGHT = 'MOVE_RIGHT';
-	// CW = Clockwise
-	// CCW = Counter Clockewise
-	var ROTATE_CW = exports.ROTATE_CW = 'ROTATE_CW';
-	var ROTATE_CCW = exports.ROTATE_CCW = 'ROTATE_CCW';
-	
-	var HARD_DROP = exports.HARD_DROP = 'HARD_DROP';
-	
-	var receivePiece = exports.receivePiece = function receivePiece(piece) {
-	  return {
-	    type: RECEIVE_PIECE,
-	    piece: piece
-	  };
-	};
-	
-	var stepPiece = exports.stepPiece = function stepPiece() {
-	  return {
-	    type: STEP_PIECE
-	  };
-	};
-	
-	var moveLeft = exports.moveLeft = function moveLeft() {
-	  return {
-	    type: MOVE_LEFT
-	  };
-	};
-	
-	var moveDown = exports.moveDown = function moveDown() {
-	  return {
-	    type: MOVE_DOWN
-	  };
-	};
-	
-	var moveRight = exports.moveRight = function moveRight() {
-	  return {
-	    type: MOVE_RIGHT
-	  };
-	};
-	
-	var rotateCW = exports.rotateCW = function rotateCW() {
-	  return {
-	    type: ROTATE_CW
-	  };
-	};
-	
-	var rotateCCW = exports.rotateCCW = function rotateCCW() {
-	  return {
-	    type: ROTATE_CCW
-	  };
-	};
-	
-	var hardDrop = exports.hardDrop = function hardDrop() {
-	  return {
-	    type: HARD_DROP
-	  };
-	};
-	
-	// Example of a piece-I object at it's initial state:
-	// --------------------------------------------------
-	// const I = {
-	//   blocks: [
-	//     [0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0],
-	//     [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-	//     [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0],
-	//     [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0]
-	//   ],
-	//   rotation: 0,
-	// pos: [
-	//   [-3,3], [-3,4], [-3,5], [-3,6],
-	//   [-2,2], [-2,4], [-2,5], [-2,6],
-	//   [-1,1], [-1,4], [-1,5], [-1,6],
-	//   [0,3], [0,4], [0,5], [0,6]
-	// ],
-	//   className: 'piece-i'
-	// };
+	exports.default = Game;
 
 /***/ },
 /* 199 */
@@ -23496,6 +23580,57 @@
 /* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var StartScreen = function (_React$Component) {
+	  _inherits(StartScreen, _React$Component);
+	
+	  function StartScreen() {
+	    _classCallCheck(this, StartScreen);
+	
+	    return _possibleConstructorReturn(this, (StartScreen.__proto__ || Object.getPrototypeOf(StartScreen)).call(this));
+	  }
+	
+	  _createClass(StartScreen, [{
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "press-start", id: "start-screen" },
+	        "Press START or ENTER",
+	        _react2.default.createElement("br", null),
+	        "to begin!"
+	      );
+	    }
+	  }]);
+	
+	  return StartScreen;
+	}(_react2.default.Component);
+	
+	exports.default = StartScreen;
+
+/***/ },
+/* 202 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
@@ -23504,7 +23639,7 @@
 	
 	var _reactRedux = __webpack_require__(173);
 	
-	var _queue = __webpack_require__(202);
+	var _queue = __webpack_require__(203);
 	
 	var _queue2 = _interopRequireDefault(_queue);
 	
@@ -23516,16 +23651,12 @@
 	  };
 	};
 	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {};
-	};
-	
 	var QueueContainer = (0, _reactRedux.connect)(mapStateToProps)(_queue2.default);
 	
 	exports.default = QueueContainer;
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23586,7 +23717,7 @@
 	exports.default = Queue;
 
 /***/ },
-/* 203 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23597,7 +23728,7 @@
 	
 	var _reactRedux = __webpack_require__(173);
 	
-	var _score = __webpack_require__(204);
+	var _score = __webpack_require__(205);
 	
 	var _score2 = _interopRequireDefault(_score);
 	
@@ -23616,7 +23747,7 @@
 	exports.default = ScoreContainer;
 
 /***/ },
-/* 204 */
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23679,7 +23810,7 @@
 	exports.default = Score;
 
 /***/ },
-/* 205 */
+/* 206 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*eslint-disable no-unused-vars*/
@@ -33759,7 +33890,132 @@
 
 
 /***/ },
-/* 206 */
+/* 207 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var CHECK_GAMEOVER = exports.CHECK_GAMEOVER = 'CHECK_GAMEOVER';
+	var GAME_ON = exports.GAME_ON = 'GAME_ON';
+	var TOGGLE_PAUSE = exports.TOGGLE_PAUSE = 'TOGGLE_PAUSE';
+	
+	var checkGameover = exports.checkGameover = function checkGameover(gameover) {
+	  return {
+	    type: CHECK_GAMEOVER,
+	    gameover: gameover
+	  };
+	};
+	
+	var gameOn = exports.gameOn = function gameOn() {
+	  return {
+	    type: GAME_ON
+	  };
+	};
+	
+	var togglePause = exports.togglePause = function togglePause(pause) {
+	  return {
+	    type: TOGGLE_PAUSE,
+	    pause: pause
+	  };
+	};
+
+/***/ },
+/* 208 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	// receive new piece
+	var RECEIVE_PIECE = exports.RECEIVE_PIECE = 'RECEIVE_PIECE';
+	// makes piece fall
+	var STEP_PIECE = exports.STEP_PIECE = 'STEP_PIECE';
+	// movements
+	var MOVE_LEFT = exports.MOVE_LEFT = 'MOVE_LEFT';
+	var MOVE_DOWN = exports.MOVE_DOWN = 'MOVE_DOWN';
+	var MOVE_RIGHT = exports.MOVE_RIGHT = 'MOVE_RIGHT';
+	// CW = Clockwise
+	// CCW = Counter Clockewise
+	var ROTATE_CW = exports.ROTATE_CW = 'ROTATE_CW';
+	var ROTATE_CCW = exports.ROTATE_CCW = 'ROTATE_CCW';
+	
+	var HARD_DROP = exports.HARD_DROP = 'HARD_DROP';
+	
+	var receivePiece = exports.receivePiece = function receivePiece(piece) {
+	  return {
+	    type: RECEIVE_PIECE,
+	    piece: piece
+	  };
+	};
+	
+	var stepPiece = exports.stepPiece = function stepPiece() {
+	  return {
+	    type: STEP_PIECE
+	  };
+	};
+	
+	var moveLeft = exports.moveLeft = function moveLeft() {
+	  return {
+	    type: MOVE_LEFT
+	  };
+	};
+	
+	var moveDown = exports.moveDown = function moveDown() {
+	  return {
+	    type: MOVE_DOWN
+	  };
+	};
+	
+	var moveRight = exports.moveRight = function moveRight() {
+	  return {
+	    type: MOVE_RIGHT
+	  };
+	};
+	
+	var rotateCW = exports.rotateCW = function rotateCW() {
+	  return {
+	    type: ROTATE_CW
+	  };
+	};
+	
+	var rotateCCW = exports.rotateCCW = function rotateCCW() {
+	  return {
+	    type: ROTATE_CCW
+	  };
+	};
+	
+	var hardDrop = exports.hardDrop = function hardDrop() {
+	  return {
+	    type: HARD_DROP
+	  };
+	};
+	
+	// Example of a piece-I object at it's initial state:
+	// --------------------------------------------------
+	// const I = {
+	//   blocks: [
+	//     [0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0],
+	//     [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+	//     [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+	//     [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0]
+	//   ],
+	//   rotation: 0,
+	// pos: [
+	//   [-3,3], [-3,4], [-3,5], [-3,6],
+	//   [-2,2], [-2,4], [-2,5], [-2,6],
+	//   [-1,1], [-1,4], [-1,5], [-1,6],
+	//   [0,3], [0,4], [0,5], [0,6]
+	// ],
+	//   className: 'piece-i'
+	// };
+
+/***/ },
+/* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33770,13 +34026,13 @@
 	
 	var _redux = __webpack_require__(180);
 	
-	var _piece_types = __webpack_require__(207);
+	var _piece_types = __webpack_require__(210);
 	
-	var _root_reducer = __webpack_require__(210);
+	var _root_reducer = __webpack_require__(213);
 	
 	var _root_reducer2 = _interopRequireDefault(_root_reducer);
 	
-	var _root_middleware = __webpack_require__(220);
+	var _root_middleware = __webpack_require__(224);
 	
 	var _root_middleware2 = _interopRequireDefault(_root_middleware);
 	
@@ -33795,7 +34051,12 @@
 	var preloadedState = {
 	  board: initialBoard(),
 	  piece: (0, _piece_types.randomPiece)(),
-	  queue: (0, _piece_types.randomPiece)()
+	  queue: (0, _piece_types.randomPiece)(),
+	  gamestate: {
+	    on: false,
+	    gameover: false,
+	    pause: false
+	  }
 	};
 	
 	var configureStore = function configureStore() {
@@ -33805,7 +34066,7 @@
 	exports.default = configureStore;
 
 /***/ },
-/* 207 */
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33815,7 +34076,7 @@
 	});
 	exports.randomPiece = exports.randomRotation = undefined;
 	
-	var _lodash = __webpack_require__(208);
+	var _lodash = __webpack_require__(211);
 	
 	var randomIdx = [0, 1, 2, 3];
 	
@@ -33829,7 +34090,7 @@
 	};
 	
 	var initialPos = function initialPos() {
-	  return [[-3, 3], [-3, 4], [-3, 5], [-3, 6], [-2, 3], [-2, 4], [-2, 5], [-2, 6], [-1, 3], [-1, 4], [-1, 5], [-1, 6], [0, 3], [0, 4], [0, 5], [0, 6]];
+	  return [[-4, 3], [-4, 4], [-4, 5], [-4, 6], [-3, 3], [-3, 4], [-3, 5], [-3, 6], [-2, 3], [-2, 4], [-2, 5], [-2, 6], [-1, 3], [-1, 4], [-1, 5], [-1, 6]];
 	};
 	
 	var I = function I() {
@@ -33903,7 +34164,7 @@
 	};
 
 /***/ },
-/* 208 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -50640,10 +50901,10 @@
 	  }
 	}.call(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(209)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(212)(module)))
 
 /***/ },
-/* 209 */
+/* 212 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -50659,7 +50920,7 @@
 
 
 /***/ },
-/* 210 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50670,30 +50931,35 @@
 	
 	var _redux = __webpack_require__(180);
 	
-	var _board_reducer = __webpack_require__(211);
+	var _board_reducer = __webpack_require__(214);
 	
 	var _board_reducer2 = _interopRequireDefault(_board_reducer);
 	
-	var _piece_reducer = __webpack_require__(217);
+	var _piece_reducer = __webpack_require__(220);
 	
 	var _piece_reducer2 = _interopRequireDefault(_piece_reducer);
 	
-	var _queue_reducer = __webpack_require__(218);
+	var _queue_reducer = __webpack_require__(221);
 	
 	var _queue_reducer2 = _interopRequireDefault(_queue_reducer);
+	
+	var _game_state_reducer = __webpack_require__(223);
+	
+	var _game_state_reducer2 = _interopRequireDefault(_game_state_reducer);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var RootReducer = (0, _redux.combineReducers)({
 	  board: _board_reducer2.default,
 	  piece: _piece_reducer2.default,
-	  queue: _queue_reducer2.default
+	  queue: _queue_reducer2.default,
+	  gamestate: _game_state_reducer2.default
 	});
 	
 	exports.default = RootReducer;
 
 /***/ },
-/* 211 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50702,9 +50968,9 @@
 	  value: true
 	});
 	
-	var _board_actions = __webpack_require__(212);
+	var _board_actions = __webpack_require__(215);
 	
-	var _render_board = __webpack_require__(213);
+	var _render_board = __webpack_require__(216);
 	
 	var BoardReducer = function BoardReducer() {
 	  var board = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -50726,7 +50992,7 @@
 	exports.default = BoardReducer;
 
 /***/ },
-/* 212 */
+/* 215 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -50734,13 +51000,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	// export const RECEIVE_PIECE = 'RECEIVE_PIECE';
-	//
-	// export const receivePiece = piece => ({
-	//   type: RECEIVE_PIECE,
-	//   piece
-	// });
-	
 	var UPDATE_BOARD = exports.UPDATE_BOARD = 'UPDATE_BOARD';
 	var BOARD_CLEAR = exports.BOARD_CLEAR = 'BOARD_CLEAR';
 	var RECEIVE_BOARD = exports.RECEIVE_BOARD = 'RECEIVE_BOARD';
@@ -50766,7 +51025,7 @@
 	};
 
 /***/ },
-/* 213 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50776,11 +51035,11 @@
 	});
 	exports.renderPreview = exports.addPiece = undefined;
 	
-	var _hard_drop_piece = __webpack_require__(214);
+	var _hard_drop_piece = __webpack_require__(217);
 	
 	var _hard_drop_piece2 = _interopRequireDefault(_hard_drop_piece);
 	
-	var _move_piece_helpers = __webpack_require__(216);
+	var _move_piece_helpers = __webpack_require__(219);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -50863,7 +51122,7 @@
 	};
 
 /***/ },
-/* 214 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50872,11 +51131,11 @@
 	  value: true
 	});
 	
-	var _move_piece = __webpack_require__(215);
+	var _move_piece = __webpack_require__(218);
 	
 	var _move_piece2 = _interopRequireDefault(_move_piece);
 	
-	var _render_board = __webpack_require__(213);
+	var _render_board = __webpack_require__(216);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -50893,7 +51152,7 @@
 	exports.default = hardDropPiece;
 
 /***/ },
-/* 215 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50902,7 +51161,7 @@
 	  value: true
 	});
 	
-	var _move_piece_helpers = __webpack_require__(216);
+	var _move_piece_helpers = __webpack_require__(219);
 	
 	var movePiece = function movePiece(dir, piece, board) {
 	  var newPos = (0, _move_piece_helpers.nextPos)(dir, piece.pos);
@@ -50959,7 +51218,7 @@
 	// };
 
 /***/ },
-/* 216 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50969,7 +51228,7 @@
 	});
 	exports.isEqual = exports.spotsEmpty = exports.checkDown = exports.checkRight = exports.checkLeft = exports.nextPos = undefined;
 	
-	var _lodash = __webpack_require__(208);
+	var _lodash = __webpack_require__(211);
 	
 	var _lodash2 = _interopRequireDefault(_lodash);
 	
@@ -51098,7 +51357,7 @@
 	};
 
 /***/ },
-/* 217 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51107,7 +51366,7 @@
 	  value: true
 	});
 	
-	var _piece_actions = __webpack_require__(198);
+	var _piece_actions = __webpack_require__(208);
 	
 	var PieceReducer = function PieceReducer() {
 	  var piece = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -51124,7 +51383,7 @@
 	exports.default = PieceReducer;
 
 /***/ },
-/* 218 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51133,9 +51392,9 @@
 	  value: true
 	});
 	
-	var _queue_actions = __webpack_require__(219);
+	var _queue_actions = __webpack_require__(222);
 	
-	var _piece_types = __webpack_require__(207);
+	var _piece_types = __webpack_require__(210);
 	
 	var QueueReducer = function QueueReducer() {
 	  var queue = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -51153,7 +51412,7 @@
 	exports.default = QueueReducer;
 
 /***/ },
-/* 219 */
+/* 222 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -51171,7 +51430,38 @@
 	};
 
 /***/ },
-/* 220 */
+/* 223 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _game_state_actions = __webpack_require__(207);
+	
+	var GameStateReducer = function GameStateReducer() {
+	  var gamestate = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var action = arguments[1];
+	
+	
+	  switch (action.type) {
+	    case _game_state_actions.CHECK_GAMEOVER:
+	      return Object.assign({}, gamestate, { gameover: action.gameover });
+	    case _game_state_actions.GAME_ON:
+	      return Object.assign({}, gamestate, { on: true });
+	    case _game_state_actions.TOGGLE_PAUSE:
+	      return Object.assign({}, gamestate, { pause: action.pause });
+	    default:
+	      return gamestate;
+	  }
+	};
+	
+	exports.default = GameStateReducer;
+
+/***/ },
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51182,15 +51472,15 @@
 	
 	var _redux = __webpack_require__(180);
 	
-	var _piece_middleware = __webpack_require__(221);
+	var _piece_middleware = __webpack_require__(225);
 	
 	var _piece_middleware2 = _interopRequireDefault(_piece_middleware);
 	
-	var _board_middleware = __webpack_require__(223);
+	var _board_middleware = __webpack_require__(227);
 	
 	var _board_middleware2 = _interopRequireDefault(_board_middleware);
 	
-	var _reduxLogger = __webpack_require__(225);
+	var _reduxLogger = __webpack_require__(229);
 	
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 	
@@ -51208,7 +51498,7 @@
 	exports.default = RootMiddleware;
 
 /***/ },
-/* 221 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51217,23 +51507,23 @@
 	  value: true
 	});
 	
-	var _piece_actions = __webpack_require__(198);
+	var _piece_actions = __webpack_require__(208);
 	
-	var _move_piece = __webpack_require__(215);
+	var _move_piece = __webpack_require__(218);
 	
 	var _move_piece2 = _interopRequireDefault(_move_piece);
 	
-	var _rotate_piece = __webpack_require__(222);
+	var _rotate_piece = __webpack_require__(226);
 	
 	var _rotate_piece2 = _interopRequireDefault(_rotate_piece);
 	
-	var _hard_drop_piece = __webpack_require__(214);
+	var _hard_drop_piece = __webpack_require__(217);
 	
 	var _hard_drop_piece2 = _interopRequireDefault(_hard_drop_piece);
 	
-	var _board_actions = __webpack_require__(212);
+	var _board_actions = __webpack_require__(215);
 	
-	var _queue_actions = __webpack_require__(219);
+	var _queue_actions = __webpack_require__(222);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -51329,7 +51619,7 @@
 	exports.default = PieceMiddleware;
 
 /***/ },
-/* 222 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51338,7 +51628,7 @@
 	  value: true
 	});
 	
-	var _move_piece_helpers = __webpack_require__(216);
+	var _move_piece_helpers = __webpack_require__(219);
 	
 	var rotatePiece = function rotatePiece(dir, oldPiece, board) {
 	  var newPiece = Object.assign({}, oldPiece);
@@ -51416,7 +51706,7 @@
 	exports.default = rotatePiece;
 
 /***/ },
-/* 223 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51425,9 +51715,9 @@
 	  value: true
 	});
 	
-	var _board_actions = __webpack_require__(212);
+	var _board_actions = __webpack_require__(215);
 	
-	var _clear_lines = __webpack_require__(224);
+	var _clear_lines = __webpack_require__(228);
 	
 	var _clear_lines2 = _interopRequireDefault(_clear_lines);
 	
@@ -51455,7 +51745,7 @@
 	exports.default = BoardMiddleware;
 
 /***/ },
-/* 224 */
+/* 228 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -51506,7 +51796,7 @@
 	exports.default = clearLines;
 
 /***/ },
-/* 225 */
+/* 229 */
 /***/ function(module, exports) {
 
 	"use strict";

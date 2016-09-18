@@ -16,7 +16,12 @@ const initialBoard = () => {
 const preloadedState = {
   board: initialBoard(),
   piece: randomPiece(),
-  queue: randomPiece()
+  queue: randomPiece(),
+  gamestate: {
+    on: false,
+    gameover: false,
+    pause: false
+  }
 };
 
 const configureStore = () => (
