@@ -169,31 +169,73 @@ class Game extends React.Component {
       switch (e.keyCode) {
         case 37:
           e.preventDefault();
+          $("#left").addClass("clicked");
           this.props.moveLeft();
           break;
         case 39:
           e.preventDefault();
+          $("#right").addClass("clicked");
           this.props.moveRight();
           break;
         case 40:
           e.preventDefault();
+          $("#down").addClass("clicked");
           this.props.moveDown();
           break;
         case 38:
           e.preventDefault();
+          $("#up").addClass("clicked");
           this.props.hardDrop();
           break;
         case 32: // spacebar
           e.preventDefault();
+          $("#a-button").addClass("clicked");
           this.props.rotateCW();
           break;
         case 16: // shift
           e.preventDefault();
+          $("#b-button").addClass("clicked");
           this.props.rotateCCW();
           break;
         case 13: // enter
           e.preventDefault();
+          $("#start-button").addClass("clicked");
           this.pause();
+          break;
+        default:
+          break;
+      }
+    });
+    // turn on new listeners
+    $(window).on("keyup", (e) => {
+      switch (e.keyCode) {
+        case 37:
+          e.preventDefault();
+          $("#left").removeClass("clicked");
+          break;
+        case 39:
+          e.preventDefault();
+          $("#right").removeClass("clicked");
+          break;
+        case 40:
+          e.preventDefault();
+          $("#down").removeClass("clicked");
+          break;
+        case 38:
+          e.preventDefault();
+          $("#up").removeClass("clicked");
+          break;
+        case 32: // spacebar
+          e.preventDefault();
+          $("#a-button").removeClass("clicked");
+          break;
+        case 16: // shift
+          e.preventDefault();
+          $("#b-button").removeClass("clicked");
+          break;
+        case 13: // enter
+          e.preventDefault();
+          $("#start-button").removeClass("clicked");
           break;
         default:
           break;

@@ -223,7 +223,7 @@
 }
 
 .d-pad-row > span > button.clicked {
-  background-color: #3c3838;
+  background-color: #a1a524;
 }
 
 button#center {
@@ -278,7 +278,7 @@ button#down {
 }
 
 .buttons-a-b > button.clicked {
-  background-color: #3c3838;
+  background-color: #a1a524;
 }
 
 #a-button {
@@ -310,7 +310,7 @@ button#down {
 }
 
 .buttons-SS > .buttons-SS-row > button.clicked {
-  background-color: #3c3838;
+  background-color: #a1a524;
 }
 
 .buttons-SS > .buttons-SS-row > label {

@@ -23403,34 +23403,79 @@
 	        switch (e.keyCode) {
 	          case 37:
 	            e.preventDefault();
+	            (0, _jquery2.default)("#left").addClass("clicked");
 	            _this7.props.moveLeft();
 	            break;
 	          case 39:
 	            e.preventDefault();
+	            (0, _jquery2.default)("#right").addClass("clicked");
 	            _this7.props.moveRight();
 	            break;
 	          case 40:
 	            e.preventDefault();
+	            (0, _jquery2.default)("#down").addClass("clicked");
 	            _this7.props.moveDown();
 	            break;
 	          case 38:
 	            e.preventDefault();
+	            (0, _jquery2.default)("#up").addClass("clicked");
 	            _this7.props.hardDrop();
 	            break;
 	          case 32:
 	            // spacebar
 	            e.preventDefault();
+	            (0, _jquery2.default)("#a-button").addClass("clicked");
 	            _this7.props.rotateCW();
 	            break;
 	          case 16:
 	            // shift
 	            e.preventDefault();
+	            (0, _jquery2.default)("#b-button").addClass("clicked");
 	            _this7.props.rotateCCW();
 	            break;
 	          case 13:
 	            // enter
 	            e.preventDefault();
+	            (0, _jquery2.default)("#start-button").addClass("clicked");
 	            _this7.pause();
+	            break;
+	          default:
+	            break;
+	        }
+	      });
+	      // turn on new listeners
+	      (0, _jquery2.default)(window).on("keyup", function (e) {
+	        switch (e.keyCode) {
+	          case 37:
+	            e.preventDefault();
+	            (0, _jquery2.default)("#left").removeClass("clicked");
+	            break;
+	          case 39:
+	            e.preventDefault();
+	            (0, _jquery2.default)("#right").removeClass("clicked");
+	            break;
+	          case 40:
+	            e.preventDefault();
+	            (0, _jquery2.default)("#down").removeClass("clicked");
+	            break;
+	          case 38:
+	            e.preventDefault();
+	            (0, _jquery2.default)("#up").removeClass("clicked");
+	            break;
+	          case 32:
+	            // spacebar
+	            e.preventDefault();
+	            (0, _jquery2.default)("#a-button").removeClass("clicked");
+	            break;
+	          case 16:
+	            // shift
+	            e.preventDefault();
+	            (0, _jquery2.default)("#b-button").removeClass("clicked");
+	            break;
+	          case 13:
+	            // enter
+	            e.preventDefault();
+	            (0, _jquery2.default)("#start-button").removeClass("clicked");
 	            break;
 	          default:
 	            break;
@@ -51853,12 +51898,21 @@
 	      var piece = getState().piece;
 	      var board = getState().board;
 	      var queue = getState().queue;
+	      var level = getState().level;
 	
-	      var update = function update() {
+	      var updateDispatches = function updateDispatches() {
 	        dispatch((0, _board_actions.boardClear)());
 	        dispatch((0, _piece_actions.receivePiece)(queue));
 	        dispatch((0, _game_state_actions.checkGameover)(board));
 	        dispatch((0, _queue_actions.updateQueue)());
+	      };
+	
+	      var update = function update() {
+	        if (level >= 2) {
+	          updateDispatches();
+	        } else {
+	          updateDispatches();
+	        }
 	      };
 	
 	      switch (action.type) {
