@@ -23300,6 +23300,7 @@
 	
 	      this.assignKeyListeners();
 	      this.assignButtonListeners();
+	      clearInterval(this.interval);
 	      this.interval = setInterval(function () {
 	        return _this4.props.stepPiece();
 	      }, // move piece down

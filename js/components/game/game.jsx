@@ -80,6 +80,7 @@ class Game extends React.Component {
   startGameInterval() {
     this.assignKeyListeners();
     this.assignButtonListeners();
+    clearInterval(this.interval);
     this.interval = setInterval(
       () => this.props.stepPiece(), // move piece down
       LEVEL_SPEED[this.currentLevel] // every second
