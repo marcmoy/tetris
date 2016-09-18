@@ -21,7 +21,8 @@ const preloadedState = {
     on: false,
     gameover: false,
     pause: false
-  }
+  },
+  score: { level: 0, points: 0, lines: 0 }
 };
 
 const configureStore = () => (

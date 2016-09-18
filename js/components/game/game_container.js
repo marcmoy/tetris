@@ -7,6 +7,7 @@ import { stepPiece, moveLeft, moveRight, moveDown,
   from '../../actions/piece_actions';
 import { resetBoard } from '../../actions/board_actions';
 import { updateQueue } from '../../actions/queue_actions';
+import { resetScore } from '../../actions/score_actions';
 
 const mapStateToProps = state => ({
   gamestate: state.gamestate
@@ -28,7 +29,8 @@ const mapDispatchToProps = dispatch => ({
   resetPiece: () => dispatch(resetPiece()),
   resetBoard: () => dispatch(resetBoard()),
   updateQueue: () => dispatch(updateQueue()),
-  resetGameState: () => dispatch(resetGameState())
+  resetGameState: () => dispatch(resetGameState()),
+  resetScore: () => dispatch(resetScore())
 });
 
 const GameContainer = connect(

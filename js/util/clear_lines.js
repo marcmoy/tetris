@@ -1,9 +1,9 @@
 let clearIndex = null;
 
-const clearLines = board => {
+const clearLines = (board, countLines) => {
   if (noLines(board)) return board;
-  let newBoard = removeLine(board, clearIndex);
-  return clearLines(newBoard);
+  let newBoard = removeLine(board, clearIndex, countLines);
+  return clearLines(newBoard, countLines);
 };
 
 const noLines = board => {
@@ -22,7 +22,8 @@ const noLines = board => {
   return true;
 };
 
-const removeLine = (oldBoard, clearRow) => {
+const removeLine = (oldBoard, clearRow, countLines) => {
+  countLines();
   let newBoard = Object.assign({}, oldBoard);
 
   for (let row = clearRow; row > 0; row--) {

@@ -318,6 +318,7 @@ class Game extends React.Component {
     this.props.resetBoard();
     this.props.updateQueue();
     this.props.resetGameState();
+    this.props.resetScore();
     this.startGameInterval();
   }
 
@@ -344,7 +345,7 @@ class Game extends React.Component {
           <div className='hidden dim' id='gameover-screen'>
             <span className='blink'>
               GAMEOVER<br/><br/>
-              Press START of ENTER<br/>
+              Press START or ENTER<br/>
               to play again.
             </span>
           </div>

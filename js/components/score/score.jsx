@@ -1,13 +1,13 @@
 import React from 'react';
 
-const Score = ({ score = {} }) => (
+const Score = ({ level, points, lines }) => (
   <div className='score-container'>
     <strong>LEVEL</strong><br/>
-    <span>1</span><br/>
-    <strong>SCORE</strong><br/>
-    <span>0</span><br/>
+    <span>{level}</span><br/>
+    <strong>POINTS</strong><br/>
+    <span>{points}</span><br/>
     <strong>LINES</strong><br/>
-    <span>0</span><br/>
+    <span>{lines}</span><br/>
   </div>
 );
 

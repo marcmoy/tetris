@@ -8,6 +8,7 @@ import hardDropPiece from '../util/hard_drop_piece';
 import { updateBoard, boardClear } from '../actions/board_actions';
 import { updateQueue } from '../actions/queue_actions';
 import { checkGameover } from '../actions/game_state_actions';
+import { increasePoints } from '../actions/score_actions';
 
 const PieceMiddleware = ({getState, dispatch}) => next => action => {
   const piece = getState().piece;
@@ -46,6 +47,7 @@ const PieceMiddleware = ({getState, dispatch}) => next => action => {
         let downPiece = movePiece('down', piece, board);
         dispatch(receivePiece(downPiece));
         dispatch(updateBoard(downPiece));
+        dispatch(increasePoints(1));
       } else {
         update();
       }
@@ -78,14 +80,12 @@ const PieceMiddleware = ({getState, dispatch}) => next => action => {
       }
       break;
     case HARD_DROP:
-      if (piece.inPlay) {
-        let hardPiece = hardDropPiece(piece, board);
-        dispatch(receivePiece(hardPiece));
-        dispatch(updateBoard(hardPiece));
-        dispatch(boardClear());
-      } else {
-        update();
-      }
+      let hardPiece = hardDropPiece(piece, board);
+      let points = (hardPiece.pos[15][0] - piece.pos[15][0]) * 2;
+      dispatch(increasePoints(points));
+      dispatch(receivePiece(hardPiece));
+      dispatch(updateBoard(hardPiece));
+      update();
       break;
     default:
       break;

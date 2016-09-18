@@ -58,7 +58,7 @@
 	
 	var _root2 = _interopRequireDefault(_root);
 	
-	var _store = __webpack_require__(211);
+	var _store = __webpack_require__(212);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
@@ -23101,6 +23101,8 @@
 	
 	var _queue_actions = __webpack_require__(210);
 	
+	var _score_actions = __webpack_require__(211);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state) {
@@ -23152,6 +23154,9 @@
 	    },
 	    resetGameState: function resetGameState() {
 	      return dispatch((0, _game_state_actions.resetGameState)());
+	    },
+	    resetScore: function resetScore() {
+	      return dispatch((0, _score_actions.resetScore)());
 	    }
 	  };
 	};
@@ -23549,6 +23554,7 @@
 	      this.props.resetBoard();
 	      this.props.updateQueue();
 	      this.props.resetGameState();
+	      this.props.resetScore();
 	      this.startGameInterval();
 	    }
 	  }, {
@@ -23592,7 +23598,7 @@
 	            'GAMEOVER',
 	            _react2.default.createElement('br', null),
 	            _react2.default.createElement('br', null),
-	            'Press START of ENTER',
+	            'Press START or ENTER',
 	            _react2.default.createElement('br', null),
 	            'to play again.'
 	          )
@@ -23867,14 +23873,14 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state) {
-	  return {};
+	  return {
+	    level: state.score.level,
+	    points: state.score.points,
+	    lines: state.score.lines
+	  };
 	};
 	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {};
-	};
-	
-	var ScoreContainer = (0, _reactRedux.connect)()(_score2.default);
+	var ScoreContainer = (0, _reactRedux.connect)(mapStateToProps)(_score2.default);
 	
 	exports.default = ScoreContainer;
 
@@ -23895,8 +23901,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var Score = function Score(_ref) {
-	  var _ref$score = _ref.score;
-	  var score = _ref$score === undefined ? {} : _ref$score;
+	  var level = _ref.level;
+	  var points = _ref.points;
+	  var lines = _ref.lines;
 	  return _react2.default.createElement(
 	    'div',
 	    { className: 'score-container' },
@@ -23909,19 +23916,19 @@
 	    _react2.default.createElement(
 	      'span',
 	      null,
-	      '1'
+	      level
 	    ),
 	    _react2.default.createElement('br', null),
 	    _react2.default.createElement(
 	      'strong',
 	      null,
-	      'SCORE'
+	      'POINTS'
 	    ),
 	    _react2.default.createElement('br', null),
 	    _react2.default.createElement(
 	      'span',
 	      null,
-	      '0'
+	      points
 	    ),
 	    _react2.default.createElement('br', null),
 	    _react2.default.createElement(
@@ -23933,7 +23940,7 @@
 	    _react2.default.createElement(
 	      'span',
 	      null,
-	      '0'
+	      lines
 	    ),
 	    _react2.default.createElement('br', null)
 	  );
@@ -34216,6 +34223,55 @@
 
 /***/ },
 /* 211 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var RESET_SCORE = exports.RESET_SCORE = 'RESET_SCORE';
+	var INCREASE_POINTS = exports.INCREASE_POINTS = 'INCREASE_POINTS';
+	var RECEIVE_POINTS = exports.RECEIVE_POINTS = 'RECEIVE_POINTS';
+	var INCREASE_LINES = exports.INCREASE_LINES = 'INCREASE_LINES';
+	var RECEIVE_LINES = exports.RECEIVE_LINES = 'RECEIVE_LINES';
+	
+	var resetScore = exports.resetScore = function resetScore() {
+	  return {
+	    type: RESET_SCORE
+	  };
+	};
+	
+	var increasePoints = exports.increasePoints = function increasePoints(points) {
+	  return {
+	    type: INCREASE_POINTS,
+	    points: points
+	  };
+	};
+	
+	var receivePoints = exports.receivePoints = function receivePoints(points) {
+	  return {
+	    type: RECEIVE_POINTS,
+	    points: points
+	  };
+	};
+	
+	var increaseLines = exports.increaseLines = function increaseLines(lines) {
+	  return {
+	    type: INCREASE_LINES,
+	    lines: lines
+	  };
+	};
+	
+	var receiveLines = exports.receiveLines = function receiveLines(lines) {
+	  return {
+	    type: RECEIVE_LINES,
+	    lines: lines
+	  };
+	};
+
+/***/ },
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34227,13 +34283,13 @@
 	
 	var _redux = __webpack_require__(180);
 	
-	var _piece_types = __webpack_require__(212);
+	var _piece_types = __webpack_require__(213);
 	
-	var _root_reducer = __webpack_require__(215);
+	var _root_reducer = __webpack_require__(216);
 	
 	var _root_reducer2 = _interopRequireDefault(_root_reducer);
 	
-	var _root_middleware = __webpack_require__(224);
+	var _root_middleware = __webpack_require__(226);
 	
 	var _root_middleware2 = _interopRequireDefault(_root_middleware);
 	
@@ -34257,7 +34313,8 @@
 	    on: false,
 	    gameover: false,
 	    pause: false
-	  }
+	  },
+	  score: { level: 0, points: 0, lines: 0 }
 	};
 	
 	var configureStore = function configureStore() {
@@ -34267,7 +34324,7 @@
 	exports.default = configureStore;
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34277,7 +34334,7 @@
 	});
 	exports.randomPiece = exports.randomRotation = undefined;
 	
-	var _lodash = __webpack_require__(213);
+	var _lodash = __webpack_require__(214);
 	
 	var randomIdx = [0, 1, 2, 3];
 	
@@ -34365,7 +34422,7 @@
 	};
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -51102,10 +51159,10 @@
 	  }
 	}.call(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(214)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(215)(module)))
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -51121,7 +51178,7 @@
 
 
 /***/ },
-/* 215 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51132,21 +51189,25 @@
 	
 	var _redux = __webpack_require__(180);
 	
-	var _board_reducer = __webpack_require__(216);
+	var _board_reducer = __webpack_require__(217);
 	
 	var _board_reducer2 = _interopRequireDefault(_board_reducer);
 	
-	var _piece_reducer = __webpack_require__(221);
+	var _piece_reducer = __webpack_require__(222);
 	
 	var _piece_reducer2 = _interopRequireDefault(_piece_reducer);
 	
-	var _queue_reducer = __webpack_require__(222);
+	var _queue_reducer = __webpack_require__(223);
 	
 	var _queue_reducer2 = _interopRequireDefault(_queue_reducer);
 	
-	var _game_state_reducer = __webpack_require__(223);
+	var _game_state_reducer = __webpack_require__(224);
 	
 	var _game_state_reducer2 = _interopRequireDefault(_game_state_reducer);
+	
+	var _score_reducer = __webpack_require__(225);
+	
+	var _score_reducer2 = _interopRequireDefault(_score_reducer);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -51154,13 +51215,14 @@
 	  board: _board_reducer2.default,
 	  piece: _piece_reducer2.default,
 	  queue: _queue_reducer2.default,
-	  gamestate: _game_state_reducer2.default
+	  gamestate: _game_state_reducer2.default,
+	  score: _score_reducer2.default
 	});
 	
 	exports.default = RootReducer;
 
 /***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51171,9 +51233,9 @@
 	
 	var _board_actions = __webpack_require__(209);
 	
-	var _render_board = __webpack_require__(217);
+	var _render_board = __webpack_require__(218);
 	
-	var _store = __webpack_require__(211);
+	var _store = __webpack_require__(212);
 	
 	var BoardReducer = function BoardReducer() {
 	  var board = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -51197,7 +51259,7 @@
 	exports.default = BoardReducer;
 
 /***/ },
-/* 217 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51207,11 +51269,11 @@
 	});
 	exports.renderPreview = exports.addPiece = undefined;
 	
-	var _hard_drop_piece = __webpack_require__(218);
+	var _hard_drop_piece = __webpack_require__(219);
 	
 	var _hard_drop_piece2 = _interopRequireDefault(_hard_drop_piece);
 	
-	var _move_piece_helpers = __webpack_require__(220);
+	var _move_piece_helpers = __webpack_require__(221);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -51294,7 +51356,7 @@
 	};
 
 /***/ },
-/* 218 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51303,11 +51365,11 @@
 	  value: true
 	});
 	
-	var _move_piece = __webpack_require__(219);
+	var _move_piece = __webpack_require__(220);
 	
 	var _move_piece2 = _interopRequireDefault(_move_piece);
 	
-	var _render_board = __webpack_require__(217);
+	var _render_board = __webpack_require__(218);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -51324,7 +51386,7 @@
 	exports.default = hardDropPiece;
 
 /***/ },
-/* 219 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51333,7 +51395,7 @@
 	  value: true
 	});
 	
-	var _move_piece_helpers = __webpack_require__(220);
+	var _move_piece_helpers = __webpack_require__(221);
 	
 	var movePiece = function movePiece(dir, piece, board) {
 	  var newPos = (0, _move_piece_helpers.nextPos)(dir, piece.pos);
@@ -51390,7 +51452,7 @@
 	// };
 
 /***/ },
-/* 220 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51400,7 +51462,7 @@
 	});
 	exports.isEqual = exports.spotsEmpty = exports.checkDown = exports.checkRight = exports.checkLeft = exports.nextPos = undefined;
 	
-	var _lodash = __webpack_require__(213);
+	var _lodash = __webpack_require__(214);
 	
 	var _lodash2 = _interopRequireDefault(_lodash);
 	
@@ -51529,7 +51591,7 @@
 	};
 
 /***/ },
-/* 221 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51540,7 +51602,7 @@
 	
 	var _piece_actions = __webpack_require__(208);
 	
-	var _piece_types = __webpack_require__(212);
+	var _piece_types = __webpack_require__(213);
 	
 	var PieceReducer = function PieceReducer() {
 	  var piece = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -51559,7 +51621,7 @@
 	exports.default = PieceReducer;
 
 /***/ },
-/* 222 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51570,7 +51632,7 @@
 	
 	var _queue_actions = __webpack_require__(210);
 	
-	var _piece_types = __webpack_require__(212);
+	var _piece_types = __webpack_require__(213);
 	
 	var QueueReducer = function QueueReducer() {
 	  var queue = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -51588,7 +51650,7 @@
 	exports.default = QueueReducer;
 
 /***/ },
-/* 223 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51599,14 +51661,13 @@
 	
 	var _game_state_actions = __webpack_require__(207);
 	
-	var checkSpots = [[0, 3], [0, 4], [0, 5], [0, 6], [0, 7]];
-	
 	var checkGame = function checkGame(board) {
 	  var count = 0;
-	  checkSpots.forEach(function (spot) {
-	    var key = spot.join(",");
-	    if (board[key].className !== 'empty') count++;
-	  });
+	  // simple lookup for efficiency
+	  if (board['0,3'].className !== 'empty') count++;
+	  if (board['0,4'].className !== 'empty') count++;
+	  if (board['0,5'].className !== 'empty') count++;
+	  if (board['0,6'].className !== 'empty') count++;
 	  return count > 0;
 	};
 	
@@ -51633,7 +51694,40 @@
 	exports.default = GameStateReducer;
 
 /***/ },
-/* 224 */
+/* 225 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _score_actions = __webpack_require__(211);
+	
+	var _piece_types = __webpack_require__(213);
+	
+	var ScoreReducer = function ScoreReducer() {
+	  var score = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var action = arguments[1];
+	
+	
+	  switch (action.type) {
+	    case _score_actions.RESET_SCORE:
+	      return { level: 0, points: 0, lines: 0 };
+	    case _score_actions.RECEIVE_POINTS:
+	      return Object.assign({}, score, { points: action.points });
+	    case _score_actions.RECEIVE_LINES:
+	      return Object.assign({}, score, { lines: action.lines });
+	    default:
+	      return score;
+	  }
+	};
+	
+	exports.default = ScoreReducer;
+
+/***/ },
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51644,15 +51738,19 @@
 	
 	var _redux = __webpack_require__(180);
 	
-	var _piece_middleware = __webpack_require__(225);
+	var _piece_middleware = __webpack_require__(227);
 	
 	var _piece_middleware2 = _interopRequireDefault(_piece_middleware);
 	
-	var _board_middleware = __webpack_require__(227);
+	var _board_middleware = __webpack_require__(229);
 	
 	var _board_middleware2 = _interopRequireDefault(_board_middleware);
 	
-	var _reduxLogger = __webpack_require__(229);
+	var _score_middleware = __webpack_require__(231);
+	
+	var _score_middleware2 = _interopRequireDefault(_score_middleware);
+	
+	var _reduxLogger = __webpack_require__(232);
 	
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 	
@@ -51660,14 +51758,14 @@
 	
 	var loggerMiddleware = (0, _reduxLogger2.default)();
 	
-	var RootMiddleware = (0, _redux.applyMiddleware)(_piece_middleware2.default, _board_middleware2.default
+	var RootMiddleware = (0, _redux.applyMiddleware)(_piece_middleware2.default, _board_middleware2.default, _score_middleware2.default
 	// loggerMiddleware
 	);
 	
 	exports.default = RootMiddleware;
 
 /***/ },
-/* 225 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51678,15 +51776,15 @@
 	
 	var _piece_actions = __webpack_require__(208);
 	
-	var _move_piece = __webpack_require__(219);
+	var _move_piece = __webpack_require__(220);
 	
 	var _move_piece2 = _interopRequireDefault(_move_piece);
 	
-	var _rotate_piece = __webpack_require__(226);
+	var _rotate_piece = __webpack_require__(228);
 	
 	var _rotate_piece2 = _interopRequireDefault(_rotate_piece);
 	
-	var _hard_drop_piece = __webpack_require__(218);
+	var _hard_drop_piece = __webpack_require__(219);
 	
 	var _hard_drop_piece2 = _interopRequireDefault(_hard_drop_piece);
 	
@@ -51695,6 +51793,8 @@
 	var _queue_actions = __webpack_require__(210);
 	
 	var _game_state_actions = __webpack_require__(207);
+	
+	var _score_actions = __webpack_require__(211);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -51739,6 +51839,7 @@
 	            var downPiece = (0, _move_piece2.default)('down', piece, board);
 	            dispatch((0, _piece_actions.receivePiece)(downPiece));
 	            dispatch((0, _board_actions.updateBoard)(downPiece));
+	            dispatch((0, _score_actions.increasePoints)(1));
 	          } else {
 	            update();
 	          }
@@ -51771,14 +51872,12 @@
 	          }
 	          break;
 	        case _piece_actions.HARD_DROP:
-	          if (piece.inPlay) {
-	            var hardPiece = (0, _hard_drop_piece2.default)(piece, board);
-	            dispatch((0, _piece_actions.receivePiece)(hardPiece));
-	            dispatch((0, _board_actions.updateBoard)(hardPiece));
-	            dispatch((0, _board_actions.boardClear)());
-	          } else {
-	            update();
-	          }
+	          var hardPiece = (0, _hard_drop_piece2.default)(piece, board);
+	          var points = (hardPiece.pos[15][0] - piece.pos[15][0]) * 2;
+	          dispatch((0, _score_actions.increasePoints)(points));
+	          dispatch((0, _piece_actions.receivePiece)(hardPiece));
+	          dispatch((0, _board_actions.updateBoard)(hardPiece));
+	          update();
 	          break;
 	        default:
 	          break;
@@ -51791,7 +51890,7 @@
 	exports.default = PieceMiddleware;
 
 /***/ },
-/* 226 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51800,7 +51899,7 @@
 	  value: true
 	});
 	
-	var _move_piece_helpers = __webpack_require__(220);
+	var _move_piece_helpers = __webpack_require__(221);
 	
 	var rotatePiece = function rotatePiece(dir, oldPiece, board) {
 	  var newPiece = Object.assign({}, oldPiece);
@@ -51878,7 +51977,7 @@
 	exports.default = rotatePiece;
 
 /***/ },
-/* 227 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51889,7 +51988,9 @@
 	
 	var _board_actions = __webpack_require__(209);
 	
-	var _clear_lines = __webpack_require__(228);
+	var _score_actions = __webpack_require__(211);
+	
+	var _clear_lines = __webpack_require__(230);
 	
 	var _clear_lines2 = _interopRequireDefault(_clear_lines);
 	
@@ -51901,14 +52002,26 @@
 	  return function (next) {
 	    return function (action) {
 	      var board = getState().board;
-	      switch (action.type) {
-	        case _board_actions.BOARD_CLEAR:
-	          var newBoard = (0, _clear_lines2.default)(board);
-	          dispatch((0, _board_actions.receiveBoard)(newBoard));
-	          break;
-	        default:
-	          break;
-	      }
+	      var level = getState().score.level;
+	
+	      (function () {
+	        switch (action.type) {
+	          case _board_actions.BOARD_CLEAR:
+	            var lineCount = 0;
+	            var countLines = function countLines() {
+	              return lineCount++;
+	            };
+	            var newBoard = (0, _clear_lines2.default)(board, countLines);
+	            var points = lineCount * 40 * (level + 1);
+	            dispatch((0, _board_actions.receiveBoard)(newBoard));
+	            dispatch((0, _score_actions.increasePoints)(points));
+	            dispatch((0, _score_actions.increaseLines)(lineCount));
+	            break;
+	          default:
+	            break;
+	        }
+	      })();
+	
 	      return next(action);
 	    };
 	  };
@@ -51917,7 +52030,7 @@
 	exports.default = BoardMiddleware;
 
 /***/ },
-/* 228 */
+/* 230 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -51927,10 +52040,10 @@
 	});
 	var clearIndex = null;
 	
-	var clearLines = function clearLines(board) {
+	var clearLines = function clearLines(board, countLines) {
 	  if (noLines(board)) return board;
-	  var newBoard = removeLine(board, clearIndex);
-	  return clearLines(newBoard);
+	  var newBoard = removeLine(board, clearIndex, countLines);
+	  return clearLines(newBoard, countLines);
 	};
 	
 	var noLines = function noLines(board) {
@@ -51949,7 +52062,8 @@
 	  return true;
 	};
 	
-	var removeLine = function removeLine(oldBoard, clearRow) {
+	var removeLine = function removeLine(oldBoard, clearRow, countLines) {
+	  countLines();
 	  var newBoard = Object.assign({}, oldBoard);
 	
 	  for (var row = clearRow; row > 0; row--) {
@@ -51968,7 +52082,52 @@
 	exports.default = clearLines;
 
 /***/ },
-/* 229 */
+/* 231 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _score_actions = __webpack_require__(211);
+	
+	var _clear_lines = __webpack_require__(230);
+	
+	var _clear_lines2 = _interopRequireDefault(_clear_lines);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var ScoreMiddleware = function ScoreMiddleware(_ref) {
+	  var getState = _ref.getState;
+	  var dispatch = _ref.dispatch;
+	  return function (next) {
+	    return function (action) {
+	      var points = getState().score.points;
+	      var lines = getState().score.lines;
+	
+	      switch (action.type) {
+	        case _score_actions.INCREASE_POINTS:
+	          var newPoints = points + action.points;
+	          dispatch((0, _score_actions.receivePoints)(newPoints));
+	          break;
+	        case _score_actions.INCREASE_LINES:
+	          var newLines = lines + action.lines;
+	          dispatch((0, _score_actions.receiveLines)(newLines));
+	          break;
+	        default:
+	          break;
+	      }
+	      return next(action);
+	    };
+	  };
+	};
+	
+	exports.default = ScoreMiddleware;
+
+/***/ },
+/* 232 */
 /***/ function(module, exports) {
 
 	"use strict";

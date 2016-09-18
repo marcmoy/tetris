@@ -1,16 +1,13 @@
 import { CHECK_GAMEOVER, GAME_ON, TOGGLE_PAUSE, RESET_GAME_STATE }
   from '../actions/game_state_actions';
 
-let checkSpots = [
-  [0,3],[0,4],[0,5],[0,6],[0,7]
-];
-
 const checkGame = board => {
   let count = 0;
-  checkSpots.forEach(spot => {
-    let key = spot.join(",");
-    if (board[key].className !== 'empty') count++;
-  });
+  // simple lookup for efficiency
+  if (board['0,3'].className !== 'empty') count++;
+  if (board['0,4'].className !== 'empty') count++;
+  if (board['0,5'].className !== 'empty') count++;
+  if (board['0,6'].className !== 'empty') count++;
   return count > 0;
 };
 
