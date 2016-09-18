@@ -51898,21 +51898,12 @@
 	      var piece = getState().piece;
 	      var board = getState().board;
 	      var queue = getState().queue;
-	      var level = getState().level;
 	
-	      var updateDispatches = function updateDispatches() {
+	      var update = function update() {
 	        dispatch((0, _board_actions.boardClear)());
 	        dispatch((0, _piece_actions.receivePiece)(queue));
 	        dispatch((0, _game_state_actions.checkGameover)(board));
 	        dispatch((0, _queue_actions.updateQueue)());
-	      };
-	
-	      var update = function update() {
-	        if (level >= 2) {
-	          updateDispatches();
-	        } else {
-	          updateDispatches();
-	        }
 	      };
 	
 	      switch (action.type) {
