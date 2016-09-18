@@ -23292,6 +23292,7 @@
 	      (0, _jquery2.default)("#left").off("mousedown touchstart");
 	      (0, _jquery2.default)("#down").off("mousedown touchstart");
 	      (0, _jquery2.default)("#right").off("mousedown touchstart");
+	      (0, _jquery2.default)("#up").off("mousedown touchstart");
 	
 	      (0, _jquery2.default)("#start-button").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
@@ -23462,7 +23463,7 @@
 	          _react2.default.createElement(
 	            'span',
 	            { className: 'blink' },
-	            'PAUSE'
+	            'PAUSED'
 	          )
 	        ),
 	        _react2.default.createElement(_board_container2.default, null),

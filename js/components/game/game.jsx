@@ -87,6 +87,7 @@ class Game extends React.Component {
     $("#left").off("mousedown touchstart");
     $("#down").off("mousedown touchstart");
     $("#right").off("mousedown touchstart");
+    $("#up").off("mousedown touchstart");
 
     $("#start-button").on("mousedown touchstart", (e) => {
       e.preventDefault();
@@ -241,7 +242,7 @@ class Game extends React.Component {
     return (
       <div>
         <div className='hidden dim' id='pause-screen'>
-          <span className='blink'>PAUSE</span>
+          <span className='blink'>PAUSED</span>
         </div>
         <BoardContainer />
         <div className='right-side clearfix'>
