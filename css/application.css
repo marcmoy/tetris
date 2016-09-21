@@ -58,6 +58,10 @@
 
 
 @media screen and (max-width: 415px) {
+  .border {
+    flex-direction: row;
+  }
+
   .base {
     margin: auto;
     background-color: green;
@@ -515,7 +519,7 @@ tbody > tr > td:after {
 }
 
 @media screen and (max-width: 415px) {
-  .how-to-play { display: none; }
+  .how-to-play { display: none; height: 0; width: 0 }
 }
 
 .keypad {
