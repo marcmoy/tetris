@@ -84,6 +84,11 @@ class Game extends React.Component {
   startGame() {
     this.props.gameOn();
     this.startGameInterval();
+    this.song = new Audio('./assets/sounds/tetris-theme-song.mp3');
+    this.song.loop = true;
+    this.song.volume = 0.7;
+    this.song.load();
+    this.song.play();
   }
 
   startGameInterval() {
