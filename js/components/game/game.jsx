@@ -19,7 +19,7 @@ class Game extends React.Component {
   constructor() {
     super();
     this.currentLevel = 0;
-    this.sound = new Sound();
+    this.sound = $(window).width() > 420 ? new Sound(false) : new Sound(true);
     this.assignKeyListeners = this.assignKeyListeners.bind(this);
     this.assignButtonListeners = this.assignButtonListeners.bind(this);
     this.removeKeyListeners = this.removeKeyListeners.bind(this);

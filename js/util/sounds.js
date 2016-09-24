@@ -10,8 +10,8 @@ const SOUNDS = {
 };
 
 class Sound {
-  constructor() {
-    this.muted = false;
+  constructor(muted) {
+    this.muted = muted;
     this.toggleMute = this.toggleMute.bind(this);
   }
 

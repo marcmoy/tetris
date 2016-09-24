@@ -23230,7 +23230,7 @@
 	    var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this));
 	
 	    _this.currentLevel = 0;
-	    _this.sound = new _sounds2.default();
+	    _this.sound = (0, _jquery2.default)(window).width() > 420 ? new _sounds2.default(false) : new _sounds2.default(true);
 	    _this.assignKeyListeners = _this.assignKeyListeners.bind(_this);
 	    _this.assignButtonListeners = _this.assignButtonListeners.bind(_this);
 	    _this.removeKeyListeners = _this.removeKeyListeners.bind(_this);
@@ -24102,10 +24102,10 @@
 	};
 	
 	var Sound = function () {
-	  function Sound() {
+	  function Sound(muted) {
 	    _classCallCheck(this, Sound);
 	
-	    this.muted = false;
+	    this.muted = muted;
 	    this.toggleMute = this.toggleMute.bind(this);
 	  }
 	
