@@ -23248,11 +23248,14 @@
 	
 	      var renderGame = function renderGame(e) {
 	        e.preventDefault();
-	        (0, _jquery2.default)("#power-switch").removeClass("off").addClass("on");
-	        (0, _jquery2.default)("#power-light").removeClass("off").addClass("on");
-	        (0, _jquery2.default)("#start-button").off("mousedown touchstart");
-	        (0, _jquery2.default)(window).off("keydown");
-	        _this2.startGame();
+	        (0, _jquery2.default)("#power-switch").animate({ left: 0 }, 300);
+	        setTimeout(function () {
+	          (0, _jquery2.default)("#power-switch").removeClass("off").addClass("on");
+	          (0, _jquery2.default)("#power-light").removeClass("off").addClass("on");
+	          (0, _jquery2.default)("#start-button").off("mousedown touchstart");
+	          (0, _jquery2.default)(window).off("keydown");
+	          _this2.startGame();
+	        }, 300);
 	      };
 	
 	      (0, _jquery2.default)("#start-button").on("mousedown touchstart", function (e) {

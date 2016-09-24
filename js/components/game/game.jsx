@@ -36,11 +36,14 @@ class Game extends React.Component {
   componentDidMount() {
     const renderGame = e => {
       e.preventDefault();
-      $("#power-switch").removeClass("off").addClass("on");
-      $("#power-light").removeClass("off").addClass("on");
-      $("#start-button").off("mousedown touchstart");
-      $(window).off("keydown");
-      this.startGame();
+      $("#power-switch").animate({ left: 0 }, 300);
+      setTimeout(() => {
+        $("#power-switch").removeClass("off").addClass("on");
+        $("#power-light").removeClass("off").addClass("on");
+        $("#start-button").off("mousedown touchstart");
+        $(window).off("keydown");
+        this.startGame();
+      }, 300);
     };
 
     $("#start-button").on("mousedown touchstart", (e) => {
