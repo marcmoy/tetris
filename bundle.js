@@ -58,7 +58,7 @@
 	
 	var _root2 = _interopRequireDefault(_root);
 	
-	var _store = __webpack_require__(212);
+	var _store = __webpack_require__(213);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
@@ -23093,15 +23093,15 @@
 	
 	var _game2 = _interopRequireDefault(_game);
 	
-	var _game_state_actions = __webpack_require__(207);
+	var _game_state_actions = __webpack_require__(208);
 	
-	var _piece_actions = __webpack_require__(208);
+	var _piece_actions = __webpack_require__(209);
 	
-	var _board_actions = __webpack_require__(209);
+	var _board_actions = __webpack_require__(210);
 	
-	var _queue_actions = __webpack_require__(210);
+	var _queue_actions = __webpack_require__(211);
 	
-	var _score_actions = __webpack_require__(211);
+	var _score_actions = __webpack_require__(212);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -23198,7 +23198,11 @@
 	
 	var _score_container2 = _interopRequireDefault(_score_container);
 	
-	var _jquery = __webpack_require__(206);
+	var _sounds = __webpack_require__(206);
+	
+	var _sounds2 = _interopRequireDefault(_sounds);
+	
+	var _jquery = __webpack_require__(207);
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
@@ -23213,7 +23217,7 @@
 	var BUTTONS = ['select-button', 'start-button', 'a-button', 'b-button', 'up', 'down', 'left', 'right'];
 	
 	var LEVEL_SPEED = {
-	  0: 800, 1: 500, 2: 200, 3: 150, 4: 100, 5: 50, 6: 50, 7: 40, 8: 40
+	  0: 800, 1: 600, 2: 500, 3: 300, 4: 250, 5: 200, 6: 175, 7: 150, 8: 125
 	};
 	
 	var Game = function (_React$Component) {
@@ -23225,6 +23229,7 @@
 	    var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this));
 	
 	    _this.currentLevel = 0;
+	    _this.sound = new _sounds2.default();
 	    _this.assignKeyListeners = _this.assignKeyListeners.bind(_this);
 	    _this.assignButtonListeners = _this.assignButtonListeners.bind(_this);
 	    _this.removeKeyListeners = _this.removeKeyListeners.bind(_this);
@@ -23249,10 +23254,12 @@
 	      var renderGame = function renderGame(e) {
 	        e.preventDefault();
 	        (0, _jquery2.default)("#power-switch").animate({ left: 0 }, 300);
+	
 	        setTimeout(function () {
 	          (0, _jquery2.default)("#power-switch").removeClass("off").addClass("on");
 	          (0, _jquery2.default)("#power-light").removeClass("off").addClass("on");
 	          (0, _jquery2.default)("#start-button").off("mousedown touchstart");
+	          _this2.sound.play('power');
 	          (0, _jquery2.default)(window).off("keydown");
 	          _this2.startGame();
 	        }, 300);
@@ -23299,24 +23306,24 @@
 	  }, {
 	    key: 'startGame',
 	    value: function startGame() {
+	      var _this4 = this;
+	
+	      setTimeout(function () {
+	        return _this4.sound.play('music');
+	      }, 850);
 	      this.props.gameOn();
 	      this.startGameInterval();
-	      this.song = new Audio('./assets/sounds/tetris-theme-song.mp3');
-	      this.song.loop = true;
-	      this.song.volume = 0.7;
-	      this.song.load();
-	      this.song.play();
 	    }
 	  }, {
 	    key: 'startGameInterval',
 	    value: function startGameInterval() {
-	      var _this4 = this;
+	      var _this5 = this;
 	
 	      this.assignKeyListeners();
 	      this.assignButtonListeners();
 	      clearInterval(this.interval);
 	      this.interval = setInterval(function () {
-	        return _this4.props.stepPiece();
+	        return _this5.props.stepPiece();
 	      }, // move piece down
 	      LEVEL_SPEED[this.props.level] // every second
 	      );
@@ -23327,10 +23334,12 @@
 	      if (this.props.gamestate.pause) {
 	        this.startGameInterval();
 	        this.props.togglePause(false);
+	        this.sound.play('music');
 	        (0, _jquery2.default)("#pause-screen").addClass("hidden");
 	      } else {
 	        this.pauseGameInterval();
 	        this.props.togglePause(true);
+	        this.sound.pause('music');
 	        (0, _jquery2.default)("#pause-screen").removeClass("hidden");
 	      }
 	    }
@@ -23344,13 +23353,13 @@
 	  }, {
 	    key: 'removeKeyListeners',
 	    value: function removeKeyListeners() {
-	      var _this5 = this;
+	      var _this6 = this;
 	
 	      (0, _jquery2.default)(window).off("keydown");
 	      (0, _jquery2.default)(window).on("keydown", function (e) {
 	        if (e.keyCode === 13) {
 	          e.preventDefault();
-	          _this5.pause();
+	          _this6.pause();
 	        }
 	      });
 	    }
@@ -23382,7 +23391,7 @@
 	  }, {
 	    key: 'removeButtonListeners',
 	    value: function removeButtonListeners() {
-	      var _this6 = this;
+	      var _this7 = this;
 	
 	      this.turnOffButtons();
 	      this.addClickEffect();
@@ -23390,7 +23399,7 @@
 	      (0, _jquery2.default)("#start-button").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this6.pause();
+	        _this7.pause();
 	      });
 	
 	      (0, _jquery2.default)("#start-button").on("mouseup touchend", function (e) {
@@ -23401,7 +23410,7 @@
 	  }, {
 	    key: 'assignKeyListeners',
 	    value: function assignKeyListeners() {
-	      var _this7 = this;
+	      var _this8 = this;
 	
 	      // turn off old listeners
 	      (0, _jquery2.default)(window).off("keydown");
@@ -23412,40 +23421,40 @@
 	          case 37:
 	            e.preventDefault();
 	            (0, _jquery2.default)("#left").addClass("clicked");
-	            _this7.props.moveLeft();
+	            _this8.props.moveLeft();
 	            break;
 	          case 39:
 	            e.preventDefault();
 	            (0, _jquery2.default)("#right").addClass("clicked");
-	            _this7.props.moveRight();
+	            _this8.props.moveRight();
 	            break;
 	          case 40:
 	            e.preventDefault();
 	            (0, _jquery2.default)("#down").addClass("clicked");
-	            _this7.props.moveDown();
+	            _this8.props.moveDown();
 	            break;
 	          case 38:
 	            e.preventDefault();
 	            (0, _jquery2.default)("#up").addClass("clicked");
-	            _this7.props.hardDrop();
+	            _this8.props.hardDrop();
 	            break;
 	          case 32:
 	            // spacebar
 	            e.preventDefault();
 	            (0, _jquery2.default)("#a-button").addClass("clicked");
-	            _this7.props.rotateCW();
+	            _this8.props.rotateCW();
 	            break;
 	          case 16:
 	            // shift
 	            e.preventDefault();
 	            (0, _jquery2.default)("#b-button").addClass("clicked");
-	            _this7.props.rotateCCW();
+	            _this8.props.rotateCCW();
 	            break;
 	          case 13:
 	            // enter
 	            e.preventDefault();
 	            (0, _jquery2.default)("#start-button").addClass("clicked");
-	            _this7.pause();
+	            _this8.pause();
 	            break;
 	          default:
 	            break;
@@ -23493,7 +23502,7 @@
 	  }, {
 	    key: 'assignButtonListeners',
 	    value: function assignButtonListeners() {
-	      var _this8 = this;
+	      var _this9 = this;
 	
 	      // turn off old listeners
 	      this.turnOffButtons();
@@ -23502,52 +23511,52 @@
 	      (0, _jquery2.default)("#down").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this8.props.moveDown();
-	        _this8.downInterval = setInterval(function () {
-	          return _this8.props.moveDown();
+	        _this9.props.moveDown();
+	        _this9.downInterval = setInterval(function () {
+	          return _this9.props.moveDown();
 	        }, 100);
 	      });
 	
 	      (0, _jquery2.default)("#down").on("mouseup touchend", function (e) {
 	        e.preventDefault();
 	        e.target.className = '';
-	        clearInterval(_this8.downInterval);
+	        clearInterval(_this9.downInterval);
 	      });
 	
 	      (0, _jquery2.default)("#left").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this8.props.moveLeft();
-	        _this8.leftInterval = setInterval(function () {
-	          return _this8.props.moveLeft();
+	        _this9.props.moveLeft();
+	        _this9.leftInterval = setInterval(function () {
+	          return _this9.props.moveLeft();
 	        }, 100);
 	      });
 	
 	      (0, _jquery2.default)("#left").on("mouseup touchend", function (e) {
 	        e.preventDefault();
 	        e.target.className = '';
-	        clearInterval(_this8.leftInterval);
+	        clearInterval(_this9.leftInterval);
 	      });
 	
 	      (0, _jquery2.default)("#right").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this8.props.moveRight();
-	        _this8.rightInterval = setInterval(function () {
-	          return _this8.props.moveRight();
+	        _this9.props.moveRight();
+	        _this9.rightInterval = setInterval(function () {
+	          return _this9.props.moveRight();
 	        }, 100);
 	      });
 	
 	      (0, _jquery2.default)("#right").on("mouseup touchend", function (e) {
 	        e.preventDefault();
 	        e.target.className = '';
-	        clearInterval(_this8.rightInterval);
+	        clearInterval(_this9.rightInterval);
 	      });
 	
 	      (0, _jquery2.default)("#up").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this8.props.hardDrop();
+	        _this9.props.hardDrop();
 	      });
 	
 	      (0, _jquery2.default)("#up").on("mouseup touchend", function (e) {
@@ -23558,7 +23567,7 @@
 	      (0, _jquery2.default)("#a-button").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this8.props.rotateCW();
+	        _this9.props.rotateCW();
 	      });
 	
 	      (0, _jquery2.default)("#a-button").on("mouseup touchend", function (e) {
@@ -23569,7 +23578,7 @@
 	      (0, _jquery2.default)("#b-button").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this8.props.rotateCCW();
+	        _this9.props.rotateCCW();
 	      });
 	
 	      (0, _jquery2.default)("#b-button").on("mouseup touchend", function (e) {
@@ -23580,7 +23589,7 @@
 	      (0, _jquery2.default)("#start-button").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this8.pause();
+	        _this9.pause();
 	      });
 	
 	      (0, _jquery2.default)("#start-button").on("mouseup touchend", function (e) {
@@ -23601,7 +23610,7 @@
 	  }, {
 	    key: 'renderGameover',
 	    value: function renderGameover() {
-	      var _this9 = this;
+	      var _this10 = this;
 	
 	      clearInterval(this.interval);
 	      (0, _jquery2.default)('#gameover-screen').removeClass('hidden');
@@ -23613,7 +23622,7 @@
 	        e.preventDefault();
 	        e.target.className = 'clicked';
 	        (0, _jquery2.default)('#gameover-screen').addClass('hidden');
-	        _this9.restartGame();
+	        _this10.restartGame();
 	      });
 	
 	      (0, _jquery2.default)("#start-button").on("mouseup touchend", function (e) {
@@ -23624,7 +23633,7 @@
 	      (0, _jquery2.default)(window).on("keydown", function (e) {
 	        if (e.keyCode === 13) {
 	          (0, _jquery2.default)('#gameover-screen').addClass('hidden');
-	          _this9.restartGame();
+	          _this10.restartGame();
 	        }
 	      });
 	    }
@@ -24032,6 +24041,85 @@
 
 /***/ },
 /* 206 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var SOUNDS = {
+	  power: new Audio('./assets/sounds/power.mp3'),
+	  intro: new Audio('./assets/sounds/intro.mp3'),
+	  music: new Audio('./assets/sounds/tetris-theme-music.mp3'),
+	  move: new Audio('./assets/sounds/move.mp3'),
+	  land: new Audio('./assets/sounds/land.mp3'),
+	  rotate: new Audio('./assets/sounds/rotate.mp3'),
+	  clearline: new Audio('./assets/sounds/clearline.mp3'),
+	  gameover: new Audio('./assets/sounds/gameover.mp3')
+	};
+	
+	var Sound = function () {
+	  function Sound() {
+	    _classCallCheck(this, Sound);
+	
+	    this.loadSounds();
+	  }
+	
+	  _createClass(Sound, [{
+	    key: 'loadSounds',
+	    value: function loadSounds() {
+	      for (var sound in SOUNDS) {
+	        if (SOUNDS[sound]) {
+	          SOUNDS[sound].volume = 0.7;
+	          SOUNDS[sound].load();
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'play',
+	    value: function play(sound) {
+	      SOUNDS[sound].play();
+	    }
+	  }, {
+	    key: 'pause',
+	    value: function pause(sound) {
+	      SOUNDS[sound].pause();
+	    }
+	  }, {
+	    key: 'stop',
+	    value: function stop(sound) {
+	      SOUNDS[sound].pause();
+	      SOUNDS[sound].currentTime = 0;
+	    }
+	  }, {
+	    key: 'mute',
+	    value: function mute() {
+	      for (var sound in SOUNDS) {
+	        if (SOUNDS[sound]) SOUNDS[sound].volume = 0;
+	      }
+	    }
+	  }, {
+	    key: 'unmute',
+	    value: function unmute() {
+	      for (var sound in SOUNDS) {
+	        if (SOUNDS[sound]) SOUNDS[sound].volume = 0.7;
+	      }
+	    }
+	  }]);
+	
+	  return Sound;
+	}();
+	
+	exports.default = Sound;
+
+/***/ },
+/* 207 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*eslint-disable no-unused-vars*/
@@ -34111,7 +34199,7 @@
 
 
 /***/ },
-/* 207 */
+/* 208 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34151,7 +34239,7 @@
 	};
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34246,7 +34334,7 @@
 	// };
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34286,7 +34374,7 @@
 	};
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34304,7 +34392,7 @@
 	};
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34369,7 +34457,7 @@
 	};
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34381,13 +34469,13 @@
 	
 	var _redux = __webpack_require__(180);
 	
-	var _piece_types = __webpack_require__(213);
+	var _piece_types = __webpack_require__(214);
 	
-	var _root_reducer = __webpack_require__(216);
+	var _root_reducer = __webpack_require__(217);
 	
 	var _root_reducer2 = _interopRequireDefault(_root_reducer);
 	
-	var _root_middleware = __webpack_require__(226);
+	var _root_middleware = __webpack_require__(227);
 	
 	var _root_middleware2 = _interopRequireDefault(_root_middleware);
 	
@@ -34422,7 +34510,7 @@
 	exports.default = configureStore;
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34432,7 +34520,7 @@
 	});
 	exports.randomPiece = exports.randomRotation = undefined;
 	
-	var _lodash = __webpack_require__(214);
+	var _lodash = __webpack_require__(215);
 	
 	var randomIdx = [0, 1, 2, 3];
 	
@@ -34520,7 +34608,7 @@
 	};
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -51257,10 +51345,10 @@
 	  }
 	}.call(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(215)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(216)(module)))
 
 /***/ },
-/* 215 */
+/* 216 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -51276,7 +51364,7 @@
 
 
 /***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51287,23 +51375,23 @@
 	
 	var _redux = __webpack_require__(180);
 	
-	var _board_reducer = __webpack_require__(217);
+	var _board_reducer = __webpack_require__(218);
 	
 	var _board_reducer2 = _interopRequireDefault(_board_reducer);
 	
-	var _piece_reducer = __webpack_require__(222);
+	var _piece_reducer = __webpack_require__(223);
 	
 	var _piece_reducer2 = _interopRequireDefault(_piece_reducer);
 	
-	var _queue_reducer = __webpack_require__(223);
+	var _queue_reducer = __webpack_require__(224);
 	
 	var _queue_reducer2 = _interopRequireDefault(_queue_reducer);
 	
-	var _game_state_reducer = __webpack_require__(224);
+	var _game_state_reducer = __webpack_require__(225);
 	
 	var _game_state_reducer2 = _interopRequireDefault(_game_state_reducer);
 	
-	var _score_reducer = __webpack_require__(225);
+	var _score_reducer = __webpack_require__(226);
 	
 	var _score_reducer2 = _interopRequireDefault(_score_reducer);
 	
@@ -51320,7 +51408,7 @@
 	exports.default = RootReducer;
 
 /***/ },
-/* 217 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51329,11 +51417,11 @@
 	  value: true
 	});
 	
-	var _board_actions = __webpack_require__(209);
+	var _board_actions = __webpack_require__(210);
 	
-	var _render_board = __webpack_require__(218);
+	var _render_board = __webpack_require__(219);
 	
-	var _store = __webpack_require__(212);
+	var _store = __webpack_require__(213);
 	
 	var BoardReducer = function BoardReducer() {
 	  var board = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -51357,7 +51445,7 @@
 	exports.default = BoardReducer;
 
 /***/ },
-/* 218 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51367,11 +51455,11 @@
 	});
 	exports.renderPreview = exports.addPiece = undefined;
 	
-	var _hard_drop_piece = __webpack_require__(219);
+	var _hard_drop_piece = __webpack_require__(220);
 	
 	var _hard_drop_piece2 = _interopRequireDefault(_hard_drop_piece);
 	
-	var _move_piece_helpers = __webpack_require__(221);
+	var _move_piece_helpers = __webpack_require__(222);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -51454,7 +51542,7 @@
 	};
 
 /***/ },
-/* 219 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51463,11 +51551,11 @@
 	  value: true
 	});
 	
-	var _move_piece = __webpack_require__(220);
+	var _move_piece = __webpack_require__(221);
 	
 	var _move_piece2 = _interopRequireDefault(_move_piece);
 	
-	var _render_board = __webpack_require__(218);
+	var _render_board = __webpack_require__(219);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -51484,7 +51572,7 @@
 	exports.default = hardDropPiece;
 
 /***/ },
-/* 220 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51493,7 +51581,7 @@
 	  value: true
 	});
 	
-	var _move_piece_helpers = __webpack_require__(221);
+	var _move_piece_helpers = __webpack_require__(222);
 	
 	var movePiece = function movePiece(dir, piece, board) {
 	  var newPos = (0, _move_piece_helpers.nextPos)(dir, piece.pos);
@@ -51550,7 +51638,7 @@
 	// };
 
 /***/ },
-/* 221 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51560,7 +51648,7 @@
 	});
 	exports.isEqual = exports.spotsEmpty = exports.checkDown = exports.checkRight = exports.checkLeft = exports.nextPos = undefined;
 	
-	var _lodash = __webpack_require__(214);
+	var _lodash = __webpack_require__(215);
 	
 	var _lodash2 = _interopRequireDefault(_lodash);
 	
@@ -51689,7 +51777,7 @@
 	};
 
 /***/ },
-/* 222 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51698,9 +51786,9 @@
 	  value: true
 	});
 	
-	var _piece_actions = __webpack_require__(208);
+	var _piece_actions = __webpack_require__(209);
 	
-	var _piece_types = __webpack_require__(213);
+	var _piece_types = __webpack_require__(214);
 	
 	var PieceReducer = function PieceReducer() {
 	  var piece = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -51719,7 +51807,7 @@
 	exports.default = PieceReducer;
 
 /***/ },
-/* 223 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51728,9 +51816,9 @@
 	  value: true
 	});
 	
-	var _queue_actions = __webpack_require__(210);
+	var _queue_actions = __webpack_require__(211);
 	
-	var _piece_types = __webpack_require__(213);
+	var _piece_types = __webpack_require__(214);
 	
 	var QueueReducer = function QueueReducer() {
 	  var queue = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -51748,7 +51836,7 @@
 	exports.default = QueueReducer;
 
 /***/ },
-/* 224 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51757,7 +51845,7 @@
 	  value: true
 	});
 	
-	var _game_state_actions = __webpack_require__(207);
+	var _game_state_actions = __webpack_require__(208);
 	
 	var checkGame = function checkGame(board) {
 	  var count = 0;
@@ -51792,7 +51880,7 @@
 	exports.default = GameStateReducer;
 
 /***/ },
-/* 225 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51801,9 +51889,9 @@
 	  value: true
 	});
 	
-	var _score_actions = __webpack_require__(211);
+	var _score_actions = __webpack_require__(212);
 	
-	var _piece_types = __webpack_require__(213);
+	var _piece_types = __webpack_require__(214);
 	
 	var ScoreReducer = function ScoreReducer() {
 	  var score = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -51827,7 +51915,7 @@
 	exports.default = ScoreReducer;
 
 /***/ },
-/* 226 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51838,19 +51926,19 @@
 	
 	var _redux = __webpack_require__(180);
 	
-	var _piece_middleware = __webpack_require__(227);
+	var _piece_middleware = __webpack_require__(228);
 	
 	var _piece_middleware2 = _interopRequireDefault(_piece_middleware);
 	
-	var _board_middleware = __webpack_require__(229);
+	var _board_middleware = __webpack_require__(230);
 	
 	var _board_middleware2 = _interopRequireDefault(_board_middleware);
 	
-	var _score_middleware = __webpack_require__(231);
+	var _score_middleware = __webpack_require__(232);
 	
 	var _score_middleware2 = _interopRequireDefault(_score_middleware);
 	
-	var _reduxLogger = __webpack_require__(232);
+	var _reduxLogger = __webpack_require__(233);
 	
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 	
@@ -51865,7 +51953,7 @@
 	exports.default = RootMiddleware;
 
 /***/ },
-/* 227 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51874,27 +51962,27 @@
 	  value: true
 	});
 	
-	var _piece_actions = __webpack_require__(208);
+	var _piece_actions = __webpack_require__(209);
 	
-	var _move_piece = __webpack_require__(220);
+	var _move_piece = __webpack_require__(221);
 	
 	var _move_piece2 = _interopRequireDefault(_move_piece);
 	
-	var _rotate_piece = __webpack_require__(228);
+	var _rotate_piece = __webpack_require__(229);
 	
 	var _rotate_piece2 = _interopRequireDefault(_rotate_piece);
 	
-	var _hard_drop_piece = __webpack_require__(219);
+	var _hard_drop_piece = __webpack_require__(220);
 	
 	var _hard_drop_piece2 = _interopRequireDefault(_hard_drop_piece);
 	
-	var _board_actions = __webpack_require__(209);
+	var _board_actions = __webpack_require__(210);
 	
-	var _queue_actions = __webpack_require__(210);
+	var _queue_actions = __webpack_require__(211);
 	
-	var _game_state_actions = __webpack_require__(207);
+	var _game_state_actions = __webpack_require__(208);
 	
-	var _score_actions = __webpack_require__(211);
+	var _score_actions = __webpack_require__(212);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -51990,7 +52078,7 @@
 	exports.default = PieceMiddleware;
 
 /***/ },
-/* 228 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51999,7 +52087,7 @@
 	  value: true
 	});
 	
-	var _move_piece_helpers = __webpack_require__(221);
+	var _move_piece_helpers = __webpack_require__(222);
 	
 	var rotatePiece = function rotatePiece(dir, oldPiece, board) {
 	  var newPiece = Object.assign({}, oldPiece);
@@ -52077,7 +52165,7 @@
 	exports.default = rotatePiece;
 
 /***/ },
-/* 229 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52086,11 +52174,11 @@
 	  value: true
 	});
 	
-	var _board_actions = __webpack_require__(209);
+	var _board_actions = __webpack_require__(210);
 	
-	var _score_actions = __webpack_require__(211);
+	var _score_actions = __webpack_require__(212);
 	
-	var _clear_lines = __webpack_require__(230);
+	var _clear_lines = __webpack_require__(231);
 	
 	var _clear_lines2 = _interopRequireDefault(_clear_lines);
 	
@@ -52130,7 +52218,7 @@
 	exports.default = BoardMiddleware;
 
 /***/ },
-/* 230 */
+/* 231 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -52182,7 +52270,7 @@
 	exports.default = clearLines;
 
 /***/ },
-/* 231 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52191,9 +52279,9 @@
 	  value: true
 	});
 	
-	var _score_actions = __webpack_require__(211);
+	var _score_actions = __webpack_require__(212);
 	
-	var _clear_lines = __webpack_require__(230);
+	var _clear_lines = __webpack_require__(231);
 	
 	var _clear_lines2 = _interopRequireDefault(_clear_lines);
 	
@@ -52246,7 +52334,7 @@
 	exports.default = ScoreMiddleware;
 
 /***/ },
-/* 232 */
+/* 233 */
 /***/ function(module, exports) {
 
 	"use strict";

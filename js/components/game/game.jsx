@@ -3,6 +3,7 @@ import BoardContainer from '../board/board_container';
 import StartScreen from '../screens/start_screen';
 import QueueContainer from '../queue/queue_container';
 import ScoreContainer from '../score/score_container';
+import Sound from '../../util/sounds';
 import $ from 'jquery';
 
 const BUTTONS = [
@@ -11,13 +12,14 @@ const BUTTONS = [
 ];
 
 const LEVEL_SPEED = {
-  0: 800, 1: 500, 2: 200, 3: 150, 4: 100, 5: 50, 6: 50, 7: 40, 8: 40
+  0: 800, 1: 600, 2: 500, 3: 300, 4: 250, 5: 200, 6: 175, 7: 150, 8: 125
 };
 
 class Game extends React.Component {
   constructor() {
     super();
     this.currentLevel = 0;
+    this.sound = new Sound();
     this.assignKeyListeners = this.assignKeyListeners.bind(this);
     this.assignButtonListeners = this.assignButtonListeners.bind(this);
     this.removeKeyListeners = this.removeKeyListeners.bind(this);
@@ -37,10 +39,12 @@ class Game extends React.Component {
     const renderGame = e => {
       e.preventDefault();
       $("#power-switch").animate({ left: 0 }, 300);
+
       setTimeout(() => {
         $("#power-switch").removeClass("off").addClass("on");
         $("#power-light").removeClass("off").addClass("on");
         $("#start-button").off("mousedown touchstart");
+        this.sound.play('power');
         $(window).off("keydown");
         this.startGame();
       }, 300);
@@ -82,13 +86,9 @@ class Game extends React.Component {
   }
 
   startGame() {
+    setTimeout(() => this.sound.play('music'),850);
     this.props.gameOn();
     this.startGameInterval();
-    this.song = new Audio('./assets/sounds/tetris-theme-song.mp3');
-    this.song.loop = true;
-    this.song.volume = 0.7;
-    this.song.load();
-    this.song.play();
   }
 
   startGameInterval() {
@@ -105,10 +105,12 @@ class Game extends React.Component {
     if (this.props.gamestate.pause) {
       this.startGameInterval();
       this.props.togglePause(false);
+      this.sound.play('music');
       $("#pause-screen").addClass("hidden");
     } else {
       this.pauseGameInterval();
       this.props.togglePause(true);
+      this.sound.pause('music');
       $("#pause-screen").removeClass("hidden");
     }
   }
