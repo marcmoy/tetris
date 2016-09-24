@@ -11,16 +11,21 @@ const SOUNDS = {
 
 class Sound {
   constructor() {
-    this.loadSounds();
+    this.muted = false;
+    this.toggleMute = this.toggleMute.bind(this);
   }
 
-  loadSounds() {
-    for (let sound in SOUNDS) {
-      if (SOUNDS[sound]) {
-        SOUNDS[sound].volume = 0.7;
-        SOUNDS[sound].load();
-      }
-    }
+  load(...sounds) {
+    sounds.forEach(sound => {
+      SOUNDS[sound].load();
+      SOUNDS[sound].volume = sound === 'music' ? 0.3: 0.6;
+    });
+  }
+
+  loadEffects() {
+    ['move', 'land', 'rotate', 'clearline', 'rotate'].forEach(sound => {
+      SOUNDS[sound].load();
+    });
   }
 
   play(sound) {
@@ -34,6 +39,15 @@ class Sound {
   stop(sound) {
     SOUNDS[sound].pause();
     SOUNDS[sound].currentTime = 0;
+  }
+
+  toggleMute() {
+    if (this.muted) {
+      this.unmute();
+    } else {
+      this.mute();
+    }
+    this.muted = !this.muted;
   }
 
   mute() {

@@ -23108,7 +23108,8 @@
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
 	    gamestate: state.gamestate,
-	    level: state.score.level
+	    level: state.score.level,
+	    sound: state.sound
 	  };
 	};
 	
@@ -23251,6 +23252,8 @@
 	    value: function componentDidMount() {
 	      var _this2 = this;
 	
+	      this.sound.load('music', 'power');
+	
 	      var renderGame = function renderGame(e) {
 	        e.preventDefault();
 	        (0, _jquery2.default)("#power-switch").animate({ left: 0 }, 300);
@@ -23260,6 +23263,7 @@
 	          (0, _jquery2.default)("#power-light").removeClass("off").addClass("on");
 	          (0, _jquery2.default)("#start-button").off("mousedown touchstart");
 	          _this2.sound.play('power');
+	          _this2.sound.loadEffects();
 	          (0, _jquery2.default)(window).off("keydown");
 	          _this2.startGame();
 	        }, 300);
@@ -23274,6 +23278,10 @@
 	      (0, _jquery2.default)("#start-button").on("mouseup touchend", function (e) {
 	        e.preventDefault();
 	        e.target.className = '';
+	      });
+	
+	      (0, _jquery2.default)("#mute-button").on("click", function (e) {
+	        _this2.sound.toggleMute();
 	      });
 	
 	      (0, _jquery2.default)(window).on("keydown", function (e) {
@@ -23421,33 +23429,45 @@
 	          case 37:
 	            e.preventDefault();
 	            (0, _jquery2.default)("#left").addClass("clicked");
+	            _this8.sound.stop('move');
+	            _this8.sound.play('move');
 	            _this8.props.moveLeft();
 	            break;
 	          case 39:
 	            e.preventDefault();
 	            (0, _jquery2.default)("#right").addClass("clicked");
+	            _this8.sound.stop('move');
+	            _this8.sound.play('move');
 	            _this8.props.moveRight();
 	            break;
 	          case 40:
 	            e.preventDefault();
 	            (0, _jquery2.default)("#down").addClass("clicked");
+	            _this8.sound.stop('move');
+	            _this8.sound.play('move');
 	            _this8.props.moveDown();
 	            break;
 	          case 38:
 	            e.preventDefault();
 	            (0, _jquery2.default)("#up").addClass("clicked");
+	            _this8.sound.stop('land');
+	            _this8.sound.play('land');
 	            _this8.props.hardDrop();
 	            break;
 	          case 32:
 	            // spacebar
 	            e.preventDefault();
 	            (0, _jquery2.default)("#a-button").addClass("clicked");
+	            _this8.sound.stop('rotate');
+	            _this8.sound.play('rotate');
 	            _this8.props.rotateCW();
 	            break;
 	          case 16:
 	            // shift
 	            e.preventDefault();
 	            (0, _jquery2.default)("#b-button").addClass("clicked");
+	            _this8.sound.stop('rotate');
+	            _this8.sound.play('rotate');
 	            _this8.props.rotateCCW();
 	            break;
 	          case 13:
@@ -23511,6 +23531,8 @@
 	      (0, _jquery2.default)("#down").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
+	        _this9.sound.stop('move');
+	        _this9.sound.play('move');
 	        _this9.props.moveDown();
 	        _this9.downInterval = setInterval(function () {
 	          return _this9.props.moveDown();
@@ -23526,6 +23548,8 @@
 	      (0, _jquery2.default)("#left").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
+	        _this9.sound.stop('move');
+	        _this9.sound.play('move');
 	        _this9.props.moveLeft();
 	        _this9.leftInterval = setInterval(function () {
 	          return _this9.props.moveLeft();
@@ -23541,6 +23565,8 @@
 	      (0, _jquery2.default)("#right").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
+	        _this9.sound.stop('move');
+	        _this9.sound.play('move');
 	        _this9.props.moveRight();
 	        _this9.rightInterval = setInterval(function () {
 	          return _this9.props.moveRight();
@@ -23556,6 +23582,8 @@
 	      (0, _jquery2.default)("#up").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
+	        _this9.sound.stop('land');
+	        _this9.sound.play('land');
 	        _this9.props.hardDrop();
 	      });
 	
@@ -23567,6 +23595,8 @@
 	      (0, _jquery2.default)("#a-button").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
+	        _this9.sound.stop('rotate');
+	        _this9.sound.play('rotate');
 	        _this9.props.rotateCW();
 	      });
 	
@@ -23578,6 +23608,8 @@
 	      (0, _jquery2.default)("#b-button").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
+	        _this9.sound.stop('rotate');
+	        _this9.sound.play('rotate');
 	        _this9.props.rotateCCW();
 	      });
 	
@@ -23613,6 +23645,9 @@
 	      var _this10 = this;
 	
 	      clearInterval(this.interval);
+	      this.sound.stop('music');
+	      this.sound.load('gameover');
+	      this.sound.play('gameover');
 	      (0, _jquery2.default)('#gameover-screen').removeClass('hidden');
 	      (0, _jquery2.default)(window).off("keydown");
 	      this.turnOffButtons();
@@ -23641,6 +23676,8 @@
 	    key: 'restartGame',
 	    value: function restartGame() {
 	      clearInterval(this.interval);
+	      this.sound.stop('gameover');
+	      this.sound.play('music');
 	      this.props.resetPiece();
 	      this.props.resetBoard();
 	      this.props.updateQueue();
@@ -24068,18 +24105,28 @@
 	  function Sound() {
 	    _classCallCheck(this, Sound);
 	
-	    this.loadSounds();
+	    this.muted = false;
+	    this.toggleMute = this.toggleMute.bind(this);
 	  }
 	
 	  _createClass(Sound, [{
-	    key: 'loadSounds',
-	    value: function loadSounds() {
-	      for (var sound in SOUNDS) {
-	        if (SOUNDS[sound]) {
-	          SOUNDS[sound].volume = 0.7;
-	          SOUNDS[sound].load();
-	        }
+	    key: 'load',
+	    value: function load() {
+	      for (var _len = arguments.length, sounds = Array(_len), _key = 0; _key < _len; _key++) {
+	        sounds[_key] = arguments[_key];
 	      }
+	
+	      sounds.forEach(function (sound) {
+	        SOUNDS[sound].load();
+	        SOUNDS[sound].volume = sound === 'music' ? 0.3 : 0.6;
+	      });
+	    }
+	  }, {
+	    key: 'loadEffects',
+	    value: function loadEffects() {
+	      ['move', 'land', 'rotate', 'clearline', 'rotate'].forEach(function (sound) {
+	        SOUNDS[sound].load();
+	      });
 	    }
 	  }, {
 	    key: 'play',
@@ -24096,6 +24143,16 @@
 	    value: function stop(sound) {
 	      SOUNDS[sound].pause();
 	      SOUNDS[sound].currentTime = 0;
+	    }
+	  }, {
+	    key: 'toggleMute',
+	    value: function toggleMute() {
+	      if (this.muted) {
+	        this.unmute();
+	      } else {
+	        this.mute();
+	      }
+	      this.muted = !this.muted;
 	    }
 	  }, {
 	    key: 'mute',
@@ -51582,6 +51639,12 @@
 	});
 	
 	var _move_piece_helpers = __webpack_require__(222);
+	
+	var _sounds = __webpack_require__(206);
+	
+	var _sounds2 = _interopRequireDefault(_sounds);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var movePiece = function movePiece(dir, piece, board) {
 	  var newPos = (0, _move_piece_helpers.nextPos)(dir, piece.pos);

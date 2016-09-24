@@ -36,6 +36,8 @@ class Game extends React.Component {
   }
 
   componentDidMount() {
+    this.sound.load('music', 'power');
+
     const renderGame = e => {
       e.preventDefault();
       $("#power-switch").animate({ left: 0 }, 300);
@@ -45,6 +47,7 @@ class Game extends React.Component {
         $("#power-light").removeClass("off").addClass("on");
         $("#start-button").off("mousedown touchstart");
         this.sound.play('power');
+        this.sound.loadEffects();
         $(window).off("keydown");
         this.startGame();
       }, 300);
@@ -59,6 +62,10 @@ class Game extends React.Component {
     $("#start-button").on("mouseup touchend", (e) => {
       e.preventDefault();
       e.target.className = '';
+    });
+
+    $("#mute-button").on("click", (e) => {
+      this.sound.toggleMute();
     });
 
     $(window).on("keydown", (e) => {
@@ -86,7 +93,7 @@ class Game extends React.Component {
   }
 
   startGame() {
-    setTimeout(() => this.sound.play('music'),850);
+    setTimeout(() => this.sound.play('music'), 850);
     this.props.gameOn();
     this.startGameInterval();
   }
@@ -180,31 +187,43 @@ class Game extends React.Component {
         case 37:
           e.preventDefault();
           $("#left").addClass("clicked");
+          this.sound.stop('move');
+          this.sound.play('move');
           this.props.moveLeft();
           break;
         case 39:
           e.preventDefault();
           $("#right").addClass("clicked");
+          this.sound.stop('move');
+          this.sound.play('move');
           this.props.moveRight();
           break;
         case 40:
           e.preventDefault();
           $("#down").addClass("clicked");
+          this.sound.stop('move');
+          this.sound.play('move');
           this.props.moveDown();
           break;
         case 38:
           e.preventDefault();
           $("#up").addClass("clicked");
+          this.sound.stop('land');
+          this.sound.play('land');
           this.props.hardDrop();
           break;
         case 32: // spacebar
           e.preventDefault();
           $("#a-button").addClass("clicked");
+          this.sound.stop('rotate');
+          this.sound.play('rotate');
           this.props.rotateCW();
           break;
         case 16: // shift
           e.preventDefault();
           $("#b-button").addClass("clicked");
+          this.sound.stop('rotate');
+          this.sound.play('rotate');
           this.props.rotateCCW();
           break;
         case 13: // enter
@@ -261,6 +280,8 @@ class Game extends React.Component {
     $("#down").on("mousedown touchstart", (e) => {
       e.preventDefault();
       e.target.className = 'clicked';
+      this.sound.stop('move');
+      this.sound.play('move');
       this.props.moveDown();
       this.downInterval = setInterval(
         () => this.props.moveDown(),
@@ -277,6 +298,8 @@ class Game extends React.Component {
     $("#left").on("mousedown touchstart", (e) => {
       e.preventDefault();
       e.target.className = 'clicked';
+      this.sound.stop('move');
+      this.sound.play('move');
       this.props.moveLeft();
       this.leftInterval = setInterval(
         () => this.props.moveLeft(),
@@ -293,6 +316,8 @@ class Game extends React.Component {
     $("#right").on("mousedown touchstart", (e) => {
       e.preventDefault();
       e.target.className = 'clicked';
+      this.sound.stop('move');
+      this.sound.play('move');
       this.props.moveRight();
       this.rightInterval = setInterval(
         () => this.props.moveRight(),
@@ -309,6 +334,8 @@ class Game extends React.Component {
     $("#up").on("mousedown touchstart", (e) => {
       e.preventDefault();
       e.target.className = 'clicked';
+      this.sound.stop('land');
+      this.sound.play('land');
       this.props.hardDrop();
     });
 
@@ -320,6 +347,8 @@ class Game extends React.Component {
     $("#a-button").on("mousedown touchstart", (e) => {
       e.preventDefault();
       e.target.className = 'clicked';
+      this.sound.stop('rotate');
+      this.sound.play('rotate');
       this.props.rotateCW();
     });
 
@@ -331,6 +360,8 @@ class Game extends React.Component {
     $("#b-button").on("mousedown touchstart", (e) => {
       e.preventDefault();
       e.target.className = 'clicked';
+      this.sound.stop('rotate');
+      this.sound.play('rotate');
       this.props.rotateCCW();
     });
 
@@ -363,6 +394,9 @@ class Game extends React.Component {
 
   renderGameover() {
     clearInterval(this.interval);
+    this.sound.stop('music');
+    this.sound.load('gameover');
+    this.sound.play('gameover');
     $('#gameover-screen').removeClass('hidden');
     $(window).off("keydown");
     this.turnOffButtons();
@@ -390,6 +424,8 @@ class Game extends React.Component {
 
   restartGame() {
     clearInterval(this.interval);
+    this.sound.stop('gameover');
+    this.sound.play('music');
     this.props.resetPiece();
     this.props.resetBoard();
     this.props.updateQueue();

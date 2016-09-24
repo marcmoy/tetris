@@ -1,5 +1,6 @@
 import { nextPos, checkLeft, checkRight, checkDown }
 from './move_piece_helpers';
+import Sound from './sounds';
 
 const movePiece = (dir, piece, board) => {
   let newPos = nextPos(dir, piece.pos);

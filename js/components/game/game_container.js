@@ -11,7 +11,8 @@ import { resetScore } from '../../actions/score_actions';
 
 const mapStateToProps = state => ({
   gamestate: state.gamestate,
-  level: state.score.level
+  level: state.score.level,
+  sound: state.sound
 });
 
 const mapDispatchToProps = dispatch => ({
