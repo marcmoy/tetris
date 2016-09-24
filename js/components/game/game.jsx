@@ -3,7 +3,7 @@ import BoardContainer from '../board/board_container';
 import StartScreen from '../screens/start_screen';
 import QueueContainer from '../queue/queue_container';
 import ScoreContainer from '../score/score_container';
-import Sound from '../../util/sounds';
+import { Sound, nullSound } from '../../util/sounds';
 import $ from 'jquery';
 
 const BUTTONS = [
@@ -19,7 +19,7 @@ class Game extends React.Component {
   constructor() {
     super();
     this.currentLevel = 0;
-    this.sound = $(window).width() > 420 ? new Sound(false) : new Sound(true);
+    this.sound = $(window).width() > 420 ? new Sound() : nullSound;
     this.assignKeyListeners = this.assignKeyListeners.bind(this);
     this.assignButtonListeners = this.assignButtonListeners.bind(this);
     this.removeKeyListeners = this.removeKeyListeners.bind(this);

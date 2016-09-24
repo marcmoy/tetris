@@ -9,7 +9,17 @@ const SOUNDS = {
   gameover: new Audio('./assets/sounds/gameover.mp3')
 };
 
-class Sound {
+// null sound for mobile
+export const nullSound = {
+  toggleMute: () => {},
+  loadEffects: () => {},
+  play: sound => {},
+  stop: sound => {},
+  load: sound => {},
+  pause: sound => {}
+};
+
+export class Sound {
   constructor(muted) {
     this.muted = muted;
     this.toggleMute = this.toggleMute.bind(this);
@@ -62,5 +72,3 @@ class Sound {
     }
   }
 }
-
-export default Sound;

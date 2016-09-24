@@ -23201,8 +23201,6 @@
 	
 	var _sounds = __webpack_require__(206);
 	
-	var _sounds2 = _interopRequireDefault(_sounds);
-	
 	var _jquery = __webpack_require__(207);
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
@@ -23230,7 +23228,7 @@
 	    var _this = _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).call(this));
 	
 	    _this.currentLevel = 0;
-	    _this.sound = (0, _jquery2.default)(window).width() > 420 ? new _sounds2.default(false) : new _sounds2.default(true);
+	    _this.sound = (0, _jquery2.default)(window).width() > 420 ? new _sounds.Sound() : _sounds.nullSound;
 	    _this.assignKeyListeners = _this.assignKeyListeners.bind(_this);
 	    _this.assignButtonListeners = _this.assignButtonListeners.bind(_this);
 	    _this.removeKeyListeners = _this.removeKeyListeners.bind(_this);
@@ -24101,7 +24099,17 @@
 	  gameover: new Audio('./assets/sounds/gameover.mp3')
 	};
 	
-	var Sound = function () {
+	// null sound for mobile
+	var nullSound = exports.nullSound = {
+	  toggleMute: function toggleMute() {},
+	  loadEffects: function loadEffects() {},
+	  play: function play(sound) {},
+	  stop: function stop(sound) {},
+	  load: function load(sound) {},
+	  pause: function pause(sound) {}
+	};
+	
+	var Sound = exports.Sound = function () {
 	  function Sound(muted) {
 	    _classCallCheck(this, Sound);
 	
@@ -24169,11 +24177,9 @@
 	      }
 	    }
 	  }]);
-	
+
 	  return Sound;
 	}();
-	
-	exports.default = Sound;
 
 /***/ },
 /* 207 */
