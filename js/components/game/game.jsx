@@ -208,8 +208,6 @@ class Game extends React.Component {
         case 38:
           e.preventDefault();
           $("#up").addClass("clicked");
-          this.sound.stop('land');
-          this.sound.play('land');
           this.props.hardDrop();
           break;
         case 32: // spacebar
@@ -334,8 +332,6 @@ class Game extends React.Component {
     $("#up").on("mousedown touchstart", (e) => {
       e.preventDefault();
       e.target.className = 'clicked';
-      this.sound.stop('land');
-      this.sound.play('land');
       this.props.hardDrop();
     });
 

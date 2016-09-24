@@ -28,6 +28,7 @@ export class Sound {
   load(...sounds) {
     sounds.forEach(sound => {
       SOUNDS[sound].load();
+      if (sound === 'music') SOUNDS[sound].loop = true;
       SOUNDS[sound].volume = sound === 'music' ? 0.3: 0.6;
     });
   }

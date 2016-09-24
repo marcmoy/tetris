@@ -9,6 +9,9 @@ import { updateBoard, boardClear } from '../actions/board_actions';
 import { updateQueue } from '../actions/queue_actions';
 import { checkGameover } from '../actions/game_state_actions';
 import { increasePoints } from '../actions/score_actions';
+import { Sound } from '../util/sounds';
+const sound = new Sound();
+sound.load('land');
 
 const PieceMiddleware = ({getState, dispatch}) => next => action => {
   const piece = getState().piece;
@@ -16,6 +19,8 @@ const PieceMiddleware = ({getState, dispatch}) => next => action => {
   const queue = getState().queue;
 
   const update = () => {
+    sound.stop('land');
+    sound.play('land');
     dispatch(boardClear());
     dispatch(receivePiece(queue));
     dispatch(checkGameover(board));

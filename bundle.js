@@ -23448,8 +23448,6 @@
 	          case 38:
 	            e.preventDefault();
 	            (0, _jquery2.default)("#up").addClass("clicked");
-	            _this8.sound.stop('land');
-	            _this8.sound.play('land');
 	            _this8.props.hardDrop();
 	            break;
 	          case 32:
@@ -23580,8 +23578,6 @@
 	      (0, _jquery2.default)("#up").on("mousedown touchstart", function (e) {
 	        e.preventDefault();
 	        e.target.className = 'clicked';
-	        _this9.sound.stop('land');
-	        _this9.sound.play('land');
 	        _this9.props.hardDrop();
 	      });
 	
@@ -24126,6 +24122,7 @@
 	
 	      sounds.forEach(function (sound) {
 	        SOUNDS[sound].load();
+	        if (sound === 'music') SOUNDS[sound].loop = true;
 	        SOUNDS[sound].volume = sound === 'music' ? 0.3 : 0.6;
 	      });
 	    }
@@ -52053,7 +52050,12 @@
 	
 	var _score_actions = __webpack_require__(212);
 	
+	var _sounds = __webpack_require__(206);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var sound = new _sounds.Sound();
+	sound.load('land');
 	
 	var PieceMiddleware = function PieceMiddleware(_ref) {
 	  var getState = _ref.getState;
@@ -52065,6 +52067,8 @@
 	      var queue = getState().queue;
 	
 	      var update = function update() {
+	        sound.stop('land');
+	        sound.play('land');
 	        dispatch((0, _board_actions.boardClear)());
 	        dispatch((0, _piece_actions.receivePiece)(queue));
 	        dispatch((0, _game_state_actions.checkGameover)(board));

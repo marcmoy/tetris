@@ -608,3 +608,23 @@ tbody > tr > td:after {
   font-size: 10px;
   font-weight: normal;
 }
+
+div.mute {
+  position: absolute;
+  top: -3.5rem;
+  right: 0;
+  text-align: center;
+  width: 100%;
+}
+
+#mute-button {
+  height: 2rem;
+  width: 4rem;
+  border-radius: 0.5rem;
+  font-family: 'Press Start 2P', cursive;
+  background: white; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(white, #ccc); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(white, #ccc); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(white, #ccc); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(white, #ccc); /* Standard syntax */
+}
