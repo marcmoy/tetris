@@ -21,4 +21,4 @@
 
 ##Gameplay
 
-<img src='/docs/mobile.gif' height='600'>
+<img loop='/docs/mobile.gif' height='600'>
