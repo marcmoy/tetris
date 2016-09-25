@@ -21,4 +21,4 @@
 
 ##Gameplay
 
-![mobile](./docs/mobile.gif)
+![gameplay](./docs/gameplay.gif)
