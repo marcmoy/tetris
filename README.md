@@ -22,5 +22,5 @@
 ##Gameplay
 
 <div style='text-align: center'>
-<img src='/docs/mobile.gif' height='300'>
+<img src='/docs/mobile.gif' height='500'>
 </div>
