@@ -21,4 +21,4 @@
 
 ##Gameplay
 
-![gameplay](./docs/gameplay.gif)
+<img src='/docs/gameplay.gif' height='350'>
