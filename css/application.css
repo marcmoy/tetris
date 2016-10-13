@@ -242,6 +242,29 @@ button#down {
   border-top: 1px solid #585656;
 }
 
+button#left:hover,
+button#right:hover,
+button#down:hover,
+button#up:hover,
+button#a-button:hover,
+button#b-button:hover,
+button#start-button:hover,
+button#select-button:hover {
+  background-color: #8a8c4d;
+  cursor: pointer;
+}
+
+button#left:active,
+button#right:active,
+button#down:active,
+button#up:active,
+button#a-button:active,
+button#b-button:active,
+button#start-button:active,
+button#select-button:active {
+  background-color: #a1a524;
+}
+
 .buttons-a-b {
   width: 7rem;
   height: 5rem;
