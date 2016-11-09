@@ -3,6 +3,10 @@
 
 ###LIVE AT: [https://marcmoy.github.io/tetris/](https://marcmoy.github.io/tetris/)
 
+##Gameplay
+
+<img src='/docs/gameplay.gif' height='350'>
+
 ##Features
 - Piece preview
 - Piece queue
@@ -17,8 +21,3 @@
 - Line clearing implemented through recursion
 - Responsive design achieved by media queries
 - React used to render dynamic html elements
-
-
-##Gameplay
-
-<img src='/docs/gameplay.gif' height='350'>
